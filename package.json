@@ -1,0 +1,42 @@
+{
+  "name": "podsearch_bot",
+  "version": "1.0.0",
+  "description": "Telegram bot that searches Podcast in iTunes store.",
+  "main": "node dist/main.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node dist/main.js",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "debbug": "node inspect --inspect-brk node_modules/.bin/jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fazendaaa/podsearch_bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fazendaaa/podsearch_bot/issues"
+  },
+  "homepage": "https://github.com/Fazendaaa/podsearch_bot#readme",
+  "devDependencies": {
+    "@types/dotenv": "^4.0.2",
+    "@types/jest": "^22.2.0",
+    "@types/moment": "^2.13.0",
+    "@types/node": "^9.4.7",
+    "dotenv": "^5.0.1",
+    "goo.gl": "^0.1.4",
+    "itunes-search": "^1.0.1",
+    "jest": "^22.4.2",
+    "moment": "^2.21.0",
+    "request": "^2.85.0",
+    "telegraf": "^3.19.0",
+    "ts-jest": "^22.4.2",
+    "ts-node": "^5.0.1",
+    "tslint": "^5.9.1",
+    "tslint-microsoft-contrib": "^5.0.3",
+    "typescript": "^2.7.2"
+  },
+  "dependencies": {}
+}
