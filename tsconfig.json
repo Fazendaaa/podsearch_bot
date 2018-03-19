@@ -44,9 +44,7 @@
         ],
         "types": [                                /* Type declaration files to be included in compilation. */
             "node",                               /* Add Node as an option. */
-            // "itunes-search",                   /* Add Itunes Search as an opiton. */
-            "dotenv",                             /* Add dotenv as an opiton. */
-            // "jest"                             /* Add jest as an opiton. */
+            "jest"                                /* Add jest as an opiton. */
         ],
         // "allowSyntheticDefaultImports": true,  /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
         // "esModuleInterop": true                /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */

@@ -1,10 +1,10 @@
 'use strict';
 
 /**
- * This import might seen a little bit unecessary, but TS compiler complains about the Jest functions being used without
- * being imported before.
+ * This  import  might seen a little bit unecessary, but TS compiler complains about the Jest functions being used as an
+ * imported  one.  This  is  because /node_modules/@types/jest/index.d.ts doesn't declare Jest as module. Just importing
+ * Jest in the tsconfig.json as type is enough.
  */
-import { } from 'jest';
 import {
     parseResponse,
     removeCmd

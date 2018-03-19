@@ -20,31 +20,31 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">35% </span>
+        <span class="strong">65% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>7/20</span>
+        <span class='fraction'>13/20</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">33.33% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/12</span>
+        <span class='fraction'>4/12</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">42.86% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/7</span>
+        <span class='fraction'>3/7</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">36.84% </span>
+        <span class="strong">63.16% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>7/19</span>
+        <span class='fraction'>12/19</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -123,7 +123,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -131,11 +131,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -176,20 +176,20 @@ setKey(process.env.GOOGLE_KEY);
 /**
  * This function removes the '/cmd' of the command.
  */
-export const removeCmd = <span class="fstat-no" title="function not covered" >(c</span>md: string): string =&gt; {
-<span class="cstat-no" title="statement not covered" >    return (typeof cmd === 'string') ? cmd.replace(/(\/\w+)\s*/, '') : '';</span>
+export const removeCmd = (cmd: string): string =&gt; {
+    return (typeof cmd === 'string') ? cmd.replace(/(\/\w+)\s*/, '') : <span class="branch-1 cbranch-no" title="branch not covered" >'';</span>
 };
 &nbsp;
 /**
  * This function takes the search from itunes's API then parse it to the format that will be presented as message to the
  * user.
  */
-export const parseResponse = <span class="fstat-no" title="function not covered" >(e</span>lement: response): Promise&lt;string&gt; =&gt; <span class="cstat-no" title="statement not covered" >new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve, reject) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (element.hasOwnProperty('results')) {</span>
-        const data: result = <span class="cstat-no" title="statement not covered" >element.results[0] || undefined;</span>
-        const srcRss: string = <span class="cstat-no" title="statement not covered" >data.feedUrl || '';</span>
+export const parseResponse = (element: response): Promise&lt;string&gt; =&gt; new Promise((resolve, reject) =&gt; {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (element.hasOwnProperty('results')) {
+        const data: result = element.results[0] || <span class="branch-1 cbranch-no" title="branch not covered" >undefined;</span>
+        const srcRss: string = data.feedUrl || <span class="branch-1 cbranch-no" title="branch not covered" >'';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        shorten(srcRss).then(<span class="fstat-no" title="function not covered" >(r</span>ss: string) =&gt; {</span>
+        shorten(srcRss).then(<span class="fstat-no" title="function not covered" >(r</span>ss: string) =&gt; {
             const srcItunes: string = <span class="cstat-no" title="statement not covered" >data.collectionViewUrl || '';</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            shorten(srcItunes).then(<span class="fstat-no" title="function not covered" >(i</span>tunes: string) =&gt; {</span>
@@ -214,7 +214,7 @@ iTunes: ${itunes}`);
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Mar 19 2018 20:26:44 GMT-0300 (-03)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Mar 19 2018 20:55:36 GMT-0300 (-03)
 </div>
 </div>
 <script src="prettify.js"></script>
