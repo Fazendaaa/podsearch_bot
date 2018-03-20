@@ -15,7 +15,8 @@
         "no-any": false,
         "mocha-no-side-effect-code": false,
         "no-http-string": false,
-        "max-line-length": false
+        "max-line-length": false,
+        "binary-expression-operand-order": false
     },
     "rulesDirectory": []
 }
