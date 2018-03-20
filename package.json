@@ -4,11 +4,10 @@
   "description": "Telegram bot that searches Podcast in iTunes store.",
   "main": "node dist/main.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --config jest.config.js --ci",
     "start": "node dist/main.js",
     "build": "tsc",
-    "watch": "tsc -w",
-    "debbug": "node inspect --inspect-brk node_modules/.bin/jest"
+    "watch": "tsc -w"
   },
   "repository": {
     "type": "git",
