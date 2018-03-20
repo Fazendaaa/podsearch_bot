@@ -1,10 +1,127 @@
 # Podsearchbot
-Telegram bot that searches Podcast in iTunes store.
-
+[Telegram](https://www.telegram.org/) bot that searches info podcast in [iTunes](https://www.apple.com/lae/itunes/) store.
 ## About
+This is a bot made using [TypeScript](http://typescriptlang.org/)(TS) because I want something to test the my new coding skill. And, like so, also the [Test Driven Development](https://en.wikipedia.org/wiki/Test-driven_development)(TDD), the first time that I've done anything with TDD.
 
-This is a bot that was made using TypeScript + Node.js and it's running on Heroku through Github integration.
+Two new things in one project? Yes, and a third one is [Continuos Integration](https://en.wikipedia.org/wiki/Continuous_integration)(CI) just to be able to push running code at a master branch to be running at the server. And, a fourth one, is making a bot that supports it multiple languages.
 
-I've made this bot so I can learning more about Continue Integration (CI) with CircleCI thanks to the YouTube channel [_FunFunFunctional_](https://youtu.be/ymPOI4gWQFY).
+Like so, once I've "finished" this code I intend to write an article at [Medium](https://medium.com/) talking about it. All the knowledge that I've got it because some one laid a trail so that I can build my own on it.
+## Prerequisites
+Since I've made all of it in a Linux enviroment I just know how to do it in it. Mac and Windows users must seek help for each particularity of attempting to do on those enviroments.
 
-Also, the Test Driven Development (TDD) is thanks to the same youtuber, MPJ, and his intro to Jest.
+First things first...
+
+You will need to generate a Telegram bot API key and that it's easy, just follow [this](https://core.telegram.org/bots#3-how-do-i-create-a-bot) step-by-step. Since I've shortened the RSS and iTunes links, you will be neding a Google URL Shortener API key, wich it is easy to get, more about it [here](https://developers.google.com/url-shortener/v1/getting_started).
+
+Now the enviroment part...
+
+Install [npm](https://www.npmjs.com/) and [Node.js](https://nodejs.org/en/) on your machine, since Linux has many package manager, each one with it's particularity settup you must seek how to do you it. But once you have set this up, open a terminal then navigate to the folder where you want your project to be then run this command:
+```bash
+git clone https://github.com/Fazendaaa/podsearch_bot
+```
+You should see something like this:
+```bash
+Cloning into 'podsearch_bot'...
+remote: Counting objects: 98, done.
+remote: Compressing objects: 100% (56/56), done.
+remote: Total 98 (delta 36), reused 88 (delta 32), pack-reused 0
+Unpacking objects: 100% (98/98), done.
+```
+## Installing
+Just run the following comand at your root project folder:
+```bash
+npm install
+```
+After some time a folder named "node_modules" should be appear in your root project folder. If you have any problem like errors or warnings from now on must be the libraries dependecies or API changes, since I've wrote using, at the time of this writing, the latest version of each one some changes must have occured to give you those problems. 
+
+Once you finalized all of this first setting up, run:
+```bash
+npm run build
+```
+And you should be presented with no warnings or any message in your terminal at all. no it is a good time to create your enviroment variables file to save the API keys that was granted to you at the [Prerequisites](https://github.com/Fazendaaa/podsearch_bot#Prerequisites) part, if you did not got one go check it out or no progress can be achived any further. To create the file just run still at the root project folder:
+```bash
+touch .env
+```
+Once the file is created, just open it and past the following enviroment variables with thier respective values that you own, just remeber that those keys are related to you and must not be shared with anyone else, rember to always have this file in your [.gitignore](https://github.com/Fazendaaa/podsearch_bot/blob/master/.gitignore) so that way you do not push it accidentally. Your .env file must be something like this:
+```bash
+BOT_KEY="YourTelegramBotAPIKey"
+GOOGLE_KEY="YourGoogleURLShortenerAPIKey"
+```
+Then is just run your bot with:
+```bash
+npm start
+```
+All of your bot's requests will be logged in your terminal. Have fun :3
+# Running tests
+Like I've mentioned, this is my first contact with TDD, that being said all of the code is being test as TS code still thanks to [jest-ts](https://github.com/kulshekhar/ts-jest) there's no need to transpiled to JS to run the tests.
+## Breaking down
+Since, right at the time of this writing, there's only test file, I've only made one test file, it's the only one that is running. You can find more about at [test](https://github.com/Fazendaaa/podsearch_bot/tree/master/test) folder. To run the test just type the following code at the root project folder:
+```bash
+npm test
+```
+And then the status of testing will be printed, something like:
+```bash
+ PASS  test/utils.test.ts (10.268s)
+  Testing parseResponse function
+    ✓ Parse nerdcast (16ms)
+    ...
+    ✓ Has no number of episodes. (1ms)
+  Testing removeCmd function
+    ✓ /search nerdcast (1ms)
+    ...
+    ✓ someWordWithoutCmd (2ms)
+
+----------|----------|----------|----------|----------|-------------------|
+File      |  % Stmts | % Branch |  % Funcs |  % Lines | Uncovered Line #s |
+----------|----------|----------|----------|----------|-------------------|
+All files |    79.41 |    76.92 |     37.5 |    78.79 |                   |
+ utils.ts |    79.41 |    76.92 |     37.5 |    78.79 |... 61,62,64,66,69 |
+----------|----------|----------|----------|----------|-------------------|
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        14.425s
+Ran all test suites.
+```
+More about the testing enviroment can be found at [jest.config.js](https://github.com/Fazendaaa/podsearch_bot/blob/master/jest.config.js).
+## Coding styles
+Since the TS language can be lintered with [ESlint](https://eslint.org/) or [TSLint](https://palantir.github.io/tslint/), I've choose the last one just because of the TS ecosystem, but the ESlint works fine as well. For more about it, see [tslint.config](https://github.com/Fazendaaa/podsearch_bot/blob/master/tslint.json).
+
+In the case that you came from a JavaScript background and want to know how this magic of "compiling" -- I've used those quotmarks because I still think that the right word for it is _transpiling_, but the internetd know days uses compiling instead -- TS to JS is made, wich setting I've setted or not, see [tsconfig.json](https://github.com/Fazendaaa/podsearch_bot/blob/master/tsconfig.json).
+# Deployment
+This bot is up and running at [Heroku](http://heroku.com/) through the Github integration, that means that each new push to the ```master``` branch means that is the code serving the bot. You can see more about how does it run at the server by looking at the [Procfile](https://github.com/Fazendaaa/podsearch_bot/blob/master/Procfile).
+
+Since this is a CI project as well, there's a [Circle CI](http://circleci.com/) integration, but this feature doesn't work right now because of some server-side issues running the tests.
+# Build with
+* [Wallaby.j](http://wallabyjs.com/) - Live [Visual Studio Code](https://code.visualstudio.com/) test runner pluging;
+* [Jest](https://facebook.github.io/jest/) - Test runner;
+* [Telegraf.js](http://telegraf.js.org/) - Library that handles it the Telegram connection;
+* [moment.js](https://momentjs.com/) - Library that handles it the date and time formating;
+* [dotenv](https://github.com/motdotla/dotenv) - Library that imports enviroment variables;
+* [goo.gl](https://github.com/kaimallea/node-googl) - Library that hanles it the Google shorten API requests;
+* [itunes-search](https://github.com/connor/itunes-node) - One of many libraries that does the fetching from iTunes API, but this one is the only one that does it right;
+# Contributing
+Please, I'm not a native/fluent english speaker, so whether you see a variable name wrote the wrong way or even some comment where I've wrote something with the wrong "past perfect way of life" or something like that, please let me know it. Not always is just about the code, but rather making it more clear to other people to learn from it.
+
+So, whether is code or not you can help me out making this code more accessible by reading the [CONTRIBUTING.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/CONTRIBUTING.md). 
+# Versoning
+I would love to say that [SemVer](https://semver.org/) or anything like that is used but, in my personal experience, this kind of approach doesn't work very well with me, the guy who could be commiting in this project for two weeks in a roll and leave it for almost one year with no simple ```npm update```. So, no versoning system is used. 
+# TODO
+Since I will be keeping this README up to date with any major change and I don't use any versoning system to log all the fixed bugs or previous projects updates, you can still have a taste of what comes next right here:
+
+* Fix the CI integration or just change the CI sevice;
+* Bot language support in the following languages:
+    * English
+    * Portuguese
+    * Russian
+    * Chinese
+    * Spanish
+    * German
+* Translate this README in the previous languages -- still don't know how to do it but I know that is possible.
+# Authors
+* Only [me](https://github.com/Fazendaaa) for now.
+# License
+Like many Open-Source Software (OSS) the MIT lincense is used, more about it in [LICENSE](https://github.com/Fazendaaa/podsearch_bot/blob/master/LICENSE).
+# Acknowledgments
+* Thanks to [PurpleBooth](https://gist.github.com/PurpleBooth) and this great [Readme](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) template and hers [Conbuting](https://gist.github.com/PurpleBooth/b24679402957c63ec426) template also;
+* [Mattias Petter Johansson](https://twitter.com/mpjme) and his channel [FunFunFunction](https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q), where I've learnt so many important coding best pratices; please don't think that this is a channel that will give any kind of "lazy-intro-tutorial" or anything like that, this channel open your eyes to how you can improve your existing skills and learn some more new ones.
