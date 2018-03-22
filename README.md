@@ -1,7 +1,7 @@
 # Podsearchbot
 <h1 align="center">
 	<br>
-    <img src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot"/>
+    <img width="360" src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot"/>
 	<br>
 	<br>
 	<br>
