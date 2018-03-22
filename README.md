@@ -1,16 +1,17 @@
 # Podsearchbot
-[![Heroku](https://heroku-badge.herokuapp.com/?app=podsearchbot&style=flat&root=projects.html)](https://github.com/pussinboots/heroku-badge)
+[![Dependecies](https://david-dm.org/Fazendaaa/podsearch_bot.svg)](https://github.com/Fazendaaa/podsearch_bot/blob/master/package.json)
 [![Build Status](https://travis-ci.org/Fazendaaa/podsearch_bot.svg?branch=master)](https://travis-ci.org/Fazendaaa/podsearch_bot)
 [![Coverage Status](https://coveralls.io/repos/github/Fazendaaa/podsearch_bot/badge.svg?branch=master)](https://coveralls.io/github/Fazendaaa/podsearch_bot?branch=master)
 [![GitHub issues](https://img.shields.io/github/issues/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/issues)
 [![GitHub forks](https://img.shields.io/github/forks/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/network)
 [![GitHub stars](https://img.shields.io/github/stars/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/stargazers)
 [![GitHub license](https://img.shields.io/github/license/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/blob/master/LICENSE)
-[![Twitter](https://img.shields.io/twitter/url/https/github.com/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2FFazendaaa%2Fpodsearch_bot)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://twitter.com/intent/tweet?text=Aweome:&url=https%3A%2F%2Fgithub.com%2FFazendaaa%2Fpodsearch_bot)
 
 [Telegram](https://www.telegram.org/) bot that searches podcast info in [iTunes](https://www.apple.com/lae/itunes/) store.
 
-[![podserachbot](https://github.com/Fazendaaa/podsearch_bot/tree/master/logo/podsearchbot.svg)](https://github.com/pussinboots/heroku-badge)
+[![podserachbot](https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png)](https://github.com/Fazendaaa/podsearch_bot)
+
 ## About
 This is a bot made using [TypeScript](http://typescriptlang.org/)(TS) because I want something to test the my new coding skill. And, like so, also the [Test Driven Development](https://en.wikipedia.org/wiki/Test-driven_development)(TDD), the first time that I've done anything with TDD.
 
@@ -123,6 +124,7 @@ I would love to say that [SemVer](https://semver.org/) or anything like that is 
 # TODO
 Since I will be keeping this README up to date with any major change and I don't use any versoning system to log all the fixed bugs or previous projects updates, you can still have a taste of what comes next right here:
 
+* Inline support;
 * Bot language support in the following languages:
     * English
     * Portuguese
