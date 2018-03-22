@@ -1,0 +1,16 @@
+{
+    "name": "podsearchbot",
+    "description": "Telegram bot that searches Podcast in iTunes store.",
+    "repository": "https://github.com/Fazendaaa/podsearch_bot.git",
+    "logo": "https://node-js-sample.herokuapp.com/node.svg",
+    "keywords": [
+        "node",
+        "telegram",
+        "bot",
+        "itunes",
+        "tavis",
+        "typescript",
+        "search",
+        "podcast"
+    ]
+}

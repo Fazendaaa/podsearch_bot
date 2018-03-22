@@ -1,5 +1,16 @@
 # Podsearchbot
-[Telegram](https://www.telegram.org/) bot that searches info podcast in [iTunes](https://www.apple.com/lae/itunes/) store.
+[![Heroku](https://heroku-badge.herokuapp.com/?app=podsearchbot&style=flat&root=projects.html)](https://github.com/pussinboots/heroku-badge)
+[![Build Status](https://travis-ci.org/Fazendaaa/podsearch_bot.svg?branch=master)](https://travis-ci.org/Fazendaaa/podsearch_bot)
+[![Coverage Status](https://coveralls.io/repos/github/Fazendaaa/podsearch_bot/badge.svg?branch=master)](https://coveralls.io/github/Fazendaaa/podsearch_bot?branch=master)
+[![GitHub issues](https://img.shields.io/github/issues/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/issues)
+[![GitHub forks](https://img.shields.io/github/forks/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/network)
+[![GitHub stars](https://img.shields.io/github/stars/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/stargazers)
+[![GitHub license](https://img.shields.io/github/license/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/blob/master/LICENSE)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2FFazendaaa%2Fpodsearch_bot)
+
+[Telegram](https://www.telegram.org/) bot that searches podcast info in [iTunes](https://www.apple.com/lae/itunes/) store.
+
+[![podserachbot](https://github.com/Fazendaaa/podsearch_bot/tree/master/logo/podsearchbot.svg)](https://github.com/pussinboots/heroku-badge)
 ## About
 This is a bot made using [TypeScript](http://typescriptlang.org/)(TS) because I want something to test the my new coding skill. And, like so, also the [Test Driven Development](https://en.wikipedia.org/wiki/Test-driven_development)(TDD), the first time that I've done anything with TDD.
 
@@ -7,7 +18,7 @@ Two new things in one project? Yes, and a third one is [Continuos Integration](h
 
 Like so, once I've "finished" this code I intend to write an article at [Medium](https://medium.com/) talking about it. All the knowledge that I've got it because some one laid a trail so that I can build my own on it.
 ## Prerequisites
-Since I've made all of it in a Linux enviroment I just know how to do it in it. Mac and Windows users must seek help for each particularity of attempting to do on those enviroments.
+Since I've made all of it in a Linux enviroment I just know how to do in it. Mac and Windows users must seek help for each particularity of attempting to do on those enviroments.
 
 First things first...
 
@@ -47,15 +58,16 @@ Once the file is created, just open it and past the following enviroment variabl
 BOT_KEY="YourTelegramBotAPIKey"
 GOOGLE_KEY="YourGoogleURLShortenerAPIKey"
 ```
-Then is just run your bot with:
+# Running
+After all of this setting up, just run your bot with:
 ```bash
-npm start
+npm run start
 ```
 All of your bot's requests will be logged in your terminal. Have fun :3
 # Running tests
 Like I've mentioned, this is my first contact with TDD, that being said all of the code is being test as TS code still thanks to [jest-ts](https://github.com/kulshekhar/ts-jest) there's no need to transpiled to JS to run the tests.
 ## Breaking down
-Since, right at the time of this writing, there's only test file, I've only made one test file, it's the only one that is running. You can find more about at [test](https://github.com/Fazendaaa/podsearch_bot/tree/master/test) folder. To run the test just type the following code at the root project folder:
+Since, right at the time of this writing, there's only test file and it's the only one that is running. You can find more about at [test](https://github.com/Fazendaaa/podsearch_bot/tree/master/test) folder. To run the test just type the following code at the root project folder:
 ```bash
 npm test
 ```
@@ -91,7 +103,9 @@ In the case that you came from a JavaScript background and want to know how this
 # Deployment
 This bot is up and running at [Heroku](http://heroku.com/) through the Github integration, that means that each new push to the ```master``` branch means that is the code serving the bot. You can see more about how does it run at the server by looking at the [Procfile](https://github.com/Fazendaaa/podsearch_bot/blob/master/Procfile).
 
-Since this is a CI project as well, there's a [Circle CI](http://circleci.com/) integration, but this feature doesn't work right now because of some server-side issues running the tests.
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Fazendaaa/podsearch_bot)
+
+There's also a [Travis CI](http://travis-ci.org/) integration.
 # Build with
 * [Wallaby.j](http://wallabyjs.com/) - Live [Visual Studio Code](https://code.visualstudio.com/) test runner pluging;
 * [Jest](https://facebook.github.io/jest/) - Test runner;
@@ -109,7 +123,6 @@ I would love to say that [SemVer](https://semver.org/) or anything like that is 
 # TODO
 Since I will be keeping this README up to date with any major change and I don't use any versoning system to log all the fixed bugs or previous projects updates, you can still have a taste of what comes next right here:
 
-* Fix the CI integration or just change the CI sevice;
 * Bot language support in the following languages:
     * English
     * Portuguese
@@ -123,5 +136,6 @@ Since I will be keeping this README up to date with any major change and I don't
 # License
 Like many Open-Source Software (OSS) the MIT lincense is used, more about it in [LICENSE](https://github.com/Fazendaaa/podsearch_bot/blob/master/LICENSE).
 # Acknowledgments
-* Thanks to [PurpleBooth](https://gist.github.com/PurpleBooth) and this great [Readme](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) template and hers [Conbuting](https://gist.github.com/PurpleBooth/b24679402957c63ec426) template also;
-* [Mattias Petter Johansson](https://twitter.com/mpjme) and his channel [FunFunFunction](https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q), where I've learnt so many important coding best pratices; please don't think that this is a channel that will give any kind of "lazy-intro-tutorial" or anything like that, this channel open your eyes to how you can improve your existing skills and learn some more new ones.
+* Thanks to [PurpleBooth](https://gist.github.com/PurpleBooth) and this great [Readme](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) template and hers [Contributing](https://gist.github.com/PurpleBooth/b24679402957c63ec426) template also;
+* [Mattias Petter Johansson](https://twitter.com/mpjme) and his channel [FunFunFunction](https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q), where I've learnt so many important coding best pratices; please don't think that this is a channel that will give any kind of "lazy-intro-tutorial" or anything like that, this channel open your eyes to how you can improve your existing skills and learn some more new ones;
+* I highly recommend checking it out my [**yolofi**](https://github.com/Fazendaaa/ytlofi) project whether you ran through some issues trying to get any CI integration or even project badges.

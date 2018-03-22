@@ -39,8 +39,8 @@
         // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
         // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
         "typeRoots": [                            /* List of folders to include type definitions from. */
-            "node_modules",
-            "src/@types"
+            "node_modules",                       /* Just for semantics. */
+            "src/@types"                          /* This will prevent TS compiler from running in *.d.ts files. */
         ],
         "types": [                                /* Type declaration files to be included in compilation. */
             "node",                               /* Add Node as an option. */
