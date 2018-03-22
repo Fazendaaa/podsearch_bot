@@ -1,8 +1,7 @@
 # Podsearchbot
 <h1 align="center">
 	<br>
-    <img width="360" src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot"/>
-	<br>
+    <img width="330" src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot"/>
 	<br>
 	<br>
 </h1>
@@ -12,6 +11,7 @@
 [![Dependecies](https://david-dm.org/Fazendaaa/podsearch_bot.svg)](https://github.com/Fazendaaa/podsearch_bot/blob/master/package.json)
 [![Build Status](https://travis-ci.org/Fazendaaa/podsearch_bot.svg?branch=master)](https://travis-ci.org/Fazendaaa/podsearch_bot)
 [![Coverage Status](https://coveralls.io/repos/github/Fazendaaa/podsearch_bot/badge.svg?branch=master)](https://coveralls.io/github/Fazendaaa/podsearch_bot?branch=master)
+[![Known Vulnerabilities](https://snyk.io/test/github/fazendaaa/podsearch_bot/badge.svg?style=flat-squaretargetFile=package.json)](https://snyk.io/test/github/fazendaaa/podsearch_bot?targetFile=package.json)
 [![GitHub issues](https://img.shields.io/github/issues/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/issues)
 [![GitHub forks](https://img.shields.io/github/forks/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/network)
 [![GitHub stars](https://img.shields.io/github/stars/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/stargazers)
@@ -26,6 +26,10 @@ This is a bot made using [TypeScript](http://typescriptlang.org/)(TS) because I 
 Two new things in one project? Yes, and a third one is [Continuos Integration](https://en.wikipedia.org/wiki/Continuous_integration)(CI) just to be able to push running code at a master branch to be running at the server. And, a fourth one, is making a bot that supports it multiple languages.
 
 Like so, once I've "finished" this code I intend to write an article at [Medium](https://medium.com/) talking about it. All the knowledge that I've got it because some one laid a trail so that I can build my own on it.
+## Commands
+
+# How does it work?
+You can build yourself a bot just like this one, just tag along with the following procedures.
 ## Prerequisites
 Since I've made all of it in a Linux enviroment I just know how to do in it. Mac and Windows users must seek help for each particularity of attempting to do on those enviroments.
 
@@ -110,7 +114,7 @@ Since the TS language can be lintered with [ESlint](https://eslint.org/) or [TSL
 
 In the case that you came from a JavaScript background and want to know how this magic of "compiling" -- I've used those quotmarks because I still think that the right word for it is _transpiling_, but the internetd know days uses compiling instead -- TS to JS is made, wich setting I've setted or not, see [tsconfig.json](https://github.com/Fazendaaa/podsearch_bot/blob/master/tsconfig.json).
 # Deployment
-This bot is up and running at [Heroku](http://heroku.com/) through the Github integration, that means that each new push to the ```master``` branch means that is the code serving the bot. You can see more about how does it run at the server by looking at the [Procfile](https://github.com/Fazendaaa/podsearch_bot/blob/master/Procfile).
+This bot is up and running at [Heroku](http://heroku.com/) through the Github integration, that means that each new push to the ```master``` branch means that is the code serving the bot. You can see more about how does it run at the server by looking at the [Procfile](https://github.com/Fazendaaa/podsearch_bot/blob/master/Procfile). You can also deploy yourself this bot into Heroku through:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Fazendaaa/podsearch_bot)
 
@@ -119,6 +123,7 @@ There's also a [Travis CI](http://travis-ci.org/) integration.
 * [Wallaby.j](http://wallabyjs.com/) - Live [Visual Studio Code](https://code.visualstudio.com/) test runner pluging;
 * [Jest](https://facebook.github.io/jest/) - Test runner;
 * [Telegraf.js](http://telegraf.js.org/) - Library that handles it the Telegram connection;
+* [Telegraf-i18n](https://github.com/telegraf/telegraf-i18n) - Library that handles language integration;
 * [moment.js](https://momentjs.com/) - Library that handles it the date and time formating;
 * [dotenv](https://github.com/motdotla/dotenv) - Library that imports enviroment variables;
 * [goo.gl](https://github.com/kaimallea/node-googl) - Library that hanles it the Google shorten API requests;
@@ -132,8 +137,6 @@ I would love to say that [SemVer](https://semver.org/) or anything like that is 
 # TODO
 Since I will be keeping this README up to date with any major change and I don't use any versoning system to log all the fixed bugs or previous projects updates, you can still have a taste of what comes next right here:
 
-* Dev branch;
-* Inline support;
 * Bot language support in the following languages:
     * English
     * Portuguese
@@ -141,7 +144,8 @@ Since I will be keeping this README up to date with any major change and I don't
     * Chinese
     * Spanish
     * German
-* Translate this README in the previous languages -- still don't know how to do it but I know that is possible.
+* Translate this README in the previous languages -- still don't know how to do it but I know that is possible;
+* Integration with wit.ai,
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
 # License

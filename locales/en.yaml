@@ -1,0 +1,27 @@
+greetings: We welcome you to **Podsearch**, ${from.first_name}. Your podcast search bot!
+
+text: |
+  Hey, ${from.first_name}.
+  Right now I don't work on text only, my creator haven't implemented yet this feature. But feel free to check it out my page to see when this feature is coming.
+
+error: There has been an error in the search. Please, check your typing or try again later.
+
+# The '\' after '\n' is just so, this way, the next line doesn't have a little spacing.
+mask: 
+  "[\u200B](${artworkUrl600})**Name**: ${artistName}\n\
+  Country: ${country}\n\
+  Genre: ${primaryGenreName}\n\
+  Episodes: ${trackCount}\n\
+  Latest Episode: ${latest}\n\
+  RSS: ${rss}\n\
+  iTunes: ${itunes}\n"
+
+noResult: |
+  No result was found for __${value}__.
+  This could mean a wrong typing or right now the search service is in maintenance. Please, try it again later.
+
+wrongInput:
+  "Please, send a valid search of the following type:\n
+  /search __podcast name__\n\n
+  Example:\n
+  /search The Story by The Mission\n"

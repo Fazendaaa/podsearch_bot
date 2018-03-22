@@ -27,17 +27,25 @@ export const removeCmd = (cmd: string): string => {
 /**
  * This function returns the formated data that will be sent to the user.
  */
-const mask = (data: result, itunes: string, rss: string, latest: string): string => {
-    return `[\u200B](${data.artworkUrl600})**Name**: ${data.artistName}\nCountry: ${data.country}
-Genre: ${data.primaryGenreName}\n# Episodes: ${data.trackCount}\nLastest Episode: ${latest}\nRSS: ${rss}
-iTunes: ${itunes}`;
+const mask = (data: result, itunes: string, rss: string, latest: string): object => {
+    return {
+        artworkUrl600: data.artworkUrl600,
+        releaseDate: data.releaseDate,
+        artistName: data.artistName,
+        country: data.country,
+        primaryGenreName: data.primaryGenreName,
+        trackCount: data.trackCount,
+        itunes,
+        rss,
+        latest
+    };
 };
 
 /**
  * This function takes the search from itunes's API then parse it to the format that will be presented as message to the
  * user.
  */
-export const parseResponse = (element: response): Promise<string> => new Promise((resolve, reject) => {
+export const parseResponse = (element: response): Promise<object> => new Promise((resolve: (data: object) => void, reject: (error: string) => void) => {
     if (undefined !== element && element.hasOwnProperty('results')) {
         const data: result = element.results[0] || undefined;
         const srcRss: string = data.feedUrl || undefined;
