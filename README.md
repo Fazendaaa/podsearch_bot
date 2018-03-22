@@ -10,7 +10,9 @@
 
 [Telegram](https://www.telegram.org/) bot that searches podcast info in [iTunes](https://www.apple.com/lae/itunes/) store.
 
-[![podserachbot](https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png)](https://github.com/Fazendaaa/podsearch_bot)
+<p align="center">
+  <img src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot/>
+</p>    
 
 ## About
 This is a bot made using [TypeScript](http://typescriptlang.org/)(TS) because I want something to test the my new coding skill. And, like so, also the [Test Driven Development](https://en.wikipedia.org/wiki/Test-driven_development)(TDD), the first time that I've done anything with TDD.
@@ -124,6 +126,7 @@ I would love to say that [SemVer](https://semver.org/) or anything like that is 
 # TODO
 Since I will be keeping this README up to date with any major change and I don't use any versoning system to log all the fixed bugs or previous projects updates, you can still have a taste of what comes next right here:
 
+* Dev branch;
 * Inline support;
 * Bot language support in the following languages:
     * English
