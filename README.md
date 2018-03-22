@@ -12,7 +12,8 @@
 
 <p align="center">
   <img src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot/>
-</p>    
+</p>
+
 
 ## About
 This is a bot made using [TypeScript](http://typescriptlang.org/)(TS) because I want something to test the my new coding skill. And, like so, also the [Test Driven Development](https://en.wikipedia.org/wiki/Test-driven_development)(TDD), the first time that I've done anything with TDD.
