@@ -1,4 +1,14 @@
 # Podsearchbot
+<h1 align="center">
+	<br>
+    <img src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot"/>
+	<br>
+	<br>
+	<br>
+</h1>
+
+> The solution that you need to share with your friends your love for podcast :3
+
 [![Dependecies](https://david-dm.org/Fazendaaa/podsearch_bot.svg)](https://github.com/Fazendaaa/podsearch_bot/blob/master/package.json)
 [![Build Status](https://travis-ci.org/Fazendaaa/podsearch_bot.svg?branch=master)](https://travis-ci.org/Fazendaaa/podsearch_bot)
 [![Coverage Status](https://coveralls.io/repos/github/Fazendaaa/podsearch_bot/badge.svg?branch=master)](https://coveralls.io/github/Fazendaaa/podsearch_bot?branch=master)
@@ -9,11 +19,6 @@
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://twitter.com/intent/tweet?text=Aweome:&url=https%3A%2F%2Fgithub.com%2FFazendaaa%2Fpodsearch_bot)
 
 [Telegram](https://www.telegram.org/) bot that searches podcast info in [iTunes](https://www.apple.com/lae/itunes/) store.
-
-<p align="center">
-  <img src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot/>
-</p>
-
 
 ## About
 This is a bot made using [TypeScript](http://typescriptlang.org/)(TS) because I want something to test the my new coding skill. And, like so, also the [Test Driven Development](https://en.wikipedia.org/wiki/Test-driven_development)(TDD), the first time that I've done anything with TDD.
