@@ -12,6 +12,7 @@ import {
 } from 'itunes-search';
 import { resolve } from 'path';
 import {
+    errorInline,
     messageToString,
     parseInline,
     parseResponse,
@@ -118,12 +119,13 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery, message, reply }
                     answerInlineQuery(results);
                 }).catch(error => {
                     console.error(error);
+                    answerInlineQuery([errorInline]);
                 });
             } else {
-                reply(i18n.t('noResult', { value }), parseMd);
+                answerInlineQuery([errorInline]);
             }
         });
     } else {
-        reply(i18n.t('wrongInput'), parseMd);
+        answerInlineQuery([errorInline]);
     }
 });

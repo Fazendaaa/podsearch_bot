@@ -101,15 +101,16 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery, message, reply }
                     answerInlineQuery(results);
                 }).catch(error => {
                     console.error(error);
+                    answerInlineQuery([utils_1.errorInline]);
                 });
             }
             else {
-                reply(i18n.t('noResult', { value }), parseMd);
+                answerInlineQuery([utils_1.errorInline]);
             }
         });
     }
     else {
-        reply(i18n.t('wrongInput'), parseMd);
+        answerInlineQuery([utils_1.errorInline]);
     }
 });
 //# sourceMappingURL=main.js.map

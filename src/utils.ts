@@ -152,3 +152,15 @@ export const parseInline = (data: result): Promise<object> => new Promise((resol
         reject('Wrong argument');
     }
 });
+
+export const errorInline = {
+    id: '0',
+    title: 'Error',
+    type: 'article',
+    input_message_content: {
+        message_text: 'Error',
+        parse_mode: 'Markdown'
+    },
+    description: 'test',
+    thumb_url: 'https://developers.google.com/maps/documentation/streetview/images/error-image-generic.png'
+};
