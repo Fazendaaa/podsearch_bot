@@ -67,10 +67,40 @@ bot.command('search', ({ i18n, reply, message }) => {
     if (value !== '') {
         itunes_search_1.search(value, opts, (data) => {
             if (0 < data.resultCount) {
-                utils_1.parseResponse(data).then((parsed) => {
+                utils_1.parseResponse(data.results[0]).then((parsed) => {
                     reply(i18n.t('mask', parsed), parseMd);
                 }).catch((error) => {
                     reply(i18n.t('error'), parseMd);
+                });
+            }
+            else {
+                reply(i18n.t('noResult', { value }), parseMd);
+            }
+        });
+    }
+    else {
+        reply(i18n.t('wrongInput'), parseMd);
+    }
+});
+/**
+ *
+ */
+bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery, message, reply }) => {
+    const opts = {
+        media: 'podcast',
+        entity: 'podcast',
+        limit: 25
+    };
+    const value = utils_1.messageToString(inlineQuery.query);
+    if (value !== '') {
+        itunes_search_1.search(value, opts, (data) => {
+            if (0 < data.resultCount) {
+                Promise.all(data.results.map((element) => {
+                    return utils_1.parseInline(element);
+                })).then(results => {
+                    answerInlineQuery(results);
+                }).catch(error => {
+                    console.error(error);
                 });
             }
             else {

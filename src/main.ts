@@ -7,10 +7,13 @@ import { config } from 'dotenv';
 import {
     options,
     response,
+    result,
     search
 } from 'itunes-search';
 import { resolve } from 'path';
 import {
+    messageToString,
+    parseInline,
     parseResponse,
     removeCmd
 } from './utils';
@@ -81,13 +84,43 @@ bot.command('search', ({ i18n, reply, message }) => {
     if (value !== '') {
         search(value, opts, (data: response) => {
             if (0 < data.resultCount) {
-                parseResponse(data).then((parsed: object) => {
+                parseResponse(data.results[0]).then((parsed: object) => {
                     reply(i18n.t('mask', parsed), parseMd);
                 }).catch((error: string) => {
                     reply(i18n.t('error'), parseMd);
                 });
             } else {
                 reply(i18n.t('noResult', {value}), parseMd);
+            }
+        });
+    } else {
+        reply(i18n.t('wrongInput'), parseMd);
+    }
+});
+
+/**
+ *
+ */
+bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery, message, reply }) => {
+    const opts: options = {
+        media: 'podcast',
+        entity: 'podcast',
+        limit: 25
+    };
+    const value: string = messageToString(inlineQuery.query);
+
+    if (value !== '') {
+        search(value, opts, (data: response) => {
+            if (0 < data.resultCount) {
+                Promise.all(data.results.map((element: result) => {
+                    return parseInline(element);
+                })).then(results => {
+                    answerInlineQuery(results);
+                }).catch(error => {
+                    console.error(error);
+                });
+            } else {
+                reply(i18n.t('noResult', { value }), parseMd);
             }
         });
     } else {

@@ -1,7 +1,8 @@
 # Podsearchbot
 <h1 align="center">
 	<br>
-    <img width="330" src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot"/>
+    <img width="300" src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot"/>
+	<br>
 	<br>
 	<br>
 </h1>
@@ -26,8 +27,28 @@ This is a bot made using [TypeScript](http://typescriptlang.org/)(TS) because I 
 Two new things in one project? Yes, and a third one is [Continuos Integration](https://en.wikipedia.org/wiki/Continuous_integration)(CI) just to be able to push running code at a master branch to be running at the server. And, a fourth one, is making a bot that supports it multiple languages.
 
 Like so, once I've "finished" this code I intend to write an article at [Medium](https://medium.com/) talking about it. All the knowledge that I've got it because some one laid a trail so that I can build my own on it.
-## Commands
-
+## How to use it
+First of all, talk to [@podsearchbot](https://telegram.me/podsearchbot).
+### Search
+There're two ways of doing that:
+#### ```/search```
+Just open it a chat with Podsearchbot and then use it like this:
+```
+/search podcast name
+```
+Example:
+```
+/search The Story by The Mission
+```
+#### Inline mode
+The inline mode works both in the Podsearchbot chat or any other chat:
+```
+@podsearch podcast name
+```
+Example:
+```
+@podsearch The Story by The Mission
+```
 # How does it work?
 You can build yourself a bot just like this one, just tag along with the following procedures.
 ## Prerequisites
