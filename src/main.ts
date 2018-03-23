@@ -13,6 +13,7 @@ import {
 import { resolve } from 'path';
 import {
     errorInline,
+    hasItAll,
     messageToString,
     parseInline,
     parseResponse,
@@ -113,12 +114,29 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery, message, reply }
     if (value !== '') {
         search(value, opts, (data: response) => {
             if (0 < data.resultCount) {
-                Promise.all(data.results.map((element: result) => {
+                /**
+                 * Removing all of the uncomplete data.
+                 */
+                const results = data.results.filter((element: result) => {
+                    return hasItAll(element);
+                });
+
+                Promise.all(results.map((element: result) => {
                     return parseInline(element);
                 })).then(results => {
+                    return results.map(element => {
+                        element.input_message_content.message_text = i18n.t('mask', element.data);
+                        delete element.data;
+
+                        return element;
+                    });
+                }).then(results => {
+                    console.log(results);
+
                     answerInlineQuery(results);
                 }).catch(error => {
                     console.error(error);
+
                     answerInlineQuery([errorInline]);
                 });
             } else {

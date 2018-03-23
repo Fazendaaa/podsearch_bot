@@ -95,9 +95,22 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery, message, reply }
     if (value !== '') {
         itunes_search_1.search(value, opts, (data) => {
             if (0 < data.resultCount) {
-                Promise.all(data.results.map((element) => {
+                /**
+                 * Removing all of the uncomplete data.
+                 */
+                const results = data.results.filter((element) => {
+                    return utils_1.hasItAll(element);
+                });
+                Promise.all(results.map((element) => {
                     return utils_1.parseInline(element);
                 })).then(results => {
+                    return results.map(element => {
+                        element.input_message_content.message_text = i18n.t('mask', element.data);
+                        delete element.data;
+                        return element;
+                    });
+                }).then(results => {
+                    console.log(results);
                     answerInlineQuery(results);
                 }).catch(error => {
                     console.error(error);

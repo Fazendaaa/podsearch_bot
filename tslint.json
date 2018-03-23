@@ -17,7 +17,8 @@
         "no-http-string": false,
         "max-line-length": false,
         "binary-expression-operand-order": false,
-        "no-shadowed-variable": false
+        "no-shadowed-variable": false,
+        "curly": false
     },
     "rulesDirectory": []
 }

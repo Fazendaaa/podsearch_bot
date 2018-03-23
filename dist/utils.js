@@ -37,20 +37,54 @@ const maskResponse = (data, itunes, rss, latest) => {
         latest
     };
 };
+exports.hasItAll = (data) => {
+    let rtnval = false;
+    if (undefined !== data &&
+        undefined !== data.releaseDate && (undefined !== data.artworkUrl30 ||
+        undefined !== data.artworkUrl60 ||
+        undefined !== data.artworkUrl100 ||
+        undefined !== data.artworkUrl600) &&
+        undefined !== data.artistName &&
+        undefined !== data.country &&
+        undefined !== data.primaryGenreName &&
+        undefined !== data.trackCount &&
+        undefined !== data.feedUrl &&
+        undefined !== data.collectionViewUrl) {
+        rtnval = true;
+    }
+    return rtnval;
+};
 /**
- * This function returns the formated data that will be sent to the user.
+ * This function returns the formated data that will be showed to the user.
  */
 const maskInline = (data, itunes, rss, latest) => {
+    let preview = 'https://developers.google.com/maps/documentation/streetview/images/error-image-generic.png';
+    if (undefined !== data.artworkUrl60) {
+        preview = data.artworkUrl60;
+    }
+    else if (undefined !== data.artworkUrl100) {
+        preview = data.artworkUrl100;
+    }
+    else if (undefined !== data.artworkUrl600) {
+        preview = data.artworkUrl600;
+    }
     return {
         id: `${data.trackId}`,
         title: data.artistName,
         type: 'article',
         input_message_content: {
-            message_text: 'Test',
+            /**
+             * Later on, message_text will be populate given locale.
+             */
+            message_text: '',
             parse_mode: 'Markdown'
         },
-        description: 'test',
-        thumb_url: data.trackViewUrl
+        description: data.shortDescription,
+        thumb_url: preview,
+        /**
+         * Data will be removed after message_text has been populated.
+         */
+        data: data
     };
 };
 /**
@@ -107,12 +141,18 @@ exports.parseResponse = (data) => new Promise((resolve, reject) => {
         reject('Wrong argument');
     }
 });
+/**
+ * Lorem ipsum.
+ */
 exports.parseInline = (data) => new Promise((resolve, reject) => {
     if (undefined !== data) {
         if (undefined === data.releaseDate) {
             reject('Has no lastest episode date.');
         }
-        else if (undefined === data.artworkUrl600) {
+        else if (undefined === data.artworkUrl30 ||
+            undefined === data.artworkUrl60 ||
+            undefined === data.artworkUrl100 ||
+            undefined === data.artworkUrl600) {
             reject('Has no podcast artwork.');
         }
         else if (undefined === data.artistName) {
@@ -141,6 +181,13 @@ exports.parseInline = (data) => new Promise((resolve, reject) => {
                         reject('Error occured while converting date.');
                     }
                     else {
+                        /**
+                         * In  case that the podcast has no description -- a lot of them hasn't -- just inform the user,
+                         * in this case doesn't pay the price thrown an reject.
+                         */
+                        if (undefined === data.shortDescription) {
+                            data.shortDescription = 'Has no description.';
+                        }
                         resolve(maskInline(data, itunes, rss, latest));
                     }
                 }).catch((error) => {

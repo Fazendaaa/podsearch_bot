@@ -21,7 +21,7 @@ noResult: |
   This could mean a wrong typing or right now the search service is in maintenance. Please, try it again later.
 
 wrongInput:
-  "Please, send a valid search of the following type:\n
-  /search __podcast name__\n\n
-  Example:\n
+  "Please, send a valid search of the following type:\n\
+  /search __podcast name__\n\n\
+  Example:\n\
   /search The Story by The Mission\n"
