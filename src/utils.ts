@@ -8,17 +8,24 @@ import {
     setKey,
     shorten
 } from 'goo.gl';
+import * as i18n_node_yaml from 'i18n-node-yaml';
 import {
     response,
     result
 } from 'itunes-search';
 import * as moment from 'moment';
+import { resolve } from 'path';
 
 config();
 /**
  * Set Google's API key.
  */
 setKey(process.env.GOOGLE_KEY);
+const i18n = i18n_node_yaml({
+    debug: true,
+    translationFolder: resolve(__dirname, '../locales'),
+    locales: ['en', 'pt']
+});
 
 /**
  * This function removes the '/cmd' of the command.
@@ -73,7 +80,7 @@ export const hasItAll = (data: result): boolean => {
 /**
  * This function returns the formated data that will be showed to the user.
  */
-const maskInline = (data: result, itunes: string, rss: string, latest: string): object => {
+const maskInline = (data: result, itunes: string, rss: string, latest: string, lanCode: string): object => {
     let preview: string = 'https://developers.google.com/maps/documentation/streetview/images/error-image-generic.png'
 
     if (undefined !== data.artworkUrl60) {
@@ -89,18 +96,11 @@ const maskInline = (data: result, itunes: string, rss: string, latest: string): 
         title: data.artistName,
         type: 'article',
         input_message_content: {
-            /**
-             * Later on, message_text will be populate given locale.
-             */
-            message_text: '',
+            message_text: i18n.api(lanCode).t('mask', { ...data, itunes, rss, latest}),
             parse_mode: 'Markdown'
         },
         description: data.shortDescription,
-        thumb_url: preview,
-        /**
-         * Data will be removed after message_text has been populated.
-         */
-        data: data
+        thumb_url: preview
     };
 };
 
@@ -153,7 +153,7 @@ export const parseResponse = (data: result): Promise<object> => new Promise((res
 /**
  * Lorem ipsum.
  */
-export const parseInline = (data: result): Promise<object> => new Promise((resolve: (data: object) => void, reject: (error: string) => void) => {
+export const parseInline = (data: result, lanCode: string): Promise<object> => new Promise((resolve: (data: object) => void, reject: (error: string) => void) => {
     if (undefined !== data) {
         if (undefined === data.releaseDate) {
             reject('Has no lastest episode date.');
@@ -191,7 +191,7 @@ export const parseInline = (data: result): Promise<object> => new Promise((resol
                             data.shortDescription = 'Has no description.';
                         }
 
-                        resolve(maskInline(data, itunes, rss, latest));
+                        resolve(maskInline(data, itunes, rss, latest, lanCode));
                     }
                 }).catch((error: string) => {
                     console.error(error);

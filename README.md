@@ -1,5 +1,6 @@
 # Podsearchbot
 <h1 align="center">
+    <br>
     <img width="260" src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot"/>
 	<br>
 	<br>

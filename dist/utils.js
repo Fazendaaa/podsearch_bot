@@ -5,12 +5,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const dotenv_1 = require("dotenv");
 const goo_gl_1 = require("goo.gl");
+const i18n_node_yaml = require("i18n-node-yaml");
 const moment = require("moment");
+const path_1 = require("path");
 dotenv_1.config();
 /**
  * Set Google's API key.
  */
 goo_gl_1.setKey(process.env.GOOGLE_KEY);
+const i18n = i18n_node_yaml({
+    debug: true,
+    translationFolder: path_1.resolve(__dirname, '../locales'),
+    locales: ['en', 'pt']
+});
 /**
  * This function removes the '/cmd' of the command.
  */
@@ -57,7 +64,7 @@ exports.hasItAll = (data) => {
 /**
  * This function returns the formated data that will be showed to the user.
  */
-const maskInline = (data, itunes, rss, latest) => {
+const maskInline = (data, itunes, rss, latest, lanCode) => {
     let preview = 'https://developers.google.com/maps/documentation/streetview/images/error-image-generic.png';
     if (undefined !== data.artworkUrl60) {
         preview = data.artworkUrl60;
@@ -73,18 +80,11 @@ const maskInline = (data, itunes, rss, latest) => {
         title: data.artistName,
         type: 'article',
         input_message_content: {
-            /**
-             * Later on, message_text will be populate given locale.
-             */
-            message_text: '',
+            message_text: i18n.api(lanCode).t('mask', Object.assign({}, data, { itunes, rss, latest })),
             parse_mode: 'Markdown'
         },
         description: data.shortDescription,
-        thumb_url: preview,
-        /**
-         * Data will be removed after message_text has been populated.
-         */
-        data: data
+        thumb_url: preview
     };
 };
 /**
@@ -144,7 +144,7 @@ exports.parseResponse = (data) => new Promise((resolve, reject) => {
 /**
  * Lorem ipsum.
  */
-exports.parseInline = (data) => new Promise((resolve, reject) => {
+exports.parseInline = (data, lanCode) => new Promise((resolve, reject) => {
     if (undefined !== data) {
         if (undefined === data.releaseDate) {
             reject('Has no lastest episode date.');
@@ -188,7 +188,7 @@ exports.parseInline = (data) => new Promise((resolve, reject) => {
                         if (undefined === data.shortDescription) {
                             data.shortDescription = 'Has no description.';
                         }
-                        resolve(maskInline(data, itunes, rss, latest));
+                        resolve(maskInline(data, itunes, rss, latest, lanCode));
                     }
                 }).catch((error) => {
                     console.error(error);

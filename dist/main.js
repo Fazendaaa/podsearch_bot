@@ -102,15 +102,8 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery, message, reply }
                     return utils_1.hasItAll(element);
                 });
                 Promise.all(results.map((element) => {
-                    return utils_1.parseInline(element);
+                    return utils_1.parseInline(element, inlineQuery.language_code);
                 })).then(results => {
-                    return results.map(element => {
-                        element.input_message_content.message_text = i18n.t('mask', element.data);
-                        delete element.data;
-                        return element;
-                    });
-                }).then(results => {
-                    console.log(results);
                     answerInlineQuery(results);
                 }).catch(error => {
                     console.error(error);
