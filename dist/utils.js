@@ -8,11 +8,17 @@ const goo_gl_1 = require("goo.gl");
 const i18n_node_yaml = require("i18n-node-yaml");
 const moment = require("moment");
 const path_1 = require("path");
+/**
+ * Allows the code to run without passing the enviroment variables as arguments.
+ */
 dotenv_1.config();
 /**
  * Set Google's API key.
  */
 goo_gl_1.setKey(process.env.GOOGLE_KEY);
+/**
+ * Configure internationalization options.
+ */
 const i18n = i18n_node_yaml({
     debug: true,
     translationFolder: path_1.resolve(__dirname, '../locales'),
@@ -24,14 +30,16 @@ const i18n = i18n_node_yaml({
 exports.removeCmd = (cmd = '') => {
     return (typeof cmd === 'string') ? cmd.replace(/(\/\w+)\s*/, '') : '';
 };
+/**
+ * "Handles" all the query input so this way even whether or not a user sends an sticker, that won't be parsed.
+ */
 exports.messageToString = (message) => {
     return Buffer.from(message, 'ascii').toString('ascii').replace(/(?:=\(|:0|:o|: o|: 0)/, ': o');
-    ;
 };
 /**
  * This function returns the formated data that will be sent to the user.
  */
-const maskResponse = (data, itunes, rss, latest) => {
+const maskResponse = (data) => {
     return {
         artworkUrl600: data.artworkUrl600,
         releaseDate: data.releaseDate,
@@ -39,11 +47,14 @@ const maskResponse = (data, itunes, rss, latest) => {
         country: data.country,
         primaryGenreName: data.primaryGenreName,
         trackCount: data.trackCount,
-        itunes,
-        rss,
-        latest
+        itunes: data.itunes,
+        rss: data.rss,
+        latest: data.latest
     };
 };
+/**
+ * Verify whether or not an iTunes response has all of the needed data to the bot.
+ */
 exports.hasItAll = (data) => {
     let rtnval = false;
     if (undefined !== data &&
@@ -62,10 +73,14 @@ exports.hasItAll = (data) => {
     return rtnval;
 };
 /**
- * This function returns the formated data that will be showed to the user.
+ * Returns the formated data that will be showed to the user.
  */
-const maskInline = (data, itunes, rss, latest, lanCode) => {
-    let preview = 'https://developers.google.com/maps/documentation/streetview/images/error-image-generic.png';
+const maskInline = (data) => {
+    let preview = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
+    /**
+     * It  takes  the  "lowest" resolution image as inline thumbnail -- the real one of the lowest would be artworkUrl30
+     * however, this one has a really low resolution, so the minimum expected has to be artworkUrl60.
+     */
     if (undefined !== data.artworkUrl60) {
         preview = data.artworkUrl60;
     }
@@ -75,12 +90,15 @@ const maskInline = (data, itunes, rss, latest, lanCode) => {
     else if (undefined !== data.artworkUrl600) {
         preview = data.artworkUrl600;
     }
+    /**
+     * Telegram's format of inline reponse.
+     */
     return {
         id: `${data.trackId}`,
         title: data.artistName,
         type: 'article',
         input_message_content: {
-            message_text: i18n.api(lanCode).t('mask', Object.assign({}, data, { itunes, rss, latest })),
+            message_text: i18n.api(data.lanCode).t('mask', data),
             parse_mode: 'Markdown'
         },
         description: data.shortDescription,
@@ -88,63 +106,9 @@ const maskInline = (data, itunes, rss, latest, lanCode) => {
     };
 };
 /**
- * This function takes the search from itunes's API then parse it to the format that will be presented as message to the
- * user.
- */
-exports.parseResponse = (data) => new Promise((resolve, reject) => {
-    if (undefined !== data) {
-        if (undefined === data.releaseDate) {
-            reject('Has no lastest episode date.');
-        }
-        else if (undefined === data.artworkUrl600) {
-            reject('Has no podcast artwork.');
-        }
-        else if (undefined === data.artistName) {
-            reject('Has no name.');
-        }
-        else if (undefined === data.country) {
-            reject('Has no country.');
-        }
-        else if (undefined === data.primaryGenreName) {
-            reject('Has no genre.');
-        }
-        else if (undefined === data.trackCount) {
-            reject('Has no number of episodes.');
-        }
-        else if (undefined === data.feedUrl) {
-            reject('Has no number RSS link.');
-        }
-        else if (undefined === data.collectionViewUrl) {
-            reject('Has no number iTunes link.');
-        }
-        else {
-            goo_gl_1.shorten(data.feedUrl).then((rss) => {
-                goo_gl_1.shorten(data.collectionViewUrl).then((itunes) => {
-                    const latest = moment(data.releaseDate).format('MMMM Do YYYY, h:mm a');
-                    if (undefined === latest) {
-                        reject('Error occured while converting date.');
-                    }
-                    else {
-                        resolve(maskResponse(data, itunes, rss, latest));
-                    }
-                }).catch((error) => {
-                    console.error(error);
-                    reject('Has no iTunes link available.');
-                });
-            }).catch((error) => {
-                console.error(error);
-                reject('Has no RSS link available.');
-            });
-        }
-    }
-    else {
-        reject('Wrong argument');
-    }
-});
-/**
  * Lorem ipsum.
  */
-exports.parseInline = (data, lanCode) => new Promise((resolve, reject) => {
+const parse = (data) => new Promise((resolve, reject) => {
     if (undefined !== data) {
         if (undefined === data.releaseDate) {
             reject('Has no lastest episode date.');
@@ -181,14 +145,7 @@ exports.parseInline = (data, lanCode) => new Promise((resolve, reject) => {
                         reject('Error occured while converting date.');
                     }
                     else {
-                        /**
-                         * In  case that the podcast has no description -- a lot of them hasn't -- just inform the user,
-                         * in this case doesn't pay the price thrown an reject.
-                         */
-                        if (undefined === data.shortDescription) {
-                            data.shortDescription = 'Has no description.';
-                        }
-                        resolve(maskInline(data, itunes, rss, latest, lanCode));
+                        resolve(Object.assign({}, data, { itunes, rss, latest }));
                     }
                 }).catch((error) => {
                     console.error(error);
@@ -204,15 +161,50 @@ exports.parseInline = (data, lanCode) => new Promise((resolve, reject) => {
         reject('Wrong argument');
     }
 });
+/**
+ * This function takes the search from itunes's API then parse it to the format that will be presented as message to the
+ * user.
+ */
+exports.parseResponse = (data) => new Promise((resolve, reject) => {
+    parse(data).then((result) => {
+        resolve(maskResponse(result));
+    }).catch((error) => {
+        /**
+         * Since this catch already console.error in parse function, there's no need to do it here also. Just pop up the
+         * reject message for the calling function to debbug it later.
+         */
+        reject(error);
+    });
+});
+/**
+ * Lorem ipsum.
+ */
+exports.parseInline = (data, lanCode) => new Promise((resolve, reject) => {
+    parse(data).then((result) => {
+        /**
+         * In  case that the podcast has no description -- a lot of them hasn't -- just inform the user,
+         * in this case doesn't pay the price thrown an reject.
+         */
+        if (undefined === result.shortDescription) {
+            result.shortDescription = 'Has no description.';
+        }
+        resolve(maskInline(Object.assign({}, result, { lanCode })));
+    }).catch((error) => {
+        reject(error);
+    });
+});
+/**
+ * Just an error message to be sent to the user in case of failed search.
+ */
 exports.errorInline = {
     id: '0',
     title: 'Error',
     type: 'article',
     input_message_content: {
-        message_text: 'Error',
+        message_text: '[*Error*] Try it again later.',
         parse_mode: 'Markdown'
     },
-    description: 'test',
-    thumb_url: 'https://developers.google.com/maps/documentation/streetview/images/error-image-generic.png'
+    description: 'Something went wrong, check your typing or try it again later.',
+    thumb_url: 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png'
 };
 //# sourceMappingURL=utils.js.map

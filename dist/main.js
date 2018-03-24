@@ -20,35 +20,26 @@ const telegrafI18n = require('telegraf-i18n');
  */
 dotenv_1.config();
 /**
- * Configure deafult user language to English.
+ * Start bot and then set options like:
+ *  - Default markdown option for message parsing;
+ *  - Polling;
+ *  - Log each bot requisition;
+ *  - Internacionalization support.
  */
+const bot = new telegraf(process.env.BOT_KEY);
 const i18n = new telegrafI18n({
     defaultLanguage: 'en',
     allowMissing: true,
     directory: path_1.resolve(__dirname, '../locales')
 });
-/**
- * Set Telegram's API key.
- */
-const bot = new telegraf(process.env.BOT_KEY);
-/**
- * Start bot options like:
- *  - poll updates;
- *  - log each bot requisition;
- *  - locale support.
- */
 bot.startPolling();
 bot.use(telegraf.log());
 bot.use(i18n.middleware());
 /**
- * Making markdown parsing available to all replies.
- */
-const parseMd = { parse_mode: 'Markdown' };
-/**
  * Greetings to new users when chatting one-to-one.
  */
-bot.command('/start', ({ i18n, reply }) => {
-    reply(i18n.t('greetings'), parseMd);
+bot.command('start', ({ i18n, replyWithMarkdown }) => {
+    replyWithMarkdown(i18n.t('greetings'));
 });
 /**
  * /search + 'podcast name', then returns it to the user all the data.
@@ -57,7 +48,7 @@ bot.command('/start', ({ i18n, reply }) => {
  * on  podcast,  this  arguments  must be setted. And, this command works only talking to the bot, so there's no need to
  * show more than one result.
  */
-bot.command('search', ({ i18n, reply, message }) => {
+bot.command('search', ({ i18n, replyWithMarkdown, message }) => {
     const opts = {
         media: 'podcast',
         entity: 'podcast',
@@ -68,35 +59,39 @@ bot.command('search', ({ i18n, reply, message }) => {
         itunes_search_1.search(value, opts, (data) => {
             if (0 < data.resultCount) {
                 utils_1.parseResponse(data.results[0]).then((parsed) => {
-                    reply(i18n.t('mask', parsed), parseMd);
+                    replyWithMarkdown(i18n.t('mask', parsed));
                 }).catch((error) => {
-                    reply(i18n.t('error'), parseMd);
+                    console.error(error);
+                    replyWithMarkdown(i18n.t('error'));
                 });
             }
             else {
-                reply(i18n.t('noResult', { value }), parseMd);
+                replyWithMarkdown(i18n.t('noResult', { value }));
             }
         });
     }
     else {
-        reply(i18n.t('wrongInput'), parseMd);
+        replyWithMarkdown(i18n.t('wrongInput'));
     }
 });
 /**
- *
+ * Handles the inline searching.
  */
-bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery, message, reply }) => {
+bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
     const opts = {
         media: 'podcast',
         entity: 'podcast',
         limit: 25
     };
     const value = utils_1.messageToString(inlineQuery.query);
+    /**
+     * Verify whether or not the user has typed anything to search for.
+     */
     if (value !== '') {
         itunes_search_1.search(value, opts, (data) => {
             if (0 < data.resultCount) {
                 /**
-                 * Removing all of the uncomplete data.
+                 * Removing all of the uncomplete data from the iTunes search.
                  */
                 const results = data.results.filter((element) => {
                     return utils_1.hasItAll(element);

@@ -9,6 +9,7 @@
 
 > The solution that you need to share with your friends your love for podcast :3
 
+[![bitHound Overall Score](https://www.bithound.io/github/Fazendaaa/podsearch_bot/badges/score.svg)](https://www.bithound.io/github/Fazendaaa/podsearch_bot)
 [![Dependecies](https://david-dm.org/Fazendaaa/podsearch_bot.svg)](https://github.com/Fazendaaa/podsearch_bot/blob/master/package.json)
 [![Build Status](https://travis-ci.org/Fazendaaa/podsearch_bot.svg?branch=master)](https://travis-ci.org/Fazendaaa/podsearch_bot)
 [![Coverage Status](https://coveralls.io/repos/github/Fazendaaa/podsearch_bot/badge.svg?branch=master)](https://coveralls.io/github/Fazendaaa/podsearch_bot?branch=master)
@@ -146,6 +147,7 @@ There's also a [Travis CI](http://travis-ci.org/) integration.
 * [Telegraf.js](http://telegraf.js.org/) - Library that handles it the Telegram connection;
 * [Telegraf-i18n](https://github.com/telegraf/telegraf-i18n) - Library that handles language integration;
 * [moment.js](https://momentjs.com/) - Library that handles it the date and time formating;
+* [i18n-yaml](https://github.com/martinheidegger/i18n-node-yaml) - Since Telegraf-i18n only handles Telegraf context, there's a need to parse other kinds of context;
 * [dotenv](https://github.com/motdotla/dotenv) - Library that imports enviroment variables;
 * [goo.gl](https://github.com/kaimallea/node-googl) - Library that hanles it the Google shorten API requests;
 * [itunes-search](https://github.com/connor/itunes-node) - One of many libraries that does the fetching from iTunes API, but this one is the only one that does it right;
@@ -162,7 +164,7 @@ Since I will be keeping this README up to date with any major change and I don't
     * English
     * Portuguese
 * Translate this README in the previous languages -- still don't know how to do it but I know that is possible;
-* Write Contributing and making it possible so anyone can help even those who don't know coding just by translating the bot texts to the user native language;
+* Write a CONTRIBUTING and making it possible so anyone can help even those who don't know coding just by translating the bot texts to the user native language;
 * Integration with wit.ai.
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
