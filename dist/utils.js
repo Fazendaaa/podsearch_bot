@@ -38,27 +38,12 @@ exports.messageToString = (message) => {
 };
 /**
  * Just concatenate genres.
+ * This will be only used locally, but there's need to exported to be tested later.
  */
-const hasGenres = (genres) => {
+exports.hasGenres = (genres) => {
     return (undefined !== genres) ? genres.reduce((accumulator, current) => {
         return `${accumulator} | ${current}`;
     }, '') : '';
-};
-/**
- * This function returns the formated data that will be sent to the user.
- */
-const maskResponse = (data) => {
-    return {
-        artworkUrl600: data.artworkUrl600,
-        releaseDate: data.releaseDate,
-        artistName: data.artistName,
-        country: data.country,
-        genres: hasGenres(data.genres),
-        trackCount: data.trackCount,
-        itunes: data.itunes,
-        rss: data.rss,
-        latest: data.latest
-    };
 };
 /**
  * Verify whether or not an iTunes response has all of the needed data to the bot.
@@ -66,10 +51,9 @@ const maskResponse = (data) => {
 exports.hasItAll = (data) => {
     let rtnval = false;
     if (undefined !== data &&
-        undefined !== data.releaseDate && (undefined !== data.artworkUrl30 ||
-        undefined !== data.artworkUrl60 ||
-        undefined !== data.artworkUrl100 ||
-        undefined !== data.artworkUrl600) &&
+        undefined !== data.releaseDate && (undefined !== data.artworkUrl60 ||
+        undefined !== data.artworkUrl100) &&
+        undefined !== data.artworkUrl600 &&
         undefined !== data.artistName &&
         undefined !== data.country &&
         undefined !== data.trackCount &&
@@ -80,112 +64,132 @@ exports.hasItAll = (data) => {
     return rtnval;
 };
 /**
- * Returns the formated data that will be showed to the user.
+ * This function returns the formated data that will be sent to the user.
+ * This will be only used locally, but there's need to exported to be tested later.
  */
-const maskInline = (data) => {
-    let preview = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
-    /**
-     * It  takes  the  "lowest" resolution image as inline thumbnail -- the real one of the lowest would be artworkUrl30
-     * however, this one has a really low resolution, so the minimum expected has to be artworkUrl60.
-     */
-    if (undefined !== data.artworkUrl60) {
-        preview = data.artworkUrl60;
-    }
-    else if (undefined !== data.artworkUrl100) {
-        preview = data.artworkUrl100;
-    }
-    else if (undefined !== data.artworkUrl600) {
-        preview = data.artworkUrl600;
-    }
-    /**
-     * Telegram's format of inline reponse.
-     */
-    return {
-        id: `${data.trackId}`,
-        title: data.artistName,
-        type: 'article',
-        input_message_content: {
-            message_text: i18n.api(data.lanCode).t('mask', data),
-            parse_mode: 'Markdown'
-        },
-        description: hasGenres(data.genres),
-        thumb_url: preview
-    };
+exports.maskResponse = (data) => {
+    return (undefined !== data) ? {
+        artworkUrl600: data.artworkUrl600,
+        releaseDate: data.releaseDate,
+        artistName: data.artistName,
+        country: data.country,
+        /**
+         * Just remember the good old days of C lang with its casting.
+         */
+        genres: exports.hasGenres(data.genres),
+        trackCount: data.trackCount,
+        itunes: data.itunes,
+        rss: data.rss,
+        latest: data.latest
+    } : undefined;
 };
+/**
+ * Returns the formated data that will be showed to the user.
+ * This will be only used locally, but there's need to exported to be tested later.
+ */
+exports.maskResponseInline = (data) => {
+    let rtnval = undefined;
+    let preview = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
+    if (undefined !== data) {
+        /**
+         * It  takes  the  "lowest"  resolution  image  as  inline  thumbnail  --  the  real  one of the lowest would be
+         * artworkUrl30 however, this one has a really low resolution, so the minimum expected has to be artworkUrl60.
+         */
+        if (undefined !== data.artworkUrl60) {
+            preview = data.artworkUrl60;
+        }
+        else if (undefined !== data.artworkUrl100) {
+            preview = data.artworkUrl100;
+        }
+        else if (undefined !== data.artworkUrl600) {
+            preview = data.artworkUrl600;
+        }
+        rtnval = {
+            id: `${data.trackId}`,
+            title: data.artistName,
+            type: 'article',
+            input_message_content: {
+                message_text: i18n.api(data.lanCode).t('mask', data),
+                parse_mode: 'Markdown'
+            },
+            description: exports.hasGenres(data.genres),
+            thumb_url: preview
+        };
+    }
+    return rtnval;
+};
+/**
+ * This function takes an result a then returns it with the shortened links about it and it lastest episode release in a
+ * readable way.
+ * This will be only used locally, but there's need to exported to be tested later.
+ */
+exports.shortenLinks = (data) => new Promise((resolve, reject) => {
+    goo_gl_1.shorten(data.feedUrl).then((rss) => {
+        goo_gl_1.shorten(data.collectionViewUrl).then((itunes) => {
+            const latest = moment(data.releaseDate).format('MMMM Do YYYY, h:mm a');
+            if (undefined === latest) {
+                reject('Error occured while converting date.');
+            }
+            else {
+                resolve(Object.assign({}, data, { itunes, rss, latest }));
+            }
+        }).catch((error) => {
+            reject('Has no iTunes link available.');
+        });
+    }).catch((error) => {
+        reject('Has no RSS link available.');
+    });
+});
 /**
  * Parsing data.
  */
-const parse = (data) => new Promise((resolve, reject) => {
-    if (undefined !== data) {
-        if (undefined === data.releaseDate) {
-            reject('Has no lastest episode date.');
-        }
-        else if (undefined === data.artworkUrl30 ||
-            undefined === data.artworkUrl60 ||
-            undefined === data.artworkUrl100 ||
-            undefined === data.artworkUrl600) {
-            reject('Has no podcast artwork.');
-        }
-        else if (undefined === data.artistName) {
-            reject('Has no name.');
-        }
-        else if (undefined === data.country) {
-            reject('Has no country.');
-        }
-        else if (undefined === data.trackCount) {
-            reject('Has no number of episodes.');
-        }
-        else if (undefined === data.feedUrl) {
-            reject('Has no number RSS link.');
-        }
-        else if (undefined === data.collectionViewUrl) {
-            reject('Has no number iTunes link.');
+exports.parse = (data) => new Promise((resolve, reject) => {
+    if (undefined !== data && 0 < data.resultCount) {
+        /**
+         * Some  data  info  comes  uncomplete,  this  could  mean  an error later on the process; that's why it must be
+         * filtered right here, to avoid it.
+         */
+        const filtered = data.results.filter(exports.hasItAll);
+        if (0 < filtered.length) {
+            Promise.all(filtered.map((element) => {
+                return exports.shortenLinks(element).catch((error) => {
+                    throw error;
+                });
+            })).then((parsed) => {
+                resolve(parsed);
+            }).catch((error) => {
+                reject(error);
+            });
         }
         else {
-            goo_gl_1.shorten(data.feedUrl).then((rss) => {
-                goo_gl_1.shorten(data.collectionViewUrl).then((itunes) => {
-                    const latest = moment(data.releaseDate).format('MMMM Do YYYY, h:mm a');
-                    if (undefined === latest) {
-                        reject('Error occured while converting date.');
-                    }
-                    else {
-                        resolve(Object.assign({}, data, { itunes, rss, latest }));
-                    }
-                }).catch((error) => {
-                    console.error(error);
-                    reject('Has no iTunes link available.');
-                });
-            }).catch((error) => {
-                console.error(error);
-                reject('Has no RSS link available.');
-            });
+            reject('No complete info in the results results to display it.');
         }
     }
     else {
-        reject('Wrong argument');
+        reject('Empty results.');
     }
 });
 /**
  * This function takes the search from itunes's API then parse it to the format that will be presented as message to the
- * user.
+ * user.  Only  takes  it  the  first  searched  response  because  it  is  a chat with the bot, maybe later when wit.ai
+ * integration is implemented, the user can give some feeedback and polishing more the search.
  */
 exports.parseResponse = (data) => new Promise((resolve, reject) => {
-    parse(data).then((result) => {
-        resolve(maskResponse(result));
+    exports.parse(data).then((results) => {
+        resolve(exports.maskResponse(results[0]));
     }).catch((error) => {
-        /**
-         * Since this catch already console.error in parse function, there's no need to do it here also. Just pop up the
-         * reject message for the calling function to debbug it later.
-         */
         reject(error);
     });
 });
 /**
- * Lorem ipsum.
+ * Parse it the data for the inline mode of search.
  */
-exports.parseInline = (data, lanCode) => new Promise((resolve, reject) => {
-    parse(data).then((result) => {
-        resolve(maskInline(Object.assign({}, result, { lanCode })));
+exports.parseResponseInline = (data, lanCode) => new Promise((resolve, reject) => {
+    exports.parse(data).then((results) => {
+        const parsed = results.map((element) => {
+            return exports.maskResponseInline(Object.assign({}, element, { lanCode }));
+        });
+        resolve(parsed);
     }).catch((error) => {
         reject(error);
     });

@@ -57,17 +57,12 @@ bot.command('search', ({ i18n, replyWithMarkdown, message }) => {
     const value = utils_1.removeCmd(message.text);
     if (value !== '') {
         itunes_search_1.search(value, opts, (data) => {
-            if (0 < data.resultCount) {
-                utils_1.parseResponse(data.results[0]).then((parsed) => {
-                    replyWithMarkdown(i18n.t('mask', parsed));
-                }).catch((error) => {
-                    console.error(error);
-                    replyWithMarkdown(i18n.t('error'));
-                });
-            }
-            else {
-                replyWithMarkdown(i18n.t('noResult', { value }));
-            }
+            utils_1.parseResponse(data).then((parsed) => {
+                replyWithMarkdown(i18n.t('mask', parsed));
+            }).catch((error) => {
+                console.error(error);
+                replyWithMarkdown(i18n.t('error'));
+            });
         });
     }
     else {
@@ -75,10 +70,10 @@ bot.command('search', ({ i18n, replyWithMarkdown, message }) => {
     }
 });
 /**
- * Lorem ipsum.
+ * Message saying how to use this bot.
  */
 bot.command('help', ({ i18n, replyWithMarkdown }) => {
-    replyWithMarkdown('Working on it');
+    replyWithMarkdown(i18n.t('wrongInput'));
 });
 /**
  * Handles the inline searching.
@@ -100,16 +95,10 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         itunes_search_1.search(value, opts, (data) => {
             if (0 < data.resultCount) {
                 /**
-                 * "Pseudo-pagination",  since  this  API  doesn't  allow  it  true  pagination, then emoving all of the
-                 * uncomplete data from the search.
+                 * "Pseudo-pagination", since this API doesn't allow it true pagination.
                  */
-                const sliced = data.results.slice(offset, offset + pageLimit);
-                const results = sliced.filter((element) => {
-                    return utils_1.hasItAll(element);
-                });
-                Promise.all(results.map((element) => {
-                    return utils_1.parseInline(element, inlineQuery.language_code);
-                })).then(results => {
+                data.results = data.results.slice(offset, offset + pageLimit);
+                utils_1.parseResponseInline(data, inlineQuery.language_code).then(results => {
                     answerInlineQuery(results, { next_offset: offset + pageLimit });
                 }).catch(error => {
                     console.error(error);
