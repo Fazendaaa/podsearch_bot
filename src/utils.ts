@@ -50,6 +50,15 @@ export const messageToString = (message: string): string => {
 };
 
 /**
+ * Just concatenate genres.
+ */
+const hasGenres = (genres: Array<string>): string => {
+    return (undefined !== genres) ? genres.reduce((accumulator, current) => {
+        return `${accumulator} | ${current}`;
+    }, '') : '';
+};
+
+/**
  * This function returns the formated data that will be sent to the user.
  */
 const maskResponse = (data: object): object => {
@@ -58,7 +67,7 @@ const maskResponse = (data: object): object => {
         releaseDate: data.releaseDate,
         artistName: data.artistName,
         country: data.country,
-        primaryGenreName: data.primaryGenreName,
+        genres: hasGenres(data.genres),
         trackCount: data.trackCount,
         itunes: data.itunes,
         rss: data.rss,
@@ -81,7 +90,6 @@ export const hasItAll = (data: result): boolean => {
         ) &&
         undefined !== data.artistName &&
         undefined !== data.country &&
-        undefined !== data.primaryGenreName &&
         undefined !== data.trackCount &&
         undefined !== data.feedUrl &&
         undefined !== data.collectionViewUrl) {
@@ -120,13 +128,13 @@ const maskInline = (data: object): object => {
             message_text: i18n.api(data.lanCode).t('mask', data),
             parse_mode: 'Markdown'
         },
-        description: data.shortDescription,
+        description: hasGenres(data.genres),
         thumb_url: preview
     };
 };
 
 /**
- * Lorem ipsum.
+ * Parsing data.
  */
 const parse = (data: result): Promise<object> => new Promise((resolve: (data: object) => void, reject: (error: string) => void) => {
     if (undefined !== data) {
@@ -142,8 +150,6 @@ const parse = (data: result): Promise<object> => new Promise((resolve: (data: ob
             reject('Has no name.');
         } else if (undefined === data.country) {
             reject('Has no country.');
-        } else if (undefined === data.primaryGenreName) {
-            reject('Has no genre.');
         } else if (undefined === data.trackCount) {
             reject('Has no number of episodes.');
         } else if (undefined === data.feedUrl) {
@@ -197,14 +203,6 @@ export const parseResponse = (data: result): Promise<object> => new Promise((res
  */
 export const parseInline = (data: result, lanCode: string): Promise<object> => new Promise((resolve: (data: object) => void, reject: (error: string) => void) => {
     parse(data).then((result: object) => {
-        /**
-         * In  case that the podcast has no description -- a lot of them hasn't -- just inform the user,
-         * in this case doesn't pay the price thrown an reject.
-         */
-        if (undefined === result.shortDescription) {
-            result.shortDescription = 'Has no description.';
-        }
-
         resolve(maskInline({...result, lanCode}));
     }).catch((error: string) => {
         reject(error);
@@ -219,9 +217,24 @@ export const errorInline = {
     title: 'Error',
     type: 'article',
     input_message_content: {
-        message_text: '[*Error*] Try it again later.',
+        message_text: '[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/dev/img/error.png)*Error*: Try it again later.',
         parse_mode: 'Markdown'
     },
     description: 'Something went wrong, check your typing or try it again later.',
-    thumb_url: 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png'
+    thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/dev/img/error.png'
+};
+
+/**
+ * Just an earch message to be sent to the user in case of an empty search querry.
+ */
+export const searchInline = {
+    id: '0',
+    title: 'Search Podcasts',
+    type: 'article',
+    input_message_content: {
+        message_text: '[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/dev/img/logo.png)Try to search any podcast.',
+        parse_mode: 'Markdown'
+    },
+    description: 'Please, just type what your looking for.',
+    thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/dev/img/logo.png'
 };

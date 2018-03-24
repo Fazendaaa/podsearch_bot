@@ -8,6 +8,7 @@ declare module 'itunes-search' {
         explicit?: string;
         limit?: number;
         media?: string;
+        lang?: string;
     };
 
     export type result = {
@@ -51,6 +52,7 @@ declare module 'itunes-search' {
         shortDescription: string;
         longDescription: string;
         hasITunesExtras: boolean;
+        genres: Array<string>;
     }
 
     export type response = {

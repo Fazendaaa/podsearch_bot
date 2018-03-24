@@ -17,8 +17,10 @@ import {
     messageToString,
     parseInline,
     parseResponse,
-    removeCmd
+    removeCmd,
+    searchInline
 } from './utils';
+
 /**
  * Why using the "old" pattern instead of the new one?
  * I had a little bit of an issue making the typing for Telegraf package, had to open my own question in Stack Overflow.
@@ -93,15 +95,25 @@ bot.command('search', ({ i18n, replyWithMarkdown, message }) => {
 });
 
 /**
+ * Lorem ipsum.
+ */
+bot.command('help', ({ i18n, replyWithMarkdown}) => {
+    replyWithMarkdown('Working on it');
+});
+
+/**
  * Handles the inline searching.
  */
 bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
+    const value: string = messageToString(inlineQuery.query);
+    const pageLimit: number = 20;
+    const offset: number = parseInt(inlineQuery.offset, 10) || 0;
     const opts: options = {
         media: 'podcast',
         entity: 'podcast',
-        limit: 25
+        // lang: inlineQuery.language_code,
+        limit: offset + pageLimit
     };
-    const value: string = messageToString(inlineQuery.query);
 
     /**
      * Verify whether or not the user has typed anything to search for.
@@ -110,16 +122,18 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         search(value, opts, (data: response) => {
             if (0 < data.resultCount) {
                 /**
-                 * Removing all of the uncomplete data from the iTunes search.
+                 * "Pseudo-pagination",  since  this  API  doesn't  allow  it  true  pagination, then emoving all of the
+                 * uncomplete data from the search.
                  */
-                const results = data.results.filter((element: result) => {
+                const sliced = data.results.slice(offset, offset + pageLimit);
+                const results = sliced.filter((element: result) => {
                     return hasItAll(element);
                 });
 
                 Promise.all(results.map((element: result) => {
                     return parseInline(element, inlineQuery.language_code);
                 })).then(results => {
-                    answerInlineQuery(results);
+                    answerInlineQuery(results, { next_offset: offset + pageLimit });
                 }).catch(error => {
                     console.error(error);
 
@@ -130,6 +144,6 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
             }
         });
     } else {
-        answerInlineQuery([errorInline]);
+        answerInlineQuery([searchInline]);
     }
 });

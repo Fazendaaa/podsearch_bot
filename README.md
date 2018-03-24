@@ -9,16 +9,15 @@
 
 > The solution that you need to share with your friends your love for podcast :3
 
-[![bitHound Overall Score](https://www.bithound.io/github/Fazendaaa/podsearch_bot/badges/score.svg)](https://www.bithound.io/github/Fazendaaa/podsearch_bot)
-[![Dependecies](https://david-dm.org/Fazendaaa/podsearch_bot.svg)](https://github.com/Fazendaaa/podsearch_bot/blob/master/package.json)
-[![Build Status](https://travis-ci.org/Fazendaaa/podsearch_bot.svg?branch=master)](https://travis-ci.org/Fazendaaa/podsearch_bot)
-[![Coverage Status](https://coveralls.io/repos/github/Fazendaaa/podsearch_bot/badge.svg?branch=master)](https://coveralls.io/github/Fazendaaa/podsearch_bot?branch=master)
+[![bitHound Overall Score](https://www.bithound.io/github/Fazendaaa/podsearch_bot/badges/score.svg?style=flat-square)](https://www.bithound.io/github/Fazendaaa/podsearch_bot)
+[![Dependecies](https://david-dm.org/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/blob/master/package.json)
+[![Build Status](https://travis-ci.org/Fazendaaa/podsearch_bot.svg?branch=master&style=flat-square)](https://travis-ci.org/Fazendaaa/podsearch_bot)
+[![Coverage Status](https://coveralls.io/repos/github/Fazendaaa/podsearch_bot/badge.svg?branch=master&style=flat-square)](https://coveralls.io/github/Fazendaaa/podsearch_bot?branch=master)
 [![Known Vulnerabilities](https://snyk.io/test/github/fazendaaa/podsearch_bot/badge.svg?style=flat-squaretargetFile=package.json)](https://snyk.io/test/github/fazendaaa/podsearch_bot?targetFile=package.json)
 [![GitHub issues](https://img.shields.io/github/issues/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/issues)
 [![GitHub forks](https://img.shields.io/github/forks/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/network)
 [![GitHub stars](https://img.shields.io/github/stars/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/stargazers)
 [![GitHub license](https://img.shields.io/github/license/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/blob/master/LICENSE)
-[![Twitter](https://img.shields.io/twitter/url/https/github.com/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://twitter.com/intent/tweet?text=Aweome:&url=https%3A%2F%2Fgithub.com%2FFazendaaa%2Fpodsearch_bot)
 
 [Telegram](https://www.telegram.org/) bot that searches podcast info in [iTunes](https://www.apple.com/lae/itunes/) store.
 

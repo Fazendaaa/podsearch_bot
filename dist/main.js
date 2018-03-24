@@ -75,15 +75,24 @@ bot.command('search', ({ i18n, replyWithMarkdown, message }) => {
     }
 });
 /**
+ * Lorem ipsum.
+ */
+bot.command('help', ({ i18n, replyWithMarkdown }) => {
+    replyWithMarkdown('Working on it');
+});
+/**
  * Handles the inline searching.
  */
 bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
+    const value = utils_1.messageToString(inlineQuery.query);
+    const pageLimit = 20;
+    const offset = parseInt(inlineQuery.offset, 10) || 0;
     const opts = {
         media: 'podcast',
         entity: 'podcast',
-        limit: 25
+        // lang: inlineQuery.language_code,
+        limit: offset + pageLimit
     };
-    const value = utils_1.messageToString(inlineQuery.query);
     /**
      * Verify whether or not the user has typed anything to search for.
      */
@@ -91,15 +100,17 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         itunes_search_1.search(value, opts, (data) => {
             if (0 < data.resultCount) {
                 /**
-                 * Removing all of the uncomplete data from the iTunes search.
+                 * "Pseudo-pagination",  since  this  API  doesn't  allow  it  true  pagination, then emoving all of the
+                 * uncomplete data from the search.
                  */
-                const results = data.results.filter((element) => {
+                const sliced = data.results.slice(offset, offset + pageLimit);
+                const results = sliced.filter((element) => {
                     return utils_1.hasItAll(element);
                 });
                 Promise.all(results.map((element) => {
                     return utils_1.parseInline(element, inlineQuery.language_code);
                 })).then(results => {
-                    answerInlineQuery(results);
+                    answerInlineQuery(results, { next_offset: offset + pageLimit });
                 }).catch(error => {
                     console.error(error);
                     answerInlineQuery([utils_1.errorInline]);
@@ -111,7 +122,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         });
     }
     else {
-        answerInlineQuery([utils_1.errorInline]);
+        answerInlineQuery([utils_1.searchInline]);
     }
 });
 //# sourceMappingURL=main.js.map
