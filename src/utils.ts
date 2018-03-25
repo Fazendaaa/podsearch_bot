@@ -212,21 +212,25 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
  */
 export const shortenLinks = (data: result): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
-    shorten(data.feedUrl).then((rss: string) => {
-        shorten(data.collectionViewUrl).then((itunes: string) => {
-            const latest: string = moment(data.releaseDate).format('MMMM Do YYYY, h:mm a');
+    if (undefined !== data) {
+        shorten(data.feedUrl).then((rss: string) => {
+            shorten(data.collectionViewUrl).then((itunes: string) => {
+                const latest: string = moment(data.releaseDate).format('MMMM Do YYYY, h:mm a');
 
-            if (undefined === latest) {
-                reject('Error occured while converting date.');
-            } else {
-                resolve({ ...data, itunes, rss, latest });
-            }
+                if (undefined === latest) {
+                    reject('Error occured while converting date.');
+                } else {
+                    resolve({ ...data, itunes, rss, latest });
+                }
+            }).catch((error: string) => {
+                reject('Has no iTunes link available.');
+            });
         }).catch((error: string) => {
-            reject('Has no iTunes link available.');
+            reject('Has no RSS link available.');
         });
-    }).catch((error: string) => {
-        reject('Has no RSS link available.');
-    });
+    } else {
+        reject('Wrong argument.');
+    }
 });
 
 /**
@@ -234,7 +238,7 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
  */
 export const parse = (data: response): Promise<Array<resultExtended>> =>
 new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: string) => void) => {
-    if (undefined !== data && 0 < data.resultCount) {
+    if (undefined !== data && 0 < data.resultCount && undefined !== data.results) {
         /**
          * Some  data  info  comes  uncomplete,  this  could  mean  an error later on the process; that's why it must be
          * filtered right here, to avoid it.
