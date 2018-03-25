@@ -19,6 +19,7 @@ import {
     messageToString,
     parse,
     parseResponse,
+    parseResponseInline,
     removeCmd,
     resultExtended,
     shortenLinks
@@ -27,48 +28,9 @@ import {
 /**
  * "Mock" data.
  */
-const srcResult: result = {
-    wrapperType: 'track',
-    kind: 'podcast',
-    collectionId: 1103141552,
-    trackId: 1103141552,
-    artistName: 'Nerdcast',
-    collectionName: 'Nerdcast',
-    trackName: 'Nerdcast',
-    collectionCensoredName: 'Nerdcast',
-    trackCensoredName: 'Nerdcast',
-    collectionViewUrl: 'https://itunes.apple.com/us/podcast/nerdcast/id1103141552?mt=2&uo=4',
-    feedUrl: 'http://feeds.soundcloud.com/users/soundcloud:users:219177314/sounds.rss',
-    trackViewUrl: 'https://itunes.apple.com/us/podcast/nerdcast/id1103141552?mt=2&uo=4',
-    artworkUrl30: 'http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/30x30bb.jpg',
-    artworkUrl60: 'http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/60x60bb.jpg',
-    artworkUrl100: 'http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/100x100bb.jpg',
-    collectionPrice: 0,
-    trackPrice: 0,
-    trackRentalPrice: 0,
-    collectionHdPrice: 0,
-    trackHdPrice: 0,
-    trackHdRentalPrice: 0,
-    releaseDate: '2016-07-11T07:05:00Z',
-    collectionExplicitness: 'cleaned',
-    trackExplicitness: 'cleaned',
-    trackCount: 2,
-    country: 'USA',
-    currency: 'USD',
-    primaryGenreName: 'Comedy',
-    contentAdvisoryRating: 'Clean',
-    artworkUrl600: 'http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg',
-    genreIds: ['1303', '26'],
-    genres: ['Comedy', 'Podcasts'],
-    itunes: 'https://goo.gl/kwHu7z',
-    rss: 'https://goo.gl/bECbi2',
-    latest: 'July 11th 2016, 4:05 am'
-};
-
-const srcResponse: response = {
-    resultCount: 1,
-    results: [srcResult]
-};
+// const testOneOutput = JSON.parse(readFile(join(__dirname, 'test_one_output.json'), 'utf8'));
+// const testTwoInput = JSON.parse(readFile(join(__dirname, 'test_two_input.json'), 'utf8'));
+// const testTwoOutput = JSON.parse(readFile(join(__dirname, 'test_two_output.json'), 'utf8'));
 
 describe('Testing removeCmd function', () => {
     test('/search nerdcast', () => {
@@ -124,100 +86,176 @@ describe('Testing maskResponseInline function', () => {
 
 describe('Testing shortenLinks function', () => {
     test('Shoren nerdcast links', () => {
-        const dst: resultExtended = {
-            ...srcResult,
-            itunes: 'https://goo.gl/kwHu7z',
-            rss: 'https://goo.gl/bECbi2',
-            latest: 'July 11th 2016, 4:05 am'
-        };
+        readFile(join(__dirname, 'test_one_input.json'), 'utf8', (err: Error, data: string) => {
+            const testOneInput = JSON.parse(data);
+            const dst: resultExtended = {
+                ...testOneInput,
+                itunes: 'https://goo.gl/kwHu7z',
+                rss: 'https://goo.gl/bECbi2',
+                latest: 'July 11th 2016, 4:05 am'
+            };
 
-        expect(shortenLinks(srcResult)).resolves.toEqual(dst);
-    });
-});
-
-describe('Testing parse function', () => {
-    test('udefined', () => {
-        expect(parse(undefined)).rejects.toEqual('Empty results.');
-    });
-});
-
-describe('Testing parseResponse function', () => {
-    const noComplete: string = 'No complete info in the results results to display it.';
-
-    test('Parse nerdcast', () => {
-        const file: string = join(__dirname, 'test.json');
-
-        readFile(file, 'utf8', (err: Error, data: string) => {
-            expect(parseResponse(srcResponse)).resolves.toEqual(JSON.parse(data));
+            expect(shortenLinks(testOneInput)).resolves.toEqual(dst);
         });
     });
-
-    /**
-     * Catching errors.
-     */
-    test('undefined', () => {
-        expect(parseResponse(undefined)).rejects.toEqual('Empty results.');
-    });
-
-    test('Has no RSS link', () => {
-        const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
-        delete newSrc.results[0].feedUrl;
-
-        expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
-    });
-
-    test('Has no iTunes link', () => {
-        const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
-        delete newSrc.results[0].collectionViewUrl;
-
-        expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
-    });
-
-    test('Has no lastest episode date.', () => {
-        const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
-        delete newSrc.results[0].releaseDate;
-
-        expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
-    });
-
-    test('Has no podcast artwork.', () => {
-        const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
-        delete newSrc.results[0].artworkUrl600;
-
-        expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
-    });
-
-    test('Has no name.', () => {
-        const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
-        delete newSrc.results[0].artistName;
-
-        expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
-    });
-
-    test('Has no country.', () => {
-        const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
-        delete newSrc.results[0].country;
-
-        expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
-    });
-
-    test('Has no genre.', () => {
-        const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
-        delete newSrc.results[0].genres;
-
-        expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
-    });
-
-    test('Has no number of episodes.', () => {
-        const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
-        delete newSrc.results[0].trackCount;
-
-        expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
-    });
 });
 
+// describe('Testing parse function', () => {
+//     test('udefined', () => {
+//         expect(parse(undefined)).rejects.toEqual('Empty results.');
+//     });
+// });
+
+// describe('Testing parseResponse function', () => {
+//     readFile(join(__dirname, 'test_one_input.json'), 'utf8', (err: Error, data: string) => {
+//         const testOneInput = JSON.parse(data);
+//         const dst: resultExtended = {
+//             ...testOneInput,
+//             itunes: 'https://goo.gl/kwHu7z',
+//             rss: 'https://goo.gl/bECbi2',
+//             latest: 'July 11th 2016, 4:05 am'
+//         };
+//         const srcResponse: response = {
+//             resultCount: 1,
+//             results: testOneInput
+//         };
+//         const noComplete: string = 'No complete info in the results results to display it.';
+
+//         test('Parse nerdcast', () => {
+//             expect(parseResponse(srcResponse)).resolves.toEqual(testOneOutput);
+//         });
+
+//         test('undefined', () => {
+//             expect(parseResponse(undefined)).rejects.toEqual('Empty results.');
+//         });
+
+//         test('Has no RSS link', () => {
+//             const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//             delete newSrc.results[0].feedUrl;
+
+//             expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
+//         });
+
+//         test('Has no iTunes link', () => {
+//             const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//             delete newSrc.results[0].collectionViewUrl;
+
+//             expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
+//         });
+
+//         test('Has no lastest episode date.', () => {
+//             const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//             delete newSrc.results[0].releaseDate;
+
+//             expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
+//         });
+
+//         test('Has no podcast artwork.', () => {
+//             const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//             delete newSrc.results[0].artworkUrl600;
+
+//             expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
+//         });
+
+//         test('Has no name.', () => {
+//             const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//             delete newSrc.results[0].artistName;
+
+//             expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
+//         });
+
+//         test('Has no country.', () => {
+//             const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//             delete newSrc.results[0].country;
+
+//             expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
+//         });
+
+//         test('Has no genre.', () => {
+//             const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//             delete newSrc.results[0].genres;
+
+//             expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
+//         });
+
+//         test('Has no number of episodes.', () => {
+//             const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//             delete newSrc.results[0].trackCount;
+
+//             expect(parseResponse(newSrc)).rejects.toEqual(noComplete);
+//         });
+//     });
+// });
+
 // describe('Testing parseResponseInline function', () => {
-//     test('', () => {
-//         expect(parseResponseInline()).toEqual();
+//     const srcResponse: response = {
+//         resultCount: 20,
+//         results: testTwoInput
+//     };
+//     const noComplete: string = 'No complete info in the results results to display it.';
+//     const lanCode: string = 'en_us';
+
+//     test('Parse nerdcast', () => {
+//         expect(parseResponseInline(srcResponse, lanCode)).resolves.toEqual(testTwoInput);
+//     });
+
+//     test('undefined', () => {
+//         expect(parseResponseInline(undefined, lanCode)).rejects.toEqual('Empty results.');
+//     });
+
+//     test('Has no RSS link', () => {
+//         const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//         delete newSrc.results[0].feedUrl;
+
+//         expect(parseResponseInline(newSrc, lanCode)).rejects.toEqual(noComplete);
+//     });
+
+//     test('Has no iTunes link', () => {
+//         const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//         delete newSrc.results[0].collectionViewUrl;
+
+//         expect(parseResponseInline(newSrc, lanCode)).rejects.toEqual(noComplete);
+//     });
+
+//     test('Has no lastest episode date.', () => {
+//         const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//         delete newSrc.results[0].releaseDate;
+
+//         expect(parseResponseInline(newSrc, lanCode)).rejects.toEqual(noComplete);
+//     });
+
+//     test('Has no podcast artwork.', () => {
+//         const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//         delete newSrc.results[0].artworkUrl600;
+
+//         expect(parseResponseInline(newSrc, lanCode)).rejects.toEqual(noComplete);
+//     });
+
+//     test('Has no name.', () => {
+//         const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//         delete newSrc.results[0].artistName;
+
+//         expect(parseResponseInline(newSrc, lanCode)).rejects.toEqual(noComplete);
+//     });
+
+//     test('Has no country.', () => {
+//         const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//         delete newSrc.results[0].country;
+
+//         expect(parseResponseInline(newSrc, lanCode)).rejects.toEqual(noComplete);
+//     });
+
+//     test('Has no genre.', () => {
+//         const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//         delete newSrc.results[0].genres;
+
+//         expect(parseResponseInline(newSrc, lanCode)).rejects.toEqual(noComplete);
+//     });
+
+//     test('Has no number of episodes.', () => {
+//         const newSrc: response = JSON.parse(JSON.stringify(srcResponse));
+//         delete newSrc.results[0].trackCount;
+
+//         expect(parseResponseInline(newSrc, lanCode)).rejects.toEqual(noComplete);
 //     });
 // });

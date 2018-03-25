@@ -58,6 +58,7 @@ exports.hasItAll = (data) => {
         undefined !== data.country &&
         undefined !== data.trackCount &&
         undefined !== data.feedUrl &&
+        undefined !== data.genres &&
         undefined !== data.collectionViewUrl) {
         rtnval = true;
     }
