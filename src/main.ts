@@ -1,8 +1,9 @@
+/**
+ * Main  file,  handles all the Telegram's requests and does the piping API searches through the parsing functions. More
+ * about the non official typings for itunes search can be found at: ./src/@typings/itunes-search/
+ */
 'use strict';
 
-/**
- * More about the non official typings for itunes search can be found at: ./src/@typings/itunes-search/
- */
 import { config } from 'dotenv';
 import {
     options,
@@ -11,12 +12,14 @@ import {
     search
 } from 'itunes-search';
 import { resolve } from 'path';
+import { telegramInline } from 'telegraf';
 import {
     errorInline,
     messageToString,
     parseResponse,
     parseResponseInline,
     removeCmd,
+    resultExtended,
     searchInline
 } from './utils';
 
@@ -76,7 +79,7 @@ bot.command('search', ({ i18n, replyWithMarkdown, message }) => {
 
     if (value !== '') {
         search(value, opts, (data: response) => {
-            parseResponse(data).then((parsed: object) => {
+            parseResponse(data).then((parsed: resultExtended) => {
                 replyWithMarkdown(i18n.t('mask', parsed));
             }).catch((error: string) => {
                 console.error(error);
@@ -120,9 +123,9 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                  */
                 data.results = data.results.slice(offset, offset + pageLimit);
 
-                parseResponseInline(data, inlineQuery.language_code).then(results => {
+                parseResponseInline(data, inlineQuery.from.language_code).then((results: Array<telegramInline>) => {
                     answerInlineQuery(results, { next_offset: offset + pageLimit });
-                }).catch(error => {
+                }).catch((error: Error) => {
                     console.error(error);
                     answerInlineQuery([errorInline]);
                 });

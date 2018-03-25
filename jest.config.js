@@ -21,7 +21,7 @@ module.exports = {
         '<rootDir>/node_modules/',
         '<rootDir>/dist/',
     ],
-    testRegex: '(/test/.*| (\\.|/)(test|spec))\\.(jsx?|tsx?)$',
+    testRegex: '(./__test__/.*| (\\.|/)(test|spec))\\.(jsx?|tsx?)$',
     moduleFileExtensions: [
         'ts',
         'tsx',

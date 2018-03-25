@@ -1,8 +1,9 @@
+/**
+ * Handeling  functions  that  does  parsing  and  checking  of data. More about the non official typings for goo.gl and
+ * itunes-search can be found at: ./src/@typings/
+ */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * More about the non official typings for goo.gl and itunes-search can be found at: ./src/@typings/
- */
 const dotenv_1 = require("dotenv");
 const goo_gl_1 = require("goo.gl");
 const i18n_node_yaml = require("i18n-node-yaml");
@@ -27,23 +28,34 @@ const i18n = i18n_node_yaml({
 /**
  * This function removes the '/cmd' of the command.
  */
-exports.removeCmd = (cmd = '') => {
-    return (typeof cmd === 'string') ? cmd.replace(/(\/\w+)\s*/, '') : '';
+exports.removeCmd = (cmd) => {
+    return (undefined !== cmd && 'string' === typeof cmd) ? cmd.replace(/(\/\w+)\s*/, '') : undefined;
 };
 /**
  * "Handles" all the query input so this way even whether or not a user sends an sticker, that won't be parsed.
  */
 exports.messageToString = (message) => {
-    return Buffer.from(message, 'ascii').toString('ascii').replace(/(?:=\(|:0|:o|: o|: 0)/, ': o');
+    return (undefined !== message && 'string' === typeof message) ?
+        Buffer.from(message, 'ascii').toString('ascii').replace(/(?:=\(|:0|:o|: o|: 0)/, ': o') :
+        undefined;
 };
 /**
  * Just concatenate genres.
  * This will be only used locally, but there's need to exported to be tested later.
  */
 exports.hasGenres = (genres) => {
-    return (undefined !== genres) ? genres.reduce((accumulator, current) => {
-        return `${accumulator} | ${current}`;
-    }, '') : '';
+    let rtnval = undefined;
+    if (undefined !== genres) {
+        if (1 < genres.length) {
+            rtnval = genres.reduce((accumulator, current) => {
+                return `${accumulator} | ${current}`;
+            });
+        }
+        else {
+            rtnval = genres[0];
+        }
+    }
+    return rtnval;
 };
 /**
  * Verify whether or not an iTunes response has all of the needed data to the bot.
@@ -125,27 +137,36 @@ exports.maskResponseInline = (data) => {
  * This will be only used locally, but there's need to exported to be tested later.
  */
 exports.shortenLinks = (data) => new Promise((resolve, reject) => {
-    goo_gl_1.shorten(data.feedUrl).then((rss) => {
-        goo_gl_1.shorten(data.collectionViewUrl).then((itunes) => {
-            const latest = moment(data.releaseDate).format('MMMM Do YYYY, h:mm a');
-            if (undefined === latest) {
-                reject('Error occured while converting date.');
-            }
-            else {
-                resolve(Object.assign({}, data, { itunes, rss, latest }));
-            }
+    if (undefined !== data) {
+        goo_gl_1.shorten(data.feedUrl).then((rss) => {
+            goo_gl_1.shorten(data.collectionViewUrl).then((itunes) => {
+                /**
+                 * There  is  no  need  to  check  whether or not releaseDate exists because the caller function already
+                 * verified this. That being said, if releaseDate is undefined, moment will return the current OS date.
+                 */
+                const latest = moment(data.releaseDate).format('MMMM Do YYYY, h:mm a');
+                if (undefined === latest) {
+                    reject('Error occured while converting date.');
+                }
+                else {
+                    resolve(Object.assign({}, data, { itunes, rss, latest }));
+                }
+            }).catch((error) => {
+                reject('Has no iTunes link available.');
+            });
         }).catch((error) => {
-            reject('Has no iTunes link available.');
+            reject('Has no RSS link available.');
         });
-    }).catch((error) => {
-        reject('Has no RSS link available.');
-    });
+    }
+    else {
+        reject('Wrong argument.');
+    }
 });
 /**
  * Parsing data.
  */
 exports.parse = (data) => new Promise((resolve, reject) => {
-    if (undefined !== data && 0 < data.resultCount) {
+    if (undefined !== data && 0 < data.resultCount && undefined !== data.results) {
         /**
          * Some  data  info  comes  uncomplete,  this  could  mean  an error later on the process; that's why it must be
          * filtered right here, to avoid it.
@@ -186,14 +207,23 @@ exports.parseResponse = (data) => new Promise((resolve, reject) => {
  * Parse it the data for the inline mode of search.
  */
 exports.parseResponseInline = (data, lanCode) => new Promise((resolve, reject) => {
-    exports.parse(data).then((results) => {
-        const parsed = results.map((element) => {
-            return exports.maskResponseInline(Object.assign({}, element, { lanCode }));
+    if (undefined !== lanCode && 'string' === typeof lanCode) {
+        /**
+         * Removing the country from the language option.
+         */
+        const lang = lanCode.split('-')[0];
+        exports.parse(data).then((results) => {
+            const parsed = results.map((element) => {
+                return exports.maskResponseInline(Object.assign({}, element, { lanCode: lang }));
+            });
+            resolve(parsed);
+        }).catch((error) => {
+            reject(error);
         });
-        resolve(parsed);
-    }).catch((error) => {
-        reject(error);
-    });
+    }
+    else {
+        reject('No lanCode available.');
+    }
 });
 /**
  * Just an error message to be sent to the user in case of failed search.

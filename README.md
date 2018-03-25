@@ -49,6 +49,11 @@ Example:
 ```
 @podsearch The Story by The Mission
 ```
+##### Help
+If you have any other questions about it just use it the help commanad:
+```
+/help
+```
 # How does it work?
 You can build yourself a bot just like this one, just tag along with the following procedures.
 ## Prerequisites
@@ -107,26 +112,22 @@ npm test
 ```
 And then the status of testing will be printed, something like:
 ```bash
- PASS  test/utils.test.ts (10.268s)
-  Testing parseResponse function
-    ✓ Parse nerdcast (16ms)
-    ...
-    ✓ Has no number of episodes. (1ms)
+ PASS  __test__/utils.test.ts
   Testing removeCmd function
-    ✓ /search nerdcast (1ms)
+    ✓ Searching "/search Nerdcast". (4ms)
     ...
-    ✓ someWordWithoutCmd (2ms)
+    ✓ Has no number of episodes.
 
 ----------|----------|----------|----------|----------|-------------------|
 File      |  % Stmts | % Branch |  % Funcs |  % Lines | Uncovered Line #s |
 ----------|----------|----------|----------|----------|-------------------|
-All files |    79.41 |    76.92 |     37.5 |    78.79 |                   |
- utils.ts |    79.41 |    76.92 |     37.5 |    78.79 |... 61,62,64,66,69 |
+All files |     67.5 |       52 |    60.71 |     67.5 |                   |
+ utils.ts |     67.5 |       52 |    60.71 |     67.5 |... 98,299,302,307 |
 ----------|----------|----------|----------|----------|-------------------|
 Test Suites: 1 passed, 1 total
-Tests:       15 passed, 15 total
+Tests:       71 passed, 71 total
 Snapshots:   0 total
-Time:        14.425s
+Time:        1.773s
 Ran all test suites.
 ```
 More about the testing enviroment can be found at [jest.config.js](https://github.com/Fazendaaa/podsearch_bot/blob/master/jest.config.js).
@@ -172,4 +173,5 @@ Like many Open-Source Software (OSS) the MIT lincense is used, more about it in 
 # Acknowledgments
 * Thanks to [PurpleBooth](https://gist.github.com/PurpleBooth) and this great [README](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) template and hers [CONTRIBUTING](https://gist.github.com/PurpleBooth/b24679402957c63ec426) template also;
 * [Mattias Petter Johansson](https://twitter.com/mpjme) and his channel [FunFunFunction](https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q), where I've learnt so many important coding best pratices; please don't think that this is a channel that will give any kind of "lazy-intro-tutorial" or anything like that, this channel open your eyes to how you can improve your existing skills and learn some more new ones;
+* Since Jest mocking documentation left me with a lot of doubts, [this](https://hackernoon.com/api-testing-with-jest-d1ab74005c0a) tutorial helped me out a little, still have some issues to understand how to correct mock data. I highly tink that is because of my testing logic, once I figure out how to do it correctly I will rewrite all testing code; for now is "working" the best way I came up to; even being that horrible is not that much compared to having an API request all the time;
 * I highly recommend checking it out my [**ytlofi**](https://github.com/Fazendaaa/ytlofi) project whether you ran through some issues trying to get any CI integration or even project badges.

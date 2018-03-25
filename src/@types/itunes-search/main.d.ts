@@ -52,6 +52,7 @@ declare module 'itunes-search' {
         shortDescription: string;
         longDescription: string;
         hasITunesExtras: boolean;
+        genreIds: Array<string>;
         genres: Array<string>;
     }
 

@@ -1,8 +1,9 @@
+/**
+ * Main  file,  handles all the Telegram's requests and does the piping API searches through the parsing functions. More
+ * about the non official typings for itunes search can be found at: ./src/@typings/itunes-search/
+ */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * More about the non official typings for itunes search can be found at: ./src/@typings/itunes-search/
- */
 const dotenv_1 = require("dotenv");
 const itunes_search_1 = require("itunes-search");
 const path_1 = require("path");
@@ -98,9 +99,9 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                  * "Pseudo-pagination", since this API doesn't allow it true pagination.
                  */
                 data.results = data.results.slice(offset, offset + pageLimit);
-                utils_1.parseResponseInline(data, inlineQuery.language_code).then(results => {
+                utils_1.parseResponseInline(data, inlineQuery.from.language_code).then((results) => {
                     answerInlineQuery(results, { next_offset: offset + pageLimit });
-                }).catch(error => {
+                }).catch((error) => {
                     console.error(error);
                     answerInlineQuery([utils_1.errorInline]);
                 });

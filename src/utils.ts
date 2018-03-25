@@ -1,8 +1,9 @@
+/**
+ * Handeling  functions  that  does  parsing  and  checking  of data. More about the non official typings for goo.gl and
+ * itunes-search can be found at: ./src/@typings/
+ */
 'use strict';
 
-/**
- * More about the non official typings for goo.gl and itunes-search can be found at: ./src/@typings/
- */
 import { config } from 'dotenv';
 import {
     setKey,
@@ -80,6 +81,7 @@ export type resultExtended = {
     shortDescription?: string;
     longDescription?: string;
     hasITunesExtras?: boolean;
+    genreIds?: Array<string>;
     genres?: Array<string> | string;
     itunes?: string;
     rss?: string;
@@ -215,6 +217,10 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
     if (undefined !== data) {
         shorten(data.feedUrl).then((rss: string) => {
             shorten(data.collectionViewUrl).then((itunes: string) => {
+                /**
+                 * There  is  no  need  to  check  whether or not releaseDate exists because the caller function already
+                 * verified this. That being said, if releaseDate is undefined, moment will return the current OS date.
+                 */
                 const latest: string = moment(data.releaseDate).format('MMMM Do YYYY, h:mm a');
 
                 if (undefined === latest) {
@@ -282,15 +288,24 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
  */
 export const parseResponseInline = (data: response, lanCode: string): Promise<Array<telegramInline>> =>
 new Promise((resolve: (data: Array<telegramInline>) => void, reject: (error: string) => void) => {
-    parse(data).then((results: Array<resultExtended>) => {
-        const parsed: Array<telegramInline> = results.map((element: resultExtended) => {
-            return maskResponseInline({...element, lanCode});
-        });
+    if (undefined !== lanCode && 'string' === typeof lanCode) {
+        /**
+         * Removing the country from the language option.
+         */
+        const lang = lanCode.split('-')[0];
 
-        resolve(parsed);
-    }).catch((error: string) => {
-        reject(error);
-    });
+        parse(data).then((results: Array<resultExtended>) => {
+            const parsed: Array<telegramInline> = results.map((element: resultExtended) => {
+                return maskResponseInline({ ...element, lanCode: lang });
+            });
+
+            resolve(parsed);
+        }).catch((error: string) => {
+            reject(error);
+        });
+    } else {
+        reject('No lanCode available.');
+    }
 });
 
 /**
