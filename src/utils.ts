@@ -90,15 +90,17 @@ export type resultExtended = {
 /**
  * This function removes the '/cmd' of the command.
  */
-export const removeCmd = (cmd: string = ''): string => {
-    return (typeof cmd === 'string') ? cmd.replace(/(\/\w+)\s*/, '') : '';
+export const removeCmd = (cmd: string): string => {
+    return (undefined !== cmd && 'string' === typeof cmd) ? cmd.replace(/(\/\w+)\s*/, '') : undefined;
 };
 
 /**
  * "Handles" all the query input so this way even whether or not a user sends an sticker, that won't be parsed.
  */
 export const messageToString = (message: string): string => {
-    return Buffer.from(message, 'ascii').toString('ascii').replace(/(?:=\(|:0|:o|: o|: 0)/, ': o');
+    return (undefined !== message && 'string' === typeof message) ?
+    Buffer.from(message, 'ascii').toString('ascii').replace(/(?:=\(|:0|:o|: o|: 0)/, ': o') :
+    undefined;
 };
 
 /**
@@ -106,9 +108,19 @@ export const messageToString = (message: string): string => {
  * This will be only used locally, but there's need to exported to be tested later.
  */
 export const hasGenres = (genres: Array<string>): string => {
-    return (undefined !== genres) ? genres.reduce((accumulator, current) => {
-        return `${accumulator} | ${current}`;
-    }, '') : '';
+    let rtnval: string = undefined;
+
+    if (undefined !== genres) {
+        if (1 < genres.length) {
+            rtnval = genres.reduce((accumulator, current) => {
+                return `${accumulator} | ${current}`;
+            });
+        } else {
+            rtnval = genres[0];
+        }
+    }
+
+    return rtnval;
 };
 
 /**
