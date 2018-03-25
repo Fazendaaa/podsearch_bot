@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1522019398625" clover="3.2.0">
-  <project timestamp="1522019398625" name="All files">
+<coverage generated="1522020425779" clover="3.2.0">
+  <project timestamp="1522020425779" name="All files">
     <metrics statements="80" coveredstatements="54" conditionals="50" coveredconditionals="26" methods="28" coveredmethods="17" elements="158" coveredelements="97" complexity="0" loc="80" ncloc="80" packages="1" files="1" classes="1">
       <file name="utils.ts" path="/home/farm/Documents/podsearch_bot/src/utils.ts">
         <metrics statements="80" coveredstatements="54" conditionals="50" coveredconditionals="26" methods="28" coveredmethods="17"/>
