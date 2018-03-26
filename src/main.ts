@@ -69,7 +69,7 @@ bot.command('start', ({ i18n, replyWithMarkdown }) => {
  * on  podcast,  this  arguments  must be setted. And, this command works only talking to the bot, so there's no need to
  * show more than one result.
  */
-bot.command('search', ({ i18n, replyWithMarkdown, message }) => {
+bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
     const opts: options = {
         media: 'podcast',
         entity: 'podcast',
@@ -87,7 +87,22 @@ bot.command('search', ({ i18n, replyWithMarkdown, message }) => {
             });
         });
     } else {
-        replyWithMarkdown(i18n.t('wrongInput'));
+        replyWithMarkdown(i18n.t('wrongInputCmd')).then(() => {
+            replyWithVideo({ source: resolve(__dirname, '../gif/search_cmd.mp4') }).then(() => {
+                replyWithMarkdown(i18n.t('wrongInputInline')).then(() => {
+                    replyWithVideo({ source: resolve(__dirname, '../gif/search_inline.mp4') }).catch((error: Error) => {
+                        throw error;
+                    });
+                }).catch((error: Error) => {
+                    throw error;
+                });
+            }).catch((error: Error) => {
+                throw error;
+            });
+        }).catch((error: Error) => {
+            replyWithMarkdown(i18n.t('error'));
+            console.error(error);
+        });
     }
 });
 
@@ -95,7 +110,7 @@ bot.command('search', ({ i18n, replyWithMarkdown, message }) => {
  * Message saying how to use this bot.
  */
 bot.command('help', ({ i18n, replyWithMarkdown}) => {
-    replyWithMarkdown(i18n.t('wrongInput'));
+    replyWithMarkdown(i18n.t('help'), { disable_web_page_preview: true });
 });
 
 /**
