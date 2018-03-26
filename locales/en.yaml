@@ -20,11 +20,22 @@ mask:
   *iTunes*: ${itunes}\n"
 
 noResult: |
-  No result was found for _${value}_.
+  No result was found for "_${value}_".
   This could mean a wrong typing or right now the search service is in maintenance. Please, try it again later.
 
-wrongInput:
-  "Please, send a valid search of the following type:\n\
+wrongInputCmd:
+  "Please send a valid search of the following format:\n\
   /search _podcast name_\n\n\
   Example:\n\
   /search _The Story by The Mission_\n"
+
+wrongInputInline:
+  "Or you can try the inline mode:"
+
+help: 
+  "This bot searches in iTunes store about podcasts. You can do a search through the search command or the inline mode. Try it with:\n\
+  /search\n\n\
+  Wanna see more:\n\
+  🤖 [Github](https://github.com/Fazendaaa/podsearch_bot) — See the code behind this bot.\n\
+  😀 [My website](http://fazendaaa.me) — Check it out some of my other works.\n\n\
+  Has any sugestions or errors to report it? Fell free to tell me: @Farmy."
