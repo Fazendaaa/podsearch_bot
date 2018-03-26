@@ -38,7 +38,7 @@ Just open it a chat with Podsearchbot and then use it like this:
 ```
 <h1 align="center">
     <br>
-        <iframe src="https://giphy.com/embed/6C6NusTKMkC8UCsM0d" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+<div style="width:100%;height:0;padding-bottom:117%;position:relative;"><iframe src="https://giphy.com/embed/6C6NusTKMkC8UCsM0d" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/podsearchbot-6C6NusTKMkC8UCsM0d">via GIPHY</a></p>
 	<br>
 </h1>
 Example:
