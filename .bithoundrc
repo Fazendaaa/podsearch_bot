@@ -1,14 +1,17 @@
-"critics": {
-    "lint": {
-        "engine": "tslint"
-    },
+{
+    "critics": {
+        "lint": {
+            "engine": "tslint"
+        },
+    }
     "wc": {
         "limit": 5000 
     },
     "ignore": [
+        "**/node_modules/**",
         "**/dist/**"
     ],
     "test": [
-        "**/__test__/**",
+        "**/__test__/**"
     ]
 }
