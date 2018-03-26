@@ -316,11 +316,11 @@ export const errorInline: telegramInline = {
     title: 'Error',
     type: 'article',
     input_message_content: {
-        message_text: '[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/dev/img/error.png)*Error*: Try it again later.',
+        message_text: '[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)*Error*: Try it again later.',
         parse_mode: 'Markdown'
     },
     description: 'Something went wrong, check your typing or try it again later.',
-    thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/dev/img/error.png'
+    thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
 };
 
 /**
@@ -331,9 +331,9 @@ export const searchInline: telegramInline = {
     title: 'Search Podcasts',
     type: 'article',
     input_message_content: {
-        message_text: '[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/dev/img/logo.png)Try to search any podcast.',
+        message_text: '[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)Try to search any podcast.',
         parse_mode: 'Markdown'
     },
     description: 'Please, just type what your looking for.',
-    thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/dev/img/logo.png'
+    thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
 };

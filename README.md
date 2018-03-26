@@ -1,7 +1,7 @@
 # Podsearchbot
 <h1 align="center">
     <br>
-    <img width="260" src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot"/>
+    <img width="260" src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png" alt="Podsearchbot"/>
 	<br>
 	<br>
 	<br>
@@ -160,11 +160,11 @@ I would love to say that [SemVer](https://semver.org/) or anything like that is 
 # TODO
 Since I will be keeping this README up to date with any major change and I don't use any versoning system to log all the fixed bugs or previous projects updates, you can still have a taste of what comes next right here:
 
-* Bot language support in the following languages:
+* Translate this README in the following languages -- still don't know how to do it but I know that is possible:
     * English
     * Portuguese
-* Translate this README in the previous languages -- still don't know how to do it but I know that is possible;
 * Write a CONTRIBUTING and making it possible so anyone can help even those who don't know coding just by translating the bot texts to the user native language;
+* Improving code coverage;
 * Integration with wit.ai.
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
