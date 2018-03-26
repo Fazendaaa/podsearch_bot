@@ -2,7 +2,7 @@
     "name": "podsearchbot",
     "description": "Telegram bot that searches Podcast in iTunes store.",
     "repository": "https://github.com/Fazendaaa/podsearch_bot.git",
-    "logo": "https://node-js-sample.herokuapp.com/node.svg",
+    "logo": "https://github.com/Fazendaaa/podsearch_bot/blob/dev/logo/podsearchbot.svg",
     "keywords": [
         "node",
         "telegram",

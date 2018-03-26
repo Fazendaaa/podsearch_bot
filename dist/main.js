@@ -1,10 +1,12 @@
+/**
+ * Main  file,  handles all the Telegram's requests and does the piping API searches through the parsing functions. More
+ * about the non official typings for itunes search can be found at: ./src/@typings/itunes-search/
+ */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * More about the non official typings for itunes search can be found at: ./src/@typings/itunes-search/
- */
 const dotenv_1 = require("dotenv");
 const itunes_search_1 = require("itunes-search");
+const path_1 = require("path");
 const utils_1 = require("./utils");
 /**
  * Why using the "old" pattern instead of the new one?
@@ -13,48 +15,104 @@ const utils_1 = require("./utils");
  * brentatkins opened my eys to the real issue: https://stackoverflow.com/q/49348607/7092954
  */
 const telegraf = require('telegraf');
+const telegrafI18n = require('telegraf-i18n');
 /**
  * Allows the code to run without passing the enviroment variables as arguments.
  */
 dotenv_1.config();
 /**
- * Set Telegram's API key.
+ * Start bot and then set options like:
+ *  - Default markdown option for message parsing;
+ *  - Polling;
+ *  - Log each bot requisition;
+ *  - Internacionalization support.
  */
 const bot = new telegraf(process.env.BOT_KEY);
-/**
- * Start poll updates.
- */
+const i18n = new telegrafI18n({
+    defaultLanguage: 'en',
+    allowMissing: true,
+    directory: path_1.resolve(__dirname, '../locales')
+});
 bot.startPolling();
-/**
- * Will print each bot's requisition.
- */
 bot.use(telegraf.log());
-/**
- * iTunes  search  options for podcast, since this API searches anything in iTunes store and this bot it's only for uses
- * on podcast, this arguments must be setted.
- */
-const opts = {
-    media: 'podcast',
-    entity: 'podcast',
-    limit: 1
-};
+bot.use(i18n.middleware());
 /**
  * Greetings to new users when chatting one-to-one.
  */
-bot.start((ctx) => {
-    ctx.reply('Welcome!');
+bot.command('start', ({ i18n, replyWithMarkdown }) => {
+    replyWithMarkdown(i18n.t('greetings'));
 });
 /**
  * /search + 'podcast name', then returns it to the user all the data.
+ *
+ * iTunes  search  options for podcast, since this API searches anything in iTunes store and this bot it's only for uses
+ * on  podcast,  this  arguments  must be setted. And, this command works only talking to the bot, so there's no need to
+ * show more than one result.
  */
-bot.command('search', (ctx) => {
-    const value = utils_1.removeCmd(ctx.update.message.text);
-    itunes_search_1.search(value, opts, (data) => {
-        utils_1.parseResponse(data).then(message => {
-            ctx.reply(message, { parse_mode: 'Markdown' });
-        }).catch((error) => {
-            ctx.reply('There has been an error in the search. Please, try again later.');
+bot.command('search', ({ i18n, replyWithMarkdown, message }) => {
+    const opts = {
+        media: 'podcast',
+        entity: 'podcast',
+        limit: 1
+    };
+    const value = utils_1.removeCmd(message.text);
+    if (value !== '') {
+        itunes_search_1.search(value, opts, (data) => {
+            utils_1.parseResponse(data).then((parsed) => {
+                replyWithMarkdown(i18n.t('mask', parsed));
+            }).catch((error) => {
+                console.error(error);
+                replyWithMarkdown(i18n.t('error'));
+            });
         });
-    });
+    }
+    else {
+        replyWithMarkdown(i18n.t('wrongInput'));
+    }
+});
+/**
+ * Message saying how to use this bot.
+ */
+bot.command('help', ({ i18n, replyWithMarkdown }) => {
+    replyWithMarkdown(i18n.t('wrongInput'));
+});
+/**
+ * Handles the inline searching.
+ */
+bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
+    const value = utils_1.messageToString(inlineQuery.query);
+    const pageLimit = 20;
+    const offset = parseInt(inlineQuery.offset, 10) || 0;
+    const opts = {
+        media: 'podcast',
+        entity: 'podcast',
+        // lang: inlineQuery.language_code,
+        limit: offset + pageLimit
+    };
+    /**
+     * Verify whether or not the user has typed anything to search for.
+     */
+    if (value !== '') {
+        itunes_search_1.search(value, opts, (data) => {
+            if (0 < data.resultCount) {
+                /**
+                 * "Pseudo-pagination", since this API doesn't allow it true pagination.
+                 */
+                data.results = data.results.slice(offset, offset + pageLimit);
+                utils_1.parseResponseInline(data, inlineQuery.from.language_code).then((results) => {
+                    answerInlineQuery(results, { next_offset: offset + pageLimit });
+                }).catch((error) => {
+                    console.error(error);
+                    answerInlineQuery([utils_1.errorInline]);
+                });
+            }
+            else {
+                answerInlineQuery([utils_1.errorInline]);
+            }
+        });
+    }
+    else {
+        answerInlineQuery([utils_1.searchInline]);
+    }
 });
 //# sourceMappingURL=main.js.map

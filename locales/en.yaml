@@ -1,0 +1,30 @@
+greetings: |
+  We welcome you to *Podsearch*, your podcast search bot!
+  Thanks for choosing this service, _${from.first_name}_ :3
+
+text: |
+  Hey, _${from.first_name}_.
+  Right now I don't work on text only, my creator haven't implemented yet this feature. But feel free to check it out my page to see when this feature is coming.
+
+error: There has been an error in the search. Please, check your typing or try again later.
+
+# The '\' after '\n' is just so, this way, the next line doesn't have a little spacing at the starting, and since this
+# string has a notation with colon has to be double-quoted also.
+mask: 
+  "[\u200B](${artworkUrl600})*Name*: _${artistName}_\n\
+  *Country*: _${country}_\n\
+  *Genre*: _${genres}_\n\
+  *Episodes*: _${trackCount}_\n\
+  *Latest Episode*: _${latest}_\n\
+  *RSS*: ${rss}\n\
+  *iTunes*: ${itunes}\n"
+
+noResult: |
+  No result was found for _${value}_.
+  This could mean a wrong typing or right now the search service is in maintenance. Please, try it again later.
+
+wrongInput:
+  "Please, send a valid search of the following type:\n\
+  /search _podcast name_\n\n\
+  Example:\n\
+  /search _The Story by The Mission_\n"

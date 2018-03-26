@@ -16,7 +16,13 @@
         "mocha-no-side-effect-code": false,
         "no-http-string": false,
         "max-line-length": false,
-        "binary-expression-operand-order": false
+        "binary-expression-operand-order": false,
+        "no-shadowed-variable": false,
+        "curly": false,
+        "array-type": false,
+        "prefer-array-literal": false,
+        "align": false,
+        "no-unnecessary-initializer": false
     },
     "rulesDirectory": []
 }

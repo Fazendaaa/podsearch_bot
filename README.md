@@ -1,7 +1,7 @@
 # Podsearchbot
 <h1 align="center">
-	<br>
-    <img src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot"/>
+    <br>
+    <img width="260" src="https://github.com/Fazendaaa/podsearch_bot/blob/master/logo/logo.png" alt="Podsearchbot"/>
 	<br>
 	<br>
 	<br>
@@ -9,14 +9,15 @@
 
 > The solution that you need to share with your friends your love for podcast :3
 
-[![Dependecies](https://david-dm.org/Fazendaaa/podsearch_bot.svg)](https://github.com/Fazendaaa/podsearch_bot/blob/master/package.json)
-[![Build Status](https://travis-ci.org/Fazendaaa/podsearch_bot.svg?branch=master)](https://travis-ci.org/Fazendaaa/podsearch_bot)
-[![Coverage Status](https://coveralls.io/repos/github/Fazendaaa/podsearch_bot/badge.svg?branch=master)](https://coveralls.io/github/Fazendaaa/podsearch_bot?branch=master)
+[![bitHound Overall Score](https://www.bithound.io/github/Fazendaaa/podsearch_bot/badges/score.svg?style=flat-square)](https://www.bithound.io/github/Fazendaaa/podsearch_bot)
+[![Dependecies](https://david-dm.org/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/blob/master/package.json)
+[![Build Status](https://travis-ci.org/Fazendaaa/podsearch_bot.svg?branch=master&style=flat-square)](https://travis-ci.org/Fazendaaa/podsearch_bot)
+[![Coverage Status](https://coveralls.io/repos/github/Fazendaaa/podsearch_bot/badge.svg?branch=master&style=flat-square)](https://coveralls.io/github/Fazendaaa/podsearch_bot?branch=master)
+[![Known Vulnerabilities](https://snyk.io/test/github/fazendaaa/podsearch_bot/badge.svg?style=flat-squaretargetFile=package.json)](https://snyk.io/test/github/fazendaaa/podsearch_bot?targetFile=package.json)
 [![GitHub issues](https://img.shields.io/github/issues/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/issues)
 [![GitHub forks](https://img.shields.io/github/forks/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/network)
 [![GitHub stars](https://img.shields.io/github/stars/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/stargazers)
 [![GitHub license](https://img.shields.io/github/license/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/blob/master/LICENSE)
-[![Twitter](https://img.shields.io/twitter/url/https/github.com/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://twitter.com/intent/tweet?text=Aweome:&url=https%3A%2F%2Fgithub.com%2FFazendaaa%2Fpodsearch_bot)
 
 [Telegram](https://www.telegram.org/) bot that searches podcast info in [iTunes](https://www.apple.com/lae/itunes/) store.
 
@@ -26,6 +27,35 @@ This is a bot made using [TypeScript](http://typescriptlang.org/)(TS) because I 
 Two new things in one project? Yes, and a third one is [Continuos Integration](https://en.wikipedia.org/wiki/Continuous_integration)(CI) just to be able to push running code at a master branch to be running at the server. And, a fourth one, is making a bot that supports it multiple languages.
 
 Like so, once I've "finished" this code I intend to write an article at [Medium](https://medium.com/) talking about it. All the knowledge that I've got it because some one laid a trail so that I can build my own on it.
+## How to use it
+First of all, talk to [@podsearchbot](https://telegram.me/podsearchbot).
+### Search
+There're two ways of doing that:
+#### ```/search```
+Just open it a chat with Podsearchbot and then use it like this:
+```
+/search podcast name
+```
+Example:
+```
+/search The Story by The Mission
+```
+#### Inline mode
+The inline mode works both in the Podsearchbot chat or any other chat:
+```
+@podsearch podcast name
+```
+Example:
+```
+@podsearch The Story by The Mission
+```
+##### Help
+If you have any other questions about it just use it the help commanad:
+```
+/help
+```
+# How does it work?
+You can build yourself a bot just like this one, just tag along with the following procedures.
 ## Prerequisites
 Since I've made all of it in a Linux enviroment I just know how to do in it. Mac and Windows users must seek help for each particularity of attempting to do on those enviroments.
 
@@ -82,26 +112,22 @@ npm test
 ```
 And then the status of testing will be printed, something like:
 ```bash
- PASS  test/utils.test.ts (10.268s)
-  Testing parseResponse function
-    ✓ Parse nerdcast (16ms)
-    ...
-    ✓ Has no number of episodes. (1ms)
+ PASS  __test__/utils.test.ts
   Testing removeCmd function
-    ✓ /search nerdcast (1ms)
+    ✓ Searching "/search Nerdcast". (4ms)
     ...
-    ✓ someWordWithoutCmd (2ms)
+    ✓ Has no number of episodes.
 
 ----------|----------|----------|----------|----------|-------------------|
 File      |  % Stmts | % Branch |  % Funcs |  % Lines | Uncovered Line #s |
 ----------|----------|----------|----------|----------|-------------------|
-All files |    79.41 |    76.92 |     37.5 |    78.79 |                   |
- utils.ts |    79.41 |    76.92 |     37.5 |    78.79 |... 61,62,64,66,69 |
+All files |     67.5 |       52 |    60.71 |     67.5 |                   |
+ utils.ts |     67.5 |       52 |    60.71 |     67.5 |... 98,299,302,307 |
 ----------|----------|----------|----------|----------|-------------------|
 Test Suites: 1 passed, 1 total
-Tests:       15 passed, 15 total
+Tests:       71 passed, 71 total
 Snapshots:   0 total
-Time:        14.425s
+Time:        1.773s
 Ran all test suites.
 ```
 More about the testing enviroment can be found at [jest.config.js](https://github.com/Fazendaaa/podsearch_bot/blob/master/jest.config.js).
@@ -110,7 +136,7 @@ Since the TS language can be lintered with [ESlint](https://eslint.org/) or [TSL
 
 In the case that you came from a JavaScript background and want to know how this magic of "compiling" -- I've used those quotmarks because I still think that the right word for it is _transpiling_, but the internetd know days uses compiling instead -- TS to JS is made, wich setting I've setted or not, see [tsconfig.json](https://github.com/Fazendaaa/podsearch_bot/blob/master/tsconfig.json).
 # Deployment
-This bot is up and running at [Heroku](http://heroku.com/) through the Github integration, that means that each new push to the ```master``` branch means that is the code serving the bot. You can see more about how does it run at the server by looking at the [Procfile](https://github.com/Fazendaaa/podsearch_bot/blob/master/Procfile).
+This bot is up and running at [Heroku](http://heroku.com/) through the Github integration, that means that each new push to the ```master``` branch means that is the code serving the bot. You can see more about how does it run at the server by looking at the [Procfile](https://github.com/Fazendaaa/podsearch_bot/blob/master/Procfile). You can also deploy yourself this bot into Heroku through:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Fazendaaa/podsearch_bot)
 
@@ -119,7 +145,9 @@ There's also a [Travis CI](http://travis-ci.org/) integration.
 * [Wallaby.j](http://wallabyjs.com/) - Live [Visual Studio Code](https://code.visualstudio.com/) test runner pluging;
 * [Jest](https://facebook.github.io/jest/) - Test runner;
 * [Telegraf.js](http://telegraf.js.org/) - Library that handles it the Telegram connection;
+* [Telegraf-i18n](https://github.com/telegraf/telegraf-i18n) - Library that handles language integration;
 * [moment.js](https://momentjs.com/) - Library that handles it the date and time formating;
+* [i18n-yaml](https://github.com/martinheidegger/i18n-node-yaml) - Since Telegraf-i18n only handles Telegraf context, there's a need to parse other kinds of context;
 * [dotenv](https://github.com/motdotla/dotenv) - Library that imports enviroment variables;
 * [goo.gl](https://github.com/kaimallea/node-googl) - Library that hanles it the Google shorten API requests;
 * [itunes-search](https://github.com/connor/itunes-node) - One of many libraries that does the fetching from iTunes API, but this one is the only one that does it right;
@@ -132,21 +160,18 @@ I would love to say that [SemVer](https://semver.org/) or anything like that is 
 # TODO
 Since I will be keeping this README up to date with any major change and I don't use any versoning system to log all the fixed bugs or previous projects updates, you can still have a taste of what comes next right here:
 
-* Dev branch;
-* Inline support;
 * Bot language support in the following languages:
     * English
     * Portuguese
-    * Russian
-    * Chinese
-    * Spanish
-    * German
-* Translate this README in the previous languages -- still don't know how to do it but I know that is possible.
+* Translate this README in the previous languages -- still don't know how to do it but I know that is possible;
+* Write a CONTRIBUTING and making it possible so anyone can help even those who don't know coding just by translating the bot texts to the user native language;
+* Integration with wit.ai.
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
 # License
 Like many Open-Source Software (OSS) the MIT lincense is used, more about it in [LICENSE](https://github.com/Fazendaaa/podsearch_bot/blob/master/LICENSE).
 # Acknowledgments
-* Thanks to [PurpleBooth](https://gist.github.com/PurpleBooth) and this great [Readme](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) template and hers [Contributing](https://gist.github.com/PurpleBooth/b24679402957c63ec426) template also;
+* Thanks to [PurpleBooth](https://gist.github.com/PurpleBooth) and this great [README](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) template and hers [CONTRIBUTING](https://gist.github.com/PurpleBooth/b24679402957c63ec426) template also;
 * [Mattias Petter Johansson](https://twitter.com/mpjme) and his channel [FunFunFunction](https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q), where I've learnt so many important coding best pratices; please don't think that this is a channel that will give any kind of "lazy-intro-tutorial" or anything like that, this channel open your eyes to how you can improve your existing skills and learn some more new ones;
-* I highly recommend checking it out my [**yolofi**](https://github.com/Fazendaaa/ytlofi) project whether you ran through some issues trying to get any CI integration or even project badges.
+* Since Jest mocking documentation left me with a lot of doubts, [this](https://hackernoon.com/api-testing-with-jest-d1ab74005c0a) tutorial helped me out a little, still have some issues to understand how to correct mock data. I highly tink that is because of my testing logic, once I figure out how to do it correctly I will rewrite all testing code; for now is "working" the best way I came up to; even being that horrible is not that much compared to having an API request all the time;
+* I highly recommend checking it out my [**ytlofi**](https://github.com/Fazendaaa/ytlofi) project whether you ran through some issues trying to get any CI integration or even project badges.
