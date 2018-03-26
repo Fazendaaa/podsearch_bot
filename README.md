@@ -36,6 +36,11 @@ Just open it a chat with Podsearchbot and then use it like this:
 ```
 /search podcast name
 ```
+<h1 align="center">
+    <br>
+        <iframe src="https://giphy.com/embed/6C6NusTKMkC8UCsM0d" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+	<br>
+</h1>
 Example:
 ```
 /search The Story by The Mission
@@ -43,11 +48,11 @@ Example:
 #### Inline mode
 The inline mode works both in the Podsearchbot chat or any other chat:
 ```
-@podsearch podcast name
+@podsearchbot podcast name
 ```
 Example:
 ```
-@podsearch The Story by The Mission
+@podsearchbot The Story by The Mission
 ```
 ##### Help
 If you have any other questions about it just use it the help commanad:
