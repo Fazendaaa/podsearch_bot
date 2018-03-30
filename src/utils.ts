@@ -311,29 +311,36 @@ new Promise((resolve: (data: Array<telegramInline>) => void, reject: (error: str
 /**
  * Just an error message to be sent to the user in case of failed search.
  */
-export const errorInline: telegramInline = {
-    id: '0',
-    title: 'Error',
-    type: 'article',
-    input_message_content: {
-        message_text: '[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)*Error*: Try it again later.',
-        parse_mode: 'Markdown'
-    },
-    description: 'Something went wrong, check your typing or try it again later.',
-    thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
+export const errorInline = (lanCode: string): Array<telegramInline> => {
+    const lang = lanCode.split('-')[0];
+
+    return [{
+        id: '0',
+        title: 'Error',
+        type: 'article',
+        input_message_content: {
+            message_text: i18n.api(lang).t('errorInline'),
+            parse_mode: 'Markdown'
+        },
+        description: i18n.api(lang).t('errorInline'),
+        thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
+    }];
 };
 
 /**
  * Just an earch message to be sent to the user in case of an empty search querry.
  */
-export const searchInline: telegramInline = {
-    id: '0',
-    title: 'Search Podcasts',
-    type: 'article',
-    input_message_content: {
-        message_text: '[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)Try to search any podcast.',
-        parse_mode: 'Markdown'
-    },
-    description: 'Please, just type what your looking for.',
-    thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
+export const searchInline = (lanCode: string): Array<telegramInline> => {
+    const lang = lanCode.split('-')[0];
+
+    return [{id: '0',
+        title: 'Search Podcasts',
+        type: 'article',
+        input_message_content: {
+            message_text: i18n.api(lang).t('searchInline'),
+            parse_mode: 'Markdown'
+        },
+        description: i18n.api(lang).t('searchInline'),
+        thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
+    }];
 };

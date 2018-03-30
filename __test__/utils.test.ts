@@ -314,6 +314,8 @@ describe('Testing shortenLinks function.', () => {
 });
 
 describe('Testing parse function', () => {
+    const noComplete: string = 'No complete info in the results results to display it.';
+
     test('udefined', () => {
         expect(parse(undefined)).rejects.toEqual('Empty results.');
     });
@@ -339,7 +341,7 @@ describe('Testing parse function', () => {
             results: []
         };
 
-        expect(parse(srcResponse)).rejects.toEqual('No complete info in the results results to display it.');
+        expect(parse(srcResponse)).rejects.toEqual(noComplete);
     });
 
     test('Without releaseDate.', () => {
@@ -350,7 +352,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].releaseDate;
 
-            expect(parse(srcResponse)).rejects.toEqual('No complete info in the results results to display it.');
+            expect(parse(srcResponse)).rejects.toEqual(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -401,7 +403,7 @@ describe('Testing parse function', () => {
             delete srcResponse.results[0].artworkUrl60;
             delete srcResponse.results[0].artworkUrl100;
 
-            expect(parse(srcResponse)).rejects.toEqual('No complete info in the results results to display it.');
+            expect(parse(srcResponse)).rejects.toEqual(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -415,7 +417,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].artworkUrl600;
 
-            expect(parse(srcResponse)).rejects.toEqual('No complete info in the results results to display it.');
+            expect(parse(srcResponse)).rejects.toEqual(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -429,7 +431,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].releaseDate;
 
-            expect(parse(srcResponse)).rejects.toEqual('No complete info in the results results to display it.');
+            expect(parse(srcResponse)).rejects.toEqual(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -443,7 +445,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].country;
 
-            expect(parse(srcResponse)).rejects.toEqual('No complete info in the results results to display it.');
+            expect(parse(srcResponse)).rejects.toEqual(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -457,7 +459,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].trackCount;
 
-            expect(parse(srcResponse)).rejects.toEqual('No complete info in the results results to display it.');
+            expect(parse(srcResponse)).rejects.toEqual(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -471,7 +473,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].feedUrl;
 
-            expect(parse(srcResponse)).rejects.toEqual('No complete info in the results results to display it.');
+            expect(parse(srcResponse)).rejects.toEqual(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -485,7 +487,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].genres;
 
-            expect(parse(srcResponse)).rejects.toEqual('No complete info in the results results to display it.');
+            expect(parse(srcResponse)).rejects.toEqual(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -499,7 +501,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].collectionViewUrl;
 
-            expect(parse(srcResponse)).rejects.toEqual('No complete info in the results results to display it.');
+            expect(parse(srcResponse)).rejects.toEqual(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -683,7 +685,7 @@ describe('Testing parseResponseInline function', () => {
             results: []
         };
 
-        expect(parseResponseInline(srcResponse, lanCode)).rejects.toEqual(noComplete);
+        expect(parseResponseInline(srcResponse, lanCode)).rejects.toEqual('Empty results.');
     });
 
     test('No results.', () => {
