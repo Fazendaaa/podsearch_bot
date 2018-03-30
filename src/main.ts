@@ -77,6 +77,11 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
     };
     const value: string = removeCmd(message.text);
 
+    /**
+     * Setting up locale languague info.
+     */
+    i18n.locale(message.from.language_code);
+
     if (value !== '') {
         search(value, opts, (data: response) => {
             parseResponse(data).then((parsed: resultExtended) => {
@@ -118,12 +123,17 @@ bot.command('help', ({ i18n, replyWithMarkdown}) => {
  */
 bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
     const value: string = messageToString(inlineQuery.query);
+    const lanCode: string = inlineQuery.from.language_code;
     const pageLimit: number = 20;
     const offset: number = parseInt(inlineQuery.offset, 10) || 0;
     const opts: options = {
         media: 'podcast',
         entity: 'podcast',
-        // lang: inlineQuery.language_code,
+        /**
+         * Need to look into itunes-search library to see what's going on with this option. To show translated info, not
+         * just the key arguments, but the value also.
+         */
+        // lang: lanCode,
         limit: offset + pageLimit
     };
 
@@ -138,17 +148,17 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                  */
                 data.results = data.results.slice(offset, offset + pageLimit);
 
-                parseResponseInline(data, inlineQuery.from.language_code).then((results: Array<telegramInline>) => {
+                parseResponseInline(data, lanCode).then((results: Array<telegramInline>) => {
                     answerInlineQuery(results, { next_offset: offset + pageLimit });
                 }).catch((error: Error) => {
                     console.error(error);
-                    answerInlineQuery([errorInline]);
+                    answerInlineQuery(errorInline(lanCode));
                 });
             } else {
-                answerInlineQuery([errorInline]);
+                answerInlineQuery(errorInline(lanCode));
             }
         });
     } else {
-        answerInlineQuery([searchInline]);
+        answerInlineQuery(searchInline(lanCode));
     }
 });

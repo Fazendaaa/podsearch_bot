@@ -36,6 +36,12 @@ help:
   "This bot searches in iTunes store about podcasts. You can do a search through the search command or the inline mode. Try it with:\n\
   /search\n\n\
   Wanna see more:\n\
-  🤖 [Github](https://github.com/Fazendaaa/podsearch_bot) — See the code behind this bot.\n\
+  🤖 [Podsearch](https://fazendaaa.github.io/podsearch_bot/) — See the code behind this bot.\n\
   😀 [My website](http://fazendaaa.me) — Check it out some of my other works.\n\n\
-  Has any sugestions or errors to report it? Fell free to tell me: @Farmy."
+  Has any suggestions or errors to report it? Fell free to tell me: @Farmy."
+
+errorInline:
+  "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Something went wrong, check your typing or try it again later."
+
+searchInline:
+  "Please, just type what your looking for."
