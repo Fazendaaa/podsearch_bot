@@ -1,0 +1,13 @@
+[
+    {
+        "id": "0",
+        "title": "Search Podcasts",
+        "type": "article",
+        "input_message_content": {
+            "message_text": "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)Por favor, digite o nome do podcast que está procurando.",
+            "parse_mode": "Markdown"
+        },
+        "description": "Por favor, digite o nome do podcast que está procurando.",
+        "thumb_url": "https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png"
+    }
+]

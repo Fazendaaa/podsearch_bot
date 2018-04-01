@@ -1,0 +1,13 @@
+[
+    {
+        "id": "0",
+        "title": "Error",
+        "type": "article",
+        "input_message_content": {
+            "message_text": "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Something went wrong, check your typing or try it again later.",
+            "parse_mode": "Markdown"
+        },
+        "description": "Something went wrong, check your typing or try it again later.",
+        "thumb_url": "https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png"
+    }
+]

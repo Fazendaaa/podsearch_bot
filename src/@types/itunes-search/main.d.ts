@@ -3,6 +3,7 @@
  */
 declare module 'itunes-search' {
     export type options = {
+        country?: string;
         attribute?: string;
         entity?: string;
         explicit?: string;
