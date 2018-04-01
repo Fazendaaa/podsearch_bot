@@ -22,7 +22,8 @@
         "array-type": false,
         "prefer-array-literal": false,
         "align": false,
-        "no-unnecessary-initializer": false
+        "no-unnecessary-initializer": false,
+        "export-name": false
     },
     "rulesDirectory": []
 }

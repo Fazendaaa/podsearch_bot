@@ -98,7 +98,7 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
                 } else {
                     console.log('Wrote.');
                 }
-            })
+            });
             parseResponse(data, message.from.language_code).then((parsed: resultExtended) => {
                 replyWithMarkdown(i18n.t('mask', parsed));
             }).catch((error: string) => {
