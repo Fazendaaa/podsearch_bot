@@ -305,7 +305,7 @@ describe('Testing maskResponseInline function.', () => {
  */
 describe('Testing shortenLinks function.', () => {
     test('Only \"undefined\".', () => {
-        expect(shortenLinks(undefined)).rejects.toEqual('Wrong argument.');
+        expect(shortenLinks(undefined)).rejects.toMatch('Wrong argument.');
     });
 
     test('Shorten all nerdcast links.', () => {
@@ -319,7 +319,7 @@ describe('Testing shortenLinks function.', () => {
                 latest: 'July 11th 2016, 4:05 am'
             };
 
-            return expect(shortenLinks(mock)).resolves.toEqual(dst);
+            return expect(shortenLinks(mock)).resolves.toBe(dst);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -331,7 +331,7 @@ describe('Testing shortenLinks function.', () => {
         return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
             delete mock.feedUrl;
 
-            return expect(shortenLinks(mock)).rejects.toEqual('Has no RSS link available.');
+            return expect(shortenLinks(mock)).rejects.toMatch('Has no RSS link available.');
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -343,7 +343,7 @@ describe('Testing shortenLinks function.', () => {
         return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
             delete mock.collectionViewUrl;
 
-            return expect(shortenLinks(mock)).rejects.toEqual('Has no iTunes link available.');
+            return expect(shortenLinks(mock)).rejects.toMatch('Has no iTunes link available.');
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -354,7 +354,7 @@ describe('Testing parse function', () => {
     const noComplete: string = 'No complete info in the results results to display it.';
 
     test('undefined', () => {
-        expect(parse(undefined)).rejects.toEqual('Empty results.');
+        expect(parse(undefined)).rejects.toMatch('Empty results.');
     });
 
     /**
@@ -366,7 +366,7 @@ describe('Testing parse function', () => {
             results: []
         };
 
-        expect(parse(srcResponse)).rejects.toEqual('Empty results.');
+        expect(parse(srcResponse)).rejects.toMatch('Empty results.');
     });
 
     /**
@@ -378,7 +378,7 @@ describe('Testing parse function', () => {
             results: []
         };
 
-        expect(parse(srcResponse)).rejects.toEqual(noComplete);
+        expect(parse(srcResponse)).rejects.toMatch(noComplete);
     });
 
     test('Without releaseDate.', () => {
@@ -391,7 +391,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].releaseDate;
 
-            return expect(parse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -408,7 +408,7 @@ describe('Testing parse function', () => {
                 };
                 delete srcResponse.results[0].artworkUrl60;
 
-                return expect(parse(srcResponse)).resolves.toEqual(mockOutput);
+                return expect(parse(srcResponse)).resolves.toBe(mockOutput);
             }).catch((error: Error) => {
                 throw error;
             });
@@ -428,7 +428,7 @@ describe('Testing parse function', () => {
                 };
                 delete srcResponse.results[0].artworkUrl100;
 
-                return expect(parse(srcResponse)).resolves.toEqual(mockOutput);
+                return expect(parse(srcResponse)).resolves.toBe(mockOutput);
             }).catch((error: Error) => {
                 throw error;
             });
@@ -448,7 +448,7 @@ describe('Testing parse function', () => {
             delete srcResponse.results[0].artworkUrl60;
             delete srcResponse.results[0].artworkUrl100;
 
-            return expect(parse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -464,7 +464,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].artworkUrl600;
 
-            return expect(parse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -480,7 +480,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].releaseDate;
 
-            return expect(parse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -496,7 +496,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].country;
 
-            return expect(parse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -512,7 +512,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].trackCount;
 
-            return expect(parse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -528,7 +528,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].feedUrl;
 
-            return expect(parse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -544,7 +544,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].genres;
 
-            return expect(parse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -560,7 +560,7 @@ describe('Testing parse function', () => {
             };
             delete srcResponse.results[0].collectionViewUrl;
 
-            return expect(parse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -580,7 +580,7 @@ describe('Testing parseResponse function', () => {
                     results: [mockInput]
                 };
 
-                return expect(parseResponse(srcResponse)).resolves.toEqual(mockOutput);
+                return expect(parseResponse(srcResponse)).resolves.toBe(mockOutput);
             }).catch((error: Error) => {
                 throw error;
             });
@@ -590,7 +590,7 @@ describe('Testing parseResponse function', () => {
     });
 
     test('Data equals to undefined.', () => {
-        expect(parseResponse(undefined)).rejects.toEqual('Empty results.');
+        expect(parseResponse(undefined)).rejects.toMatch('Empty results.');
     });
 
     test('Has no RSS link.', () => {
@@ -603,7 +603,7 @@ describe('Testing parseResponse function', () => {
             };
             delete srcResponse.results[0].feedUrl;
 
-            return expect(parseResponse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parseResponse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -619,7 +619,7 @@ describe('Testing parseResponse function', () => {
             };
             delete srcResponse.results[0].artworkUrl600;
 
-            return expect(parseResponse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parseResponse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -635,7 +635,7 @@ describe('Testing parseResponse function', () => {
             };
             delete srcResponse.results[0].releaseDate;
 
-            return expect(parseResponse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parseResponse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -651,7 +651,7 @@ describe('Testing parseResponse function', () => {
             };
             delete srcResponse.results[0].artworkUrl600;
 
-            return expect(parseResponse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parseResponse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -667,7 +667,7 @@ describe('Testing parseResponse function', () => {
             };
             delete srcResponse.results[0].artistName;
 
-            return expect(parseResponse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parseResponse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -683,7 +683,7 @@ describe('Testing parseResponse function', () => {
             };
             delete srcResponse.results[0].country;
 
-            return expect(parseResponse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parseResponse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -699,7 +699,7 @@ describe('Testing parseResponse function', () => {
             };
             delete srcResponse.results[0].genres;
 
-            return expect(parseResponse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parseResponse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -715,7 +715,7 @@ describe('Testing parseResponse function', () => {
             };
             delete srcResponse.results[0].trackCount;
 
-            return expect(parseResponse(srcResponse)).rejects.toEqual(noComplete);
+            return expect(parseResponse(srcResponse)).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -730,7 +730,7 @@ describe('Testing parseResponseInline function', () => {
 
         return readAsync('nerdcast/en-us/inputTwo.json').then((mockInput: response) => {
             return readAsync('nerdcast/en-us/outputFour.json').then((mockOutput: Array<telegramInline>) => {
-                return expect(parseResponseInline(mockInput, 'en-us')).resolves.toEqual(mockOutput);
+                return expect(parseResponseInline(mockInput, 'en-us')).resolves.toBe(mockOutput);
             }).catch((error: Error) => {
                 throw error;
             });
@@ -743,7 +743,7 @@ describe('Testing parseResponseInline function', () => {
         expect.assertions(1);
 
         return readAsync('nerdcast/en-us/inputTwo.json').then((mockInput: response) => {
-            return expect(parseResponseInline(mockInput, undefined)).rejects.toEqual('No lanCode available.');
+            return expect(parseResponseInline(mockInput, undefined)).rejects.toMatch('No lanCode available.');
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -756,7 +756,7 @@ describe('Testing parseResponseInline function', () => {
         };
         expect.assertions(1);
 
-        return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual('Empty results.');
+        return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch('Empty results.');
     });
 
     test('No results.', () => {
@@ -766,13 +766,13 @@ describe('Testing parseResponseInline function', () => {
         };
         expect.assertions(1);
 
-        return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+        return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
     });
 
     test('Data equals to undefined.', () => {
         expect.assertions(1);
 
-        return expect(parseResponseInline(undefined, 'en-us')).rejects.toEqual('Empty results.');
+        return expect(parseResponseInline(undefined, 'en-us')).rejects.toMatch('Empty results.');
     });
 
     test('Has no RSS link', () => {
@@ -785,7 +785,7 @@ describe('Testing parseResponseInline function', () => {
             };
             delete srcResponse.results[0].feedUrl;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -801,7 +801,7 @@ describe('Testing parseResponseInline function', () => {
             };
             delete srcResponse.results[0].artworkUrl600;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -817,7 +817,7 @@ describe('Testing parseResponseInline function', () => {
             };
             delete srcResponse.results[0].releaseDate;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -833,7 +833,7 @@ describe('Testing parseResponseInline function', () => {
             };
             delete srcResponse.results[0].artworkUrl600;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -849,7 +849,7 @@ describe('Testing parseResponseInline function', () => {
             };
             delete srcResponse.results[0].artistName;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -865,7 +865,7 @@ describe('Testing parseResponseInline function', () => {
             };
             delete srcResponse.results[0].country;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -881,7 +881,7 @@ describe('Testing parseResponseInline function', () => {
             };
             delete srcResponse.results[0].genres;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -897,7 +897,7 @@ describe('Testing parseResponseInline function', () => {
             };
             delete srcResponse.results[0].trackCount;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
