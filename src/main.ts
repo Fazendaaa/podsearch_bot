@@ -135,6 +135,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
     const country: string = inlineQuery.from.language_code.split('-')[1] || 'US';
     const opts: options = {
         country: country,
+        limit: offset + pageLimit,
         media: 'podcast',
         entity: 'podcast'
     };

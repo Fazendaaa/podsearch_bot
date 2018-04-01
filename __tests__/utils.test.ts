@@ -29,6 +29,11 @@ import {
 } from '../src/utils';
 
 /**
+ * Setting timeout to 10s.
+ */
+jest.setTimeout(10000);
+
+/**
  * I  know  that  isn't  the right way of doing mocking tests but, right now, is the way that I came up to. This testing
  * file  is  a nightmare of reading I/O -- need to correct ASAP this, if this continue tha way it is, scale testing will
  * be impossible.
@@ -685,11 +690,11 @@ const readAsync = (filename: string) => new Promise((resolve, reject) => {
 describe('Testing parseResponseInline function', () => {
     const noComplete: string = 'No complete info in the results results to display it.';
 
-    test('Parse nerdcast', (done: jest.DoneCallback) => {
-        readAsync('nerdcast/en-us/inputTwo.json').then((mockInput: response) => {
-            readAsync('nerdcast/en-us/outputFour.json').then((mockOutput: Array<telegramInline>) => {
-                expect.assertions(1);
+    test('Parse nerdcast', () => {
+        expect.assertions(1);
 
+        return readAsync('nerdcast/en-us/inputTwo.json').then((mockInput: response) => {
+            return readAsync('nerdcast/en-us/outputFour.json').then((mockOutput: Array<telegramInline>) => {
                 return expect(parseResponseInline(mockInput, 'en-us')).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw error;
@@ -699,161 +704,169 @@ describe('Testing parseResponseInline function', () => {
         });
     });
 
-    // test('No lanCode', (done: jest.DoneCallback) => {
-    //     readAsync('nerdcast/en-us/inputTwo.json').then((mockInput: Array<result>) => {
-    //         const srcResponse: response = {
-    //             resultCount: 20,
-    //             results: mockInput
-    //         };
+    test('No lanCode', () => {
+        expect.assertions(1);
 
-    //         expect(parseResponseInline(srcResponse, undefined)).rejects.toEqual('No lanCode available.');
-    //         done();
-    //     }).catch((error: Error) => {
-    //         console.error(error);
-    //     });
-    // });
+        return readAsync('nerdcast/en-us/inputTwo.json').then((mockInput: response) => {
+            return expect(parseResponseInline(mockInput, undefined)).rejects.toEqual('No lanCode available.');
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
 
-    // test('resultCount equals to zero.', () => {
-    //     const srcResponse: response = {
-    //         resultCount: 0,
-    //         results: []
-    //     };
+    test('resultCount equals to zero.', () => {
+        const srcResponse: response = {
+            resultCount: 0,
+            results: []
+        };
+        expect.assertions(1);
 
-    //     expect(parseResponseInline(srcResponse, lanCode)).rejects.toEqual('Empty results.');
-    // });
+        return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual('Empty results.');
+    });
 
-    // test('No results.', () => {
-    //     const srcResponse: response = {
-    //         resultCount: 20,
-    //         results: []
-    //     };
+    test('No results.', () => {
+        const srcResponse: response = {
+            resultCount: 20,
+            results: []
+        };
+        expect.assertions(1);
 
-    //     expect(parseResponseInline(srcResponse, lanCode)).rejects.toEqual(noComplete);
-    // });
+        return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+    });
 
-    // test('Data equals to undefined.', () => {
-    //     expect(parseResponseInline(undefined, lanCode)).rejects.toEqual('Empty results.');
-    // });
+    test('Data equals to undefined.', () => {
+        expect.assertions(1);
 
-    // test('Has no RSS link', (done: jest.DoneCallback) => {
-    //     readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-    //         const srcResponse: response = {
-    //             resultCount: 1,
-    //             results: [mockInput]
-    //         };
-    //         delete srcResponse.results[0].feedUrl;
+        return expect(parseResponseInline(undefined, 'en-us')).rejects.toEqual('Empty results.');
+    });
 
-    //         expect(parseResponseInline(srcResponse, lanCode)).rejects.toEqual(noComplete);
-    //         done();
-    //     }).catch((error: Error) => {
-    //         console.error(error);
-    //     });
-    // });
+    test('Has no RSS link', () => {
+        expect.assertions(1);
 
-    // test('Has no iTunes link', (done: jest.DoneCallback) => {
-    //     readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-    //         const srcResponse: response = {
-    //             resultCount: 1,
-    //             results: [mockInput]
-    //         };
-    //         delete srcResponse.results[0].artworkUrl600;
+        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
+            const srcResponse: response = {
+                resultCount: 1,
+                results: [mockInput]
+            };
+            delete srcResponse.results[0].feedUrl;
 
-    //         expect(parseResponseInline(srcResponse, lanCode)).rejects.toEqual(noComplete);
-    //         done();
-    //     }).catch((error: Error) => {
-    //         console.error(error);
-    //     });
-    // });
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
 
-    // test('Has no latest episode date.', (done: jest.DoneCallback) => {
-    //     readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-    //         const srcResponse: response = {
-    //             resultCount: 1,
-    //             results: [mockInput]
-    //         };
-    //         delete srcResponse.results[0].releaseDate;
+    test('Has no iTunes link', () => {
+        expect.assertions(1);
 
-    //         expect(parseResponseInline(srcResponse, lanCode)).rejects.toEqual(noComplete);
-    //         done();
-    //     }).catch((error: Error) => {
-    //         console.error(error);
-    //     });
-    // });
+        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
+            const srcResponse: response = {
+                resultCount: 1,
+                results: [mockInput]
+            };
+            delete srcResponse.results[0].artworkUrl600;
 
-    // test('Has no podcast artwork.', (done: jest.DoneCallback) => {
-    //     readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-    //         const srcResponse: response = {
-    //             resultCount: 1,
-    //             results: [mockInput]
-    //         };
-    //         delete srcResponse.results[0].artworkUrl600;
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
 
-    //         expect(parseResponseInline(srcResponse, lanCode)).rejects.toEqual(noComplete);
-    //         done();
-    //     }).catch((error: Error) => {
-    //         console.error(error);
-    //     });
-    // });
+    test('Has no latest episode date.', () => {
+        expect.assertions(1);
 
-    // test('Has no name.', (done: jest.DoneCallback) => {
-    //     readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-    //         const srcResponse: response = {
-    //             resultCount: 1,
-    //             results: [mockInput]
-    //         };
-    //         delete srcResponse.results[0].artistName;
+        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
+            const srcResponse: response = {
+                resultCount: 1,
+                results: [mockInput]
+            };
+            delete srcResponse.results[0].releaseDate;
 
-    //         expect(parseResponseInline(srcResponse, lanCode)).rejects.toEqual(noComplete);
-    //         done();
-    //     }).catch((error: Error) => {
-    //         console.error(error);
-    //     });
-    // });
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
 
-    // test('Has no country.', (done: jest.DoneCallback) => {
-    //     readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-    //         const srcResponse: response = {
-    //             resultCount: 1,
-    //             results: [mockInput]
-    //         };
-    //         delete srcResponse.results[0].country;
+    test('Has no podcast artwork.', () => {
+        expect.assertions(1);
 
-    //         expect(parseResponseInline(srcResponse, lanCode)).rejects.toEqual(noComplete);
-    //         done();
-    //     }).catch((error: Error) => {
-    //         console.error(error);
-    //     });
-    // });
+        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
+            const srcResponse: response = {
+                resultCount: 1,
+                results: [mockInput]
+            };
+            delete srcResponse.results[0].artworkUrl600;
 
-    // test('Has no genre.', (done: jest.DoneCallback) => {
-    //     readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-    //         const srcResponse: response = {
-    //             resultCount: 1,
-    //             results: [mockInput]
-    //         };
-    //         delete srcResponse.results[0].genres;
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
 
-    //         expect(parseResponseInline(srcResponse, lanCode)).rejects.toEqual(noComplete);
-    //         done();
-    //     }).catch((error: Error) => {
-    //         console.error(error);
-    //     });
-    // });
+    test('Has no name.', () => {
+        expect.assertions(1);
 
-    // test('Has no number of episodes.', (done: jest.DoneCallback) => {
-    //     readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-    //         const srcResponse: response = {
-    //             resultCount: 1,
-    //             results: [mockInput]
-    //         };
-    //         delete srcResponse.results[0].trackCount;
+        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
+            const srcResponse: response = {
+                resultCount: 1,
+                results: [mockInput]
+            };
+            delete srcResponse.results[0].artistName;
 
-    //         expect(parseResponseInline(srcResponse, lanCode)).rejects.toEqual(noComplete);
-    //         done();
-    //     }).catch((error: Error) => {
-    //         console.error(error);
-    //     });
-    // });
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
+    test('Has no country.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
+            const srcResponse: response = {
+                resultCount: 1,
+                results: [mockInput]
+            };
+            delete srcResponse.results[0].country;
+
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
+    test('Has no genre.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
+            const srcResponse: response = {
+                resultCount: 1,
+                results: [mockInput]
+            };
+            delete srcResponse.results[0].genres;
+
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
+    test('Has no number of episodes.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
+            const srcResponse: response = {
+                resultCount: 1,
+                results: [mockInput]
+            };
+            delete srcResponse.results[0].trackCount;
+
+            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toEqual(noComplete);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
 });
 
 // describe('Testing errorInline function', () => {
