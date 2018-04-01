@@ -48,62 +48,69 @@ const readAsync = (filename: string) => new Promise((resolve, reject) => {
     });
 });
 
+/**
+ * Basic difference:
+ *  * toBe = for numbers;
+ *  * toEqual = for object;
+ *  * toMatch = for string.
+ * The others are selfs explaining.
+ */
 describe('Testing removeCmd function', () => {
     test('Searching \"/search Nerdcast\".', () => {
-        expect(removeCmd('/search Nerdcast')).toEqual('Nerdcast');
+        expect(removeCmd('/search Nerdcast')).toMatch('Nerdcast');
     });
 
     /**
      * It is good to test a simple input without spaces then one with it, to see whether or not the regex is working.
      */
     test('Searching \"/search The Story by The Mission\".', () => {
-        expect(removeCmd('/search The Story by The Mission')).toEqual('The Story by The Mission');
+        expect(removeCmd('/search The Story by The Mission')).toMatch('The Story by The Mission');
     });
 
     test('Just \"/search\"', () => {
-        expect(removeCmd('/search')).toEqual('');
+        expect(removeCmd('/search')).toMatch('');
     });
 
     /**
      * Need to change this function later to return nothing instead of an backslash.
      */
     test('Just a \"/\".', () => {
-        expect(removeCmd('/')).toEqual('/');
+        expect(removeCmd('/')).toMatch('/');
     });
 
     test('Empty string.', () => {
-        expect(removeCmd('')).toEqual('');
+        expect(removeCmd('')).toMatch('');
     });
 
     /**
      * Since there's no command there's nothing to be removed.
      */
     test('Only \"The Story by The Mission\".', () => {
-        expect(removeCmd('The Story by The Mission')).toEqual('The Story by The Mission');
+        expect(removeCmd('The Story by The Mission')).toMatch('The Story by The Mission');
     });
 
     test('Only \"undefined\".', () => {
-        expect(removeCmd(undefined)).toEqual(undefined);
+        expect(removeCmd(undefined)).toBeUndefined();
     });
 });
 
 describe('Testing messageToString function.', () => {
     test('Searching \"@podsearchbot The Story by The Mission\"', () => {
-        expect(messageToString('The Story by The Mission')).toEqual('The Story by The Mission');
+        expect(messageToString('The Story by The Mission')).toMatch('The Story by The Mission');
     });
 
     test('Only \"undefined\".', () => {
-        expect(messageToString(undefined)).toEqual(undefined);
+        expect(messageToString(undefined)).toBeUndefined();
     });
 
     test('Empty string.', () => {
-        expect(messageToString('')).toEqual('');
+        expect(messageToString('')).toMatch('');
     });
 });
 
 describe('Testing hasGenres function', () => {
     test('Only \"undefined\".', () => {
-        expect(hasGenres(undefined)).toEqual(undefined);
+        expect(hasGenres(undefined)).toBeUndefined();
     });
 
     /**
@@ -111,19 +118,19 @@ describe('Testing hasGenres function', () => {
      * the advantages of writing tests on a type language.
      */
     test('Empty string.', () => {
-        expect(hasGenres([''])).toEqual('');
+        expect(hasGenres([''])).toMatch('');
     });
 
     test('One argument.', () => {
-        expect(hasGenres(['one arg'])).toEqual('one arg');
+        expect(hasGenres(['one arg'])).toMatch('one arg');
     });
 
     test('Two arguments.', () => {
-        expect(hasGenres(['one arg', 'two arg'])).toEqual('one arg | two arg');
+        expect(hasGenres(['one arg', 'two arg'])).toMatch('one arg | two arg');
     });
 
     test('Three arguments.', () => {
-        expect(hasGenres(['one arg', 'two arg', 'three arg'])).toEqual('one arg | two arg | three arg');
+        expect(hasGenres(['one arg', 'two arg', 'three arg'])).toMatch('one arg | two arg | three arg');
     });
 });
 
@@ -136,14 +143,14 @@ describe('Testing hasItAll function.', () => {
         expect.assertions(1);
 
         return readAsync('result.json').then((mock: result) => {
-            return expect(hasItAll(mock)).toEqual(true);
+            return expect(hasItAll(mock)).toBeTruthy();
         }).catch((error: Error) => {
             console.error(error);
         });
     });
 
     test('Only \"undefined\".', () => {
-        expect(hasItAll(undefined)).toEqual(false);
+        expect(hasItAll(undefined)).toBeFalsy();
     });
 
     test('Without releaseDate.', () => {
@@ -152,7 +159,7 @@ describe('Testing hasItAll function.', () => {
         return readAsync('result.json').then((mock: result) => {
             delete mock.releaseDate;
 
-            return expect(hasItAll(mock)).toEqual(false);
+            return expect(hasItAll(mock)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -164,7 +171,7 @@ describe('Testing hasItAll function.', () => {
         return readAsync('result.json').then((mock: result) => {
             delete mock.artworkUrl60;
 
-            return expect(hasItAll(mock)).toEqual(true);
+            return expect(hasItAll(mock)).toBeTruthy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -176,7 +183,7 @@ describe('Testing hasItAll function.', () => {
         return readAsync('result.json').then((mock: result) => {
             delete mock.artworkUrl100;
 
-            return expect(hasItAll(mock)).toEqual(true);
+            return expect(hasItAll(mock)).toBeTruthy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -189,7 +196,7 @@ describe('Testing hasItAll function.', () => {
             delete mock.artworkUrl60;
             delete mock.artworkUrl100;
 
-            return expect(hasItAll(mock)).toEqual(false);
+            return expect(hasItAll(mock)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -201,7 +208,7 @@ describe('Testing hasItAll function.', () => {
         return readAsync('result.json').then((mock: result) => {
             delete mock.artworkUrl600;
 
-            return expect(hasItAll(mock)).toEqual(false);
+            return expect(hasItAll(mock)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -213,7 +220,7 @@ describe('Testing hasItAll function.', () => {
         return readAsync('result.json').then((mock: result) => {
             delete mock.artistName;
 
-            return expect(hasItAll(mock)).toEqual(false);
+            return expect(hasItAll(mock)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -225,7 +232,7 @@ describe('Testing hasItAll function.', () => {
         return readAsync('result.json').then((mock: result) => {
             delete mock.country;
 
-            return expect(hasItAll(mock)).toEqual(false);
+            return expect(hasItAll(mock)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -237,7 +244,7 @@ describe('Testing hasItAll function.', () => {
         return readAsync('result.json').then((mock: result) => {
             delete mock.trackCount;
 
-            return expect(hasItAll(mock)).toEqual(false);
+            return expect(hasItAll(mock)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -249,7 +256,7 @@ describe('Testing hasItAll function.', () => {
         return readAsync('result.json').then((mock: result) => {
             delete mock.feedUrl;
 
-            return expect(hasItAll(mock)).toEqual(false);
+            return expect(hasItAll(mock)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -261,7 +268,7 @@ describe('Testing hasItAll function.', () => {
         return readAsync('result.json').then((mock: result) => {
             delete mock.genres;
 
-            return expect(hasItAll(mock)).toEqual(false);
+            return expect(hasItAll(mock)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -273,7 +280,7 @@ describe('Testing hasItAll function.', () => {
         return readAsync('result.json').then((mock: result) => {
             delete mock.collectionViewUrl;
 
-            return expect(hasItAll(mock)).toEqual(false);
+            return expect(hasItAll(mock)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -286,13 +293,13 @@ describe('Testing maskResponse function.', () => {
      * this would mean a twice check up, that being said it would mean a more slow program due this double checking.
      */
     test('Only \"undefined\".', () => {
-        expect(maskResponse(undefined)).toEqual(undefined);
+        expect(maskResponse(undefined)).toBeUndefined();
     });
 });
 
 describe('Testing maskResponseInline function.', () => {
     test('Only \"undefined\".', () => {
-        expect(maskResponseInline(undefined)).toEqual(undefined);
+        expect(maskResponseInline(undefined)).toBeUndefined();
     });
 });
 
@@ -319,7 +326,7 @@ describe('Testing shortenLinks function.', () => {
                 latest: 'July 11th 2016, 4:05 am'
             };
 
-            return expect(shortenLinks(mock)).resolves.toBe(dst);
+            return expect(shortenLinks(mock)).resolves.toEqual(dst);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -408,7 +415,7 @@ describe('Testing parse function', () => {
                 };
                 delete srcResponse.results[0].artworkUrl60;
 
-                return expect(parse(srcResponse)).resolves.toBe(mockOutput);
+                return expect(parse(srcResponse)).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw error;
             });
@@ -428,7 +435,7 @@ describe('Testing parse function', () => {
                 };
                 delete srcResponse.results[0].artworkUrl100;
 
-                return expect(parse(srcResponse)).resolves.toBe(mockOutput);
+                return expect(parse(srcResponse)).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw error;
             });
@@ -580,7 +587,7 @@ describe('Testing parseResponse function', () => {
                     results: [mockInput]
                 };
 
-                return expect(parseResponse(srcResponse)).resolves.toBe(mockOutput);
+                return expect(parseResponse(srcResponse)).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw error;
             });
@@ -730,7 +737,7 @@ describe('Testing parseResponseInline function', () => {
 
         return readAsync('nerdcast/en-us/inputTwo.json').then((mockInput: response) => {
             return readAsync('nerdcast/en-us/outputFour.json').then((mockOutput: Array<telegramInline>) => {
-                return expect(parseResponseInline(mockInput, 'en-us')).resolves.toBe(mockOutput);
+                return expect(parseResponseInline(mockInput, 'en-us')).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw error;
             });
@@ -906,7 +913,7 @@ describe('Testing parseResponseInline function', () => {
 
 describe('Testing errorInline function', () => {
     test('lanCode equals to undefined', () => {
-        expect(errorInline(undefined)).toEqual(undefined);
+        expect(errorInline(undefined)).toBeUndefined();
     });
 
     test('lanCode equals to en-us', () => {
@@ -932,7 +939,7 @@ describe('Testing errorInline function', () => {
 
 describe('Testing searchInline function', () => {
     test('lanCode equals to undefined', () => {
-        expect(searchInline(undefined)).toEqual(undefined);
+        expect(searchInline(undefined)).toBeUndefined();
     });
 
     test('lanCode equals to en-us', () => {
