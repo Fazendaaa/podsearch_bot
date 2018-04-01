@@ -4,7 +4,7 @@
         "title": "Error",
         "type": "article",
         "input_message_content": {
-            "message_text": "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Alguma coisa de errado aconteceu, por favor verifique o que digitou ou tente mais tarde",
+            "message_text": "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Alguma coisa de errado aconteceu, por favor verifique o que digitou ou tente mais tarde.",
             "parse_mode": "Markdown"
         },
         "description": "Alguma coisa de errado aconteceu, por favor verifique o que digitou ou tente mais tarde.",

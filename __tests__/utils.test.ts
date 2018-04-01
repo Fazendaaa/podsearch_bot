@@ -421,7 +421,7 @@ describe('Testing parse function', () => {
         expect.assertions(1);
 
         return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            return readAsync('nerdcast/en-us/outputOne.json').then((mockOutput: result) => {
+            return readAsync('nerdcast/en-us/outputTwo.json').then((mockOutput: result) => {
                 const srcResponse: response = {
                     resultCount: 1,
                     results: [mockInput]

@@ -174,7 +174,6 @@ Since I will be keeping this README up to date with any major change and I don't
 * Write a CONTRIBUTING and making it possible so anyone can help even those who don't know coding just by translating the bot texts to the user native language;
 * Writing a notification system, so that upon a new episode release the user will be notified;
 * Adding recommendations thanks to the feedback of [_lowhigh_](https://www.reddit.com/r/TelegramBots/comments/875tsz/podsearchbot/dwao2qj/) on Reddit;
-* Improving code coverage;
 * Integration with wit.ai.
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
