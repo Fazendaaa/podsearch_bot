@@ -17,6 +17,7 @@ import {
 import * as moment from 'moment';
 import { resolve } from 'path';
 import { telegramInline } from 'telegraf';
+import { writeFile } from 'fs';
 
 /**
  * Allows the code to run without passing the environment variables as arguments.
@@ -211,20 +212,27 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
  * readable way.
  * This will be only used locally, but there's need to exported to be tested later.
  */
-export const shortenLinks = (data: result): Promise<resultExtended> =>
+export const shortenLinks = (data: result, lanCode: string): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
-    if (undefined !== data) {
+    if (undefined !== data && undefined !== lanCode && 'string' === typeof (lanCode)) {
         shorten(data.feedUrl).then((rss: string) => {
             shorten(data.collectionViewUrl).then((itunes: string) => {
                 /**
                  * There  is  no  need  to  check  whether or not releaseDate exists because the caller function already
                  * verified this. That being said, if releaseDate is undefined, moment will return the current OS date.
                  */
-                const latest: string = moment(data.releaseDate).format('MMMM Do YYYY, h:mm a');
+                const latest: string = moment(data.releaseDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
 
                 if (undefined === latest) {
                     reject('Error occurred while converting date.');
                 } else {
+                    writeFile('outputThree.json', JSON.stringify({ ...data, itunes, rss, latest }), err => {
+                        if (err) {
+                            console.error(err);
+                        } else {
+                            console.log('Wrote.');
+                        }
+                    });
                     resolve({ ...data, itunes, rss, latest });
                 }
             }).catch((error: string) => {
@@ -241,7 +249,7 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
 /**
  * Parsing data.
  */
-export const parse = (data: response): Promise<Array<resultExtended>> =>
+export const parse = (data: response, lanCode: string): Promise<Array<resultExtended>> =>
 new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: string) => void) => {
     if (undefined !== data && 0 < data.resultCount && undefined !== data.results) {
         /**
@@ -252,7 +260,7 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
 
         if (0 < filtered.length) {
             Promise.all(filtered.map((element: result) => {
-                return shortenLinks(element).catch((error: string) => {
+                return shortenLinks(element, lanCode).catch((error: string) => {
                     throw error;
                 });
             })).then((parsed: Array<resultExtended>) => {
@@ -273,9 +281,9 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
  * user.  Only  takes  it  the  first  searched  response  because  it  is  a chat with the bot, maybe later when wit.ai
  * integration is implemented, the user can give some feedback and polishing more the search.
  */
-export const parseResponse = (data: response): Promise<resultExtended> =>
+export const parseResponse = (data: response, lanCode: string): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
-    parse(data).then((results: Array<resultExtended>) => {
+    parse(data, lanCode).then((results: Array<resultExtended>) => {
         resolve(maskResponse(results[0]));
     }).catch((error: string) => {
         reject(error);
@@ -293,7 +301,7 @@ new Promise((resolve: (data: Array<telegramInline>) => void, reject: (error: str
          */
         const lang = lanCode.split('-')[0];
 
-        parse(data).then((results: Array<resultExtended>) => {
+        parse(data, lanCode).then((results: Array<resultExtended>) => {
             const parsed: Array<telegramInline> = results.map((element: resultExtended) => {
                 return maskResponseInline({ ...element, lanCode: lang });
             });

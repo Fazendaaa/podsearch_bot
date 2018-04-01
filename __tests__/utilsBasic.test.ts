@@ -1,5 +1,11 @@
 /**
- * Tests.
+ * Tests basic.
+ *
+ * Basic matchers difference:
+ *  * toBe = for numbers;
+ *  * toEqual = for object;
+ *  * toMatch = for string.
+ * The others are selfs explaining.
  */
 'use strict';
 
@@ -38,7 +44,7 @@ jest.setTimeout(60000);
  * file  is  a nightmare of reading I/O -- need to correct ASAP this, if this continue tha way it is, scale testing will
  * be impossible.
  */
-const readAsync = (filename: string) => new Promise((resolve, reject) => {
+export const readAsync = (filename: string) => new Promise((resolve, reject) => {
     readFile(join(__dirname, `../__mocks__/${filename}`), 'utf8', (err: Error, data: string) => {
         if (err) {
             reject(err);
@@ -48,13 +54,6 @@ const readAsync = (filename: string) => new Promise((resolve, reject) => {
     });
 });
 
-/**
- * Basic difference:
- *  * toBe = for numbers;
- *  * toEqual = for object;
- *  * toMatch = for string.
- * The others are selfs explaining.
- */
 describe('Testing removeCmd function', () => {
     test('Searching \"/search Nerdcast\".', () => {
         expect(removeCmd('/search Nerdcast')).toMatch('Nerdcast');
@@ -322,7 +321,7 @@ describe('Testing shortenLinks function.', () => {
             return readAsync('nerdcast/en-us/outputFive.json').then((mockOutput: resultExtended) => {
                 return expect(shortenLinks(mockInput)).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
-                throw(error);
+                throw (error);
             });
         }).catch((error: Error) => {
             console.error(error);
@@ -574,25 +573,6 @@ describe('Testing parse function', () => {
 describe('Testing parseResponse function', () => {
     const noComplete: string = 'No complete info in the results results to display it.';
 
-    test('Parse nerdcast.', () => {
-        expect.assertions(1);
-
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            return readAsync('nerdcast/en-us/outputThree.json').then((mockOutput: result) => {
-                const srcResponse: response = {
-                    resultCount: 1,
-                    results: [mockInput]
-                };
-
-                return expect(parseResponse(srcResponse)).resolves.toEqual(mockOutput);
-            }).catch((error: Error) => {
-                throw error;
-            });
-        }).catch((error: Error) => {
-            console.error(error);
-        });
-    });
-
     test('Data equals to undefined.', () => {
         expect(parseResponse(undefined)).rejects.toMatch('Empty results.');
     });
@@ -728,20 +708,6 @@ describe('Testing parseResponse function', () => {
 
 describe('Testing parseResponseInline function', () => {
     const noComplete: string = 'No complete info in the results results to display it.';
-
-    test('Parse nerdcast', () => {
-        expect.assertions(1);
-
-        return readAsync('nerdcast/en-us/inputTwo.json').then((mockInput: response) => {
-            return readAsync('nerdcast/en-us/outputFour.json').then((mockOutput: Array<telegramInline>) => {
-                return expect(parseResponseInline(mockInput, 'en-us')).resolves.toEqual(mockOutput);
-            }).catch((error: Error) => {
-                throw error;
-            });
-        }).catch((error: Error) => {
-            console.error(error);
-        });
-    });
 
     test('No lanCode', () => {
         expect.assertions(1);
@@ -912,50 +878,10 @@ describe('Testing errorInline function', () => {
     test('lanCode equals to undefined', () => {
         expect(errorInline(undefined)).toBeUndefined();
     });
-
-    test('lanCode equals to en-us', () => {
-        expect.assertions(1);
-
-        return readAsync('/inline/en-us/errorInline.json').then((file: Array<telegramInline>) => {
-            return expect(errorInline('en-us')).toEqual(file);
-        }).catch((error: Error) => {
-            console.error(error);
-        });
-    });
-
-    test('lanCode equals to pt-br', () => {
-        expect.assertions(1);
-
-        return readAsync('/inline/pt-br/errorInline.json').then(file => {
-            return expect(errorInline('pt-br')).toEqual(file);
-        }).catch((error: Error) => {
-            console.error(error);
-        });
-    });
 });
 
 describe('Testing searchInline function', () => {
     test('lanCode equals to undefined', () => {
         expect(searchInline(undefined)).toBeUndefined();
-    });
-
-    test('lanCode equals to en-us', () => {
-        expect.assertions(1);
-
-        return readAsync('/inline/en-us/searchInline.json').then(file => {
-            return expect(searchInline('en-us')).toEqual(file);
-        }).catch((error: Error) => {
-            console.error(error);
-        });
-    });
-
-    test('lanCode equals to pt-br', () => {
-        expect.assertions(1);
-
-        return readAsync('/inline/pt-br/searchInline.json').then(file => {
-            return expect(searchInline('pt-br')).toEqual(file);
-        }).catch((error: Error) => {
-            console.error(error);
-        });
     });
 });
