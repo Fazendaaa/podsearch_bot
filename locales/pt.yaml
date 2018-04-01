@@ -8,9 +8,8 @@ text: |
 
 error: Algo aconteceu de errado. Por favor, mais tarde tente novamente.
 
-mask: 
+mask:
   "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\
-  *País*: _${country}_\n\
   *Gêneros*: _${genres}_\n\
   *Episódios*: _${trackCount}_\n\
   *Último episódio*: _${latest}_\n\
@@ -30,7 +29,7 @@ wrongInputCmd:
 wrongInputInline:
   "Ou você pode experimentar a pesquisa inline:"
 
-help: 
+help:
   "Esse bot realiza pesquisas de podcasts na loja da iTunes. Você pode realizar uma pesquisa através do comando o do modo inline. Veja em:\n\
   /search\n\n\
   Quer ver mais:\n\
@@ -38,8 +37,14 @@ help:
   😀 [Meu website](http://fazendaaa.me) — Veja mais dos meus outros projetos.\n\n\
   Tem alguma sugestão ou erros para reportar? Sinta-se a vontade para me dizer em: @Farmy."
 
-errorInline:
+errorInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Alguma coisa de errado aconteceu, por favor verifique o que digitou ou tente mais tarde."
 
-searchInline:
+errorInlineDescription:
+  "Alguma coisa de errado aconteceu, por favor verifique o que digitou ou tente mais tarde."
+
+searchInlineMessage:
+  "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)Por favor, digite o nome do podcast que está procurando."
+
+searchInlineDescription:
   "Por favor, digite o nome do podcast que está procurando."

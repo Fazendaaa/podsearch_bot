@@ -1,5 +1,5 @@
 /**
- * Handeling  functions  that  does  parsing  and  checking  of data. More about the non official typings for goo.gl and
+ * Handling  functions  that  does  parsing  and  checking  of  data. More about the non official typings for goo.gl and
  * itunes-search can be found at: ./src/@typings/
  */
 'use strict';
@@ -19,7 +19,7 @@ import { resolve } from 'path';
 import { telegramInline } from 'telegraf';
 
 /**
- * Allows the code to run without passing the enviroment variables as arguments.
+ * Allows the code to run without passing the environment variables as arguments.
  */
 config();
 
@@ -110,26 +110,26 @@ export const messageToString = (message: string): string => {
  * This will be only used locally, but there's need to exported to be tested later.
  */
 export const hasGenres = (genres: Array<string>): string => {
-    let rtnval: string = undefined;
+    let returnValue: string = undefined;
 
     if (undefined !== genres) {
         if (1 < genres.length) {
-            rtnval = genres.reduce((accumulator, current) => {
+            returnValue = genres.reduce((accumulator, current) => {
                 return `${accumulator} | ${current}`;
             });
         } else {
-            rtnval = genres[0];
+            returnValue = genres[0];
         }
     }
 
-    return rtnval;
+    return returnValue;
 };
 
 /**
  * Verify whether or not an iTunes response has all of the needed data to the bot.
  */
 export const hasItAll = (data: result): boolean => {
-    let rtnval: boolean = false;
+    let returnValue: boolean = false;
 
     if (undefined !== data &&
         undefined !== data.releaseDate && (
@@ -143,10 +143,10 @@ export const hasItAll = (data: result): boolean => {
         undefined !== data.feedUrl &&
         undefined !== data.genres &&
         undefined !== data.collectionViewUrl) {
-        rtnval = true;
+        returnValue = true;
     }
 
-    return rtnval;
+    return returnValue;
 };
 
 /**
@@ -158,7 +158,6 @@ export const maskResponse = (data: resultExtended): resultExtended => {
         artworkUrl600: data.artworkUrl600,
         releaseDate: data.releaseDate,
         artistName: data.artistName,
-        country: data.country,
         /**
          * Just remember the good old days of C lang with its casting.
          */
@@ -175,7 +174,7 @@ export const maskResponse = (data: resultExtended): resultExtended => {
  * This will be only used locally, but there's need to exported to be tested later.
  */
 export const maskResponseInline = (data: resultExtended): telegramInline => {
-    let rtnval: telegramInline = undefined;
+    let returnValue: telegramInline = undefined;
     let preview: string = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
 
     if (undefined !== data) {
@@ -191,7 +190,7 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
             preview = data.artworkUrl600;
         }
 
-        rtnval = {
+        returnValue = {
             id: `${data.trackId}`,
             title: data.artistName,
             type: 'article',
@@ -204,11 +203,11 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
         };
     }
 
-    return rtnval;
+    return returnValue;
 };
 
 /**
- * This function takes an result a then returns it with the shortened links about it and it lastest episode release in a
+ * This  function takes an result a then returns it with the shortened links about it and it latest episode release in a
  * readable way.
  * This will be only used locally, but there's need to exported to be tested later.
  */
@@ -224,7 +223,7 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
                 const latest: string = moment(data.releaseDate).format('MMMM Do YYYY, h:mm a');
 
                 if (undefined === latest) {
-                    reject('Error occured while converting date.');
+                    reject('Error occurred while converting date.');
                 } else {
                     resolve({ ...data, itunes, rss, latest });
                 }
@@ -246,7 +245,7 @@ export const parse = (data: response): Promise<Array<resultExtended>> =>
 new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: string) => void) => {
     if (undefined !== data && 0 < data.resultCount && undefined !== data.results) {
         /**
-         * Some  data  info  comes  uncomplete,  this  could  mean  an error later on the process; that's why it must be
+         * Some  data  info  comes  incomplete,  this  could  mean  an error later on the process; that's why it must be
          * filtered right here, to avoid it.
          */
         const filtered: Array<result> = data.results.filter(hasItAll);
@@ -272,7 +271,7 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
 /**
  * This function takes the search from itunes's API then parse it to the format that will be presented as message to the
  * user.  Only  takes  it  the  first  searched  response  because  it  is  a chat with the bot, maybe later when wit.ai
- * integration is implemented, the user can give some feeedback and polishing more the search.
+ * integration is implemented, the user can give some feedback and polishing more the search.
  */
 export const parseResponse = (data: response): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
@@ -312,35 +311,50 @@ new Promise((resolve: (data: Array<telegramInline>) => void, reject: (error: str
  * Just an error message to be sent to the user in case of failed search.
  */
 export const errorInline = (lanCode: string): Array<telegramInline> => {
-    const lang = lanCode.split('-')[0];
+    let returnValue: Array<telegramInline> = undefined;
+    let lang: string = undefined;
 
-    return [{
-        id: '0',
-        title: 'Error',
-        type: 'article',
-        input_message_content: {
-            message_text: i18n.api(lang).t('errorInline'),
-            parse_mode: 'Markdown'
-        },
-        description: i18n.api(lang).t('errorInline'),
-        thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
-    }];
+    if (undefined !== lanCode && 'string' === typeof(lanCode)) {
+        lang = lanCode.split('-')[0];
+
+        returnValue = [{
+            id: '0',
+            title: 'Error',
+            type: 'article',
+            input_message_content: {
+                message_text: i18n.api(lang).t('errorInlineMessage'),
+                parse_mode: 'Markdown'
+            },
+            description: i18n.api(lang).t('errorInlineDescription'),
+            thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
+        }];
+    }
+
+    return returnValue;
 };
 
 /**
- * Just an earch message to be sent to the user in case of an empty search querry.
+ * Just a search message to be sent to the user in case of an empty search query.
  */
 export const searchInline = (lanCode: string): Array<telegramInline> => {
-    const lang = lanCode.split('-')[0];
+    let returnValue: Array<telegramInline> = undefined;
+    let lang: string = undefined;
 
-    return [{id: '0',
-        title: 'Search Podcasts',
-        type: 'article',
-        input_message_content: {
-            message_text: i18n.api(lang).t('searchInline'),
-            parse_mode: 'Markdown'
-        },
-        description: i18n.api(lang).t('searchInline'),
-        thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
-    }];
+    if (undefined !== lanCode && 'string' === typeof(lanCode)) {
+        lang = lanCode.split('-')[0];
+
+        returnValue = [{
+            id: '0',
+            title: 'Search Podcasts',
+            type: 'article',
+            input_message_content: {
+                message_text: i18n.api(lang).t('searchInlineMessage'),
+                parse_mode: 'Markdown'
+            },
+            description: i18n.api(lang).t('searchInlineDescription'),
+            thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
+        }];
+    }
+
+    return returnValue;
 };

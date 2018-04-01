@@ -17,7 +17,7 @@ const utils_1 = require("./utils");
 const telegraf = require('telegraf');
 const telegrafI18n = require('telegraf-i18n');
 /**
- * Allows the code to run without passing the enviroment variables as arguments.
+ * Allows the code to run without passing the environment variables as arguments.
  */
 dotenv_1.config();
 /**
@@ -25,7 +25,7 @@ dotenv_1.config();
  *  - Default markdown option for message parsing;
  *  - Polling;
  *  - Log each bot requisition;
- *  - Internacionalization support.
+ *  - Internationalization support.
  */
 const bot = new telegraf(process.env.BOT_KEY);
 const i18n = new telegrafI18n({
@@ -46,18 +46,24 @@ bot.command('start', ({ i18n, replyWithMarkdown }) => {
  * /search + 'podcast name', then returns it to the user all the data.
  *
  * iTunes  search  options for podcast, since this API searches anything in iTunes store and this bot it's only for uses
- * on  podcast,  this  arguments  must be setted. And, this command works only talking to the bot, so there's no need to
- * show more than one result.
+ * on  podcast,  this arguments must be set. And, this command works only talking to the bot, so there's no need to show
+ * more than one result.
  */
 bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
+    const value = utils_1.removeCmd(message.text);
+    /**
+     * This  option  is  an  option  to  language, since works better -- sincerely still don't know why, maybe something
+     * related to iTunes API -- to return data in user native language.
+     */
+    const country = message.from.language_code.split('-')[1] || 'US';
     const opts = {
+        country: country,
         media: 'podcast',
         entity: 'podcast',
         limit: 1
     };
-    const value = utils_1.removeCmd(message.text);
     /**
-     * Setting up locale languague info.
+     * Setting up locale language info.
      */
     i18n.locale(message.from.language_code);
     if (value !== '') {
@@ -103,15 +109,11 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
     const lanCode = inlineQuery.from.language_code;
     const pageLimit = 20;
     const offset = parseInt(inlineQuery.offset, 10) || 0;
+    const country = inlineQuery.from.language_code.split('-')[1] || 'US';
     const opts = {
+        country: country,
         media: 'podcast',
-        entity: 'podcast',
-        /**
-         * Need to look into itunes-search library to see what's going on with this option. To show translated info, not
-         * just the key arguments, but the value also.
-         */
-        // lang: lanCode,
-        limit: offset + pageLimit
+        entity: 'podcast'
     };
     /**
      * Verify whether or not the user has typed anything to search for.
@@ -123,17 +125,26 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                  * "Pseudo-pagination", since this API doesn't allow it true pagination.
                  */
                 data.results = data.results.slice(offset, offset + pageLimit);
-                utils_1.parseResponseInline(data, lanCode).then((results) => {
-                    answerInlineQuery(results, { next_offset: offset + pageLimit });
-                }).catch((error) => {
-                    console.error(error);
-                    answerInlineQuery(utils_1.errorInline(lanCode));
-                });
+                /**
+                 * Checking  the  offset to be equals to zero so that mean that the bot hasn't shown the user only fewer
+                 * podcast options, or even none, in the search.
+                 */
+                if (0 < data.results.length) {
+                    utils_1.parseResponseInline(data, lanCode).then((results) => {
+                        answerInlineQuery(results, { next_offset: offset + pageLimit });
+                    }).catch((error) => {
+                        console.error(error);
+                        answerInlineQuery(utils_1.errorInline(lanCode));
+                    });
+                }
             }
             else {
                 answerInlineQuery(utils_1.errorInline(lanCode));
             }
         });
+        /**
+         * Incentive the user to search for a podcast.
+         */
     }
     else {
         answerInlineQuery(utils_1.searchInline(lanCode));

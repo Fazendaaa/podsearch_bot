@@ -1,5 +1,5 @@
 /**
- * Handeling  functions  that  does  parsing  and  checking  of data. More about the non official typings for goo.gl and
+ * Handling  functions  that  does  parsing  and  checking  of  data. More about the non official typings for goo.gl and
  * itunes-search can be found at: ./src/@typings/
  */
 'use strict';
@@ -10,7 +10,7 @@ const i18n_node_yaml = require("i18n-node-yaml");
 const moment = require("moment");
 const path_1 = require("path");
 /**
- * Allows the code to run without passing the enviroment variables as arguments.
+ * Allows the code to run without passing the environment variables as arguments.
  */
 dotenv_1.config();
 /**
@@ -44,24 +44,24 @@ exports.messageToString = (message) => {
  * This will be only used locally, but there's need to exported to be tested later.
  */
 exports.hasGenres = (genres) => {
-    let rtnval = undefined;
+    let returnValue = undefined;
     if (undefined !== genres) {
         if (1 < genres.length) {
-            rtnval = genres.reduce((accumulator, current) => {
+            returnValue = genres.reduce((accumulator, current) => {
                 return `${accumulator} | ${current}`;
             });
         }
         else {
-            rtnval = genres[0];
+            returnValue = genres[0];
         }
     }
-    return rtnval;
+    return returnValue;
 };
 /**
  * Verify whether or not an iTunes response has all of the needed data to the bot.
  */
 exports.hasItAll = (data) => {
-    let rtnval = false;
+    let returnValue = false;
     if (undefined !== data &&
         undefined !== data.releaseDate && (undefined !== data.artworkUrl60 ||
         undefined !== data.artworkUrl100) &&
@@ -72,9 +72,9 @@ exports.hasItAll = (data) => {
         undefined !== data.feedUrl &&
         undefined !== data.genres &&
         undefined !== data.collectionViewUrl) {
-        rtnval = true;
+        returnValue = true;
     }
-    return rtnval;
+    return returnValue;
 };
 /**
  * This function returns the formated data that will be sent to the user.
@@ -85,7 +85,6 @@ exports.maskResponse = (data) => {
         artworkUrl600: data.artworkUrl600,
         releaseDate: data.releaseDate,
         artistName: data.artistName,
-        country: data.country,
         /**
          * Just remember the good old days of C lang with its casting.
          */
@@ -101,7 +100,7 @@ exports.maskResponse = (data) => {
  * This will be only used locally, but there's need to exported to be tested later.
  */
 exports.maskResponseInline = (data) => {
-    let rtnval = undefined;
+    let returnValue = undefined;
     let preview = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
     if (undefined !== data) {
         /**
@@ -117,7 +116,7 @@ exports.maskResponseInline = (data) => {
         else if (undefined !== data.artworkUrl600) {
             preview = data.artworkUrl600;
         }
-        rtnval = {
+        returnValue = {
             id: `${data.trackId}`,
             title: data.artistName,
             type: 'article',
@@ -129,10 +128,10 @@ exports.maskResponseInline = (data) => {
             thumb_url: preview
         };
     }
-    return rtnval;
+    return returnValue;
 };
 /**
- * This function takes an result a then returns it with the shortened links about it and it lastest episode release in a
+ * This  function takes an result a then returns it with the shortened links about it and it latest episode release in a
  * readable way.
  * This will be only used locally, but there's need to exported to be tested later.
  */
@@ -146,7 +145,7 @@ exports.shortenLinks = (data) => new Promise((resolve, reject) => {
                  */
                 const latest = moment(data.releaseDate).format('MMMM Do YYYY, h:mm a');
                 if (undefined === latest) {
-                    reject('Error occured while converting date.');
+                    reject('Error occurred while converting date.');
                 }
                 else {
                     resolve(Object.assign({}, data, { itunes, rss, latest }));
@@ -168,7 +167,7 @@ exports.shortenLinks = (data) => new Promise((resolve, reject) => {
 exports.parse = (data) => new Promise((resolve, reject) => {
     if (undefined !== data && 0 < data.resultCount && undefined !== data.results) {
         /**
-         * Some  data  info  comes  uncomplete,  this  could  mean  an error later on the process; that's why it must be
+         * Some  data  info  comes  incomplete,  this  could  mean  an error later on the process; that's why it must be
          * filtered right here, to avoid it.
          */
         const filtered = data.results.filter(exports.hasItAll);
@@ -194,7 +193,7 @@ exports.parse = (data) => new Promise((resolve, reject) => {
 /**
  * This function takes the search from itunes's API then parse it to the format that will be presented as message to the
  * user.  Only  takes  it  the  first  searched  response  because  it  is  a chat with the bot, maybe later when wit.ai
- * integration is implemented, the user can give some feeedback and polishing more the search.
+ * integration is implemented, the user can give some feedback and polishing more the search.
  */
 exports.parseResponse = (data) => new Promise((resolve, reject) => {
     exports.parse(data).then((results) => {
@@ -229,33 +228,44 @@ exports.parseResponseInline = (data, lanCode) => new Promise((resolve, reject) =
  * Just an error message to be sent to the user in case of failed search.
  */
 exports.errorInline = (lanCode) => {
-    const lang = lanCode.split('-')[0];
-    return [{
-            id: '0',
-            title: 'Error',
-            type: 'article',
-            input_message_content: {
-                message_text: i18n.api(lang).t('errorInline'),
-                parse_mode: 'Markdown'
-            },
-            description: i18n.api(lang).t('errorInline'),
-            thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
-        }];
+    let returnValue = undefined;
+    let lang = undefined;
+    if (undefined !== lanCode && 'string' === typeof (lanCode)) {
+        lang = lanCode.split('-')[0];
+        returnValue = [{
+                id: '0',
+                title: 'Error',
+                type: 'article',
+                input_message_content: {
+                    message_text: i18n.api(lang).t('errorInlineMessage'),
+                    parse_mode: 'Markdown'
+                },
+                description: i18n.api(lang).t('errorInlineDescription'),
+                thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
+            }];
+    }
+    return returnValue;
 };
 /**
- * Just an earch message to be sent to the user in case of an empty search querry.
+ * Just a search message to be sent to the user in case of an empty search query.
  */
 exports.searchInline = (lanCode) => {
-    const lang = lanCode.split('-')[0];
-    return [{ id: '0',
-            title: 'Search Podcasts',
-            type: 'article',
-            input_message_content: {
-                message_text: i18n.api(lang).t('searchInline'),
-                parse_mode: 'Markdown'
-            },
-            description: i18n.api(lang).t('searchInline'),
-            thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
-        }];
+    let returnValue = undefined;
+    let lang = undefined;
+    if (undefined !== lanCode && 'string' === typeof (lanCode)) {
+        lang = lanCode.split('-')[0];
+        returnValue = [{
+                id: '0',
+                title: 'Search Podcasts',
+                type: 'article',
+                input_message_content: {
+                    message_text: i18n.api(lang).t('searchInlineMessage'),
+                    parse_mode: 'Markdown'
+                },
+                description: i18n.api(lang).t('searchInlineDescription'),
+                thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
+            }];
+    }
+    return returnValue;
 };
 //# sourceMappingURL=utils.js.map
