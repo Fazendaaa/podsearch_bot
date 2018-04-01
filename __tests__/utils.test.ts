@@ -31,7 +31,7 @@ import {
 /**
  * Setting timeout to 60s === 60000ms.
  */
-jest.setTimeout(20000);
+jest.setTimeout(60000);
 
 /**
  * I  know  that  isn't  the right way of doing mocking tests but, right now, is the way that I came up to. This testing
@@ -318,15 +318,12 @@ describe('Testing shortenLinks function.', () => {
     test('Shorten all nerdcast links.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
-            const dst: resultExtended = {
-                ...mock,
-                itunes: 'https://goo.gl/kwHu7z',
-                rss: 'https://goo.gl/bECbi2',
-                latest: 'July 11th 2016, 4:05 am'
-            };
-
-            return expect(shortenLinks(mock)).resolves.toEqual(dst);
+        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
+            return readAsync('nerdcast/en-us/outputFive.json').then((mockOutput: resultExtended) => {
+                return expect(shortenLinks(mockInput)).resolves.toEqual(mockOutput);
+            }).catch((error: Error) => {
+                throw(error);
+            });
         }).catch((error: Error) => {
             console.error(error);
         });
