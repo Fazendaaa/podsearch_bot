@@ -29,9 +29,9 @@ import {
 } from '../src/utils';
 
 /**
- * Setting timeout to 10s === 10000ms.
+ * Setting timeout to 60s === 60000ms.
  */
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
 /**
  * I  know  that  isn't  the right way of doing mocking tests but, right now, is the way that I came up to. This testing

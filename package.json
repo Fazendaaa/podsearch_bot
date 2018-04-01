@@ -4,7 +4,7 @@
   "description": "Telegram bot that searches Podcast in iTunes store.",
   "main": "node dist/main.js",
   "scripts": {
-    "test": "jest --config jest.config.js --useStderr --ci --forceExit --bail --coverage --expand --logHeapUsage --runInBand --updateSnapshot --verbose",
+    "test": "jest --config jest.config.js --useStderr --ci --forceExit --coverage --expand --logHeapUsage --runInBand --updateSnapshot --verbose",
     "start": "node dist/main.js",
     "build": "tsc",
     "watch": "tsc -w",
@@ -40,8 +40,7 @@
     "ts-node": "^5.0.1",
     "tslint": "^5.9.1",
     "tslint-microsoft-contrib": "^5.0.3",
-    "typescript": "^2.7.2",
-    "uuid": "^3.2.1"
+    "typescript": "^2.7.2"
   },
   "dependencies": {}
 }
