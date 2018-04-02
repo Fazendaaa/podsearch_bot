@@ -55,7 +55,8 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
      * This  option  is  an  option  to  language, since works better -- sincerely still don't know why, maybe something
      * related to iTunes API -- to return data in user native language.
      */
-    const country = message.from.language_code.split('-')[1] || 'US';
+    const country = message.from.language_code.split('-')[1] || 'us';
+    const language = message.from.language_code.split('-')[0] || 'en';
     const opts = {
         country: country,
         media: 'podcast',
@@ -65,10 +66,10 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
     /**
      * Setting up locale language info.
      */
-    i18n.locale(message.from.language_code);
+    i18n.locale(language);
     if (value !== '') {
         itunes_search_1.search(value, opts, (data) => {
-            utils_1.parseResponse(data).then((parsed) => {
+            utils_1.parseResponse(data, message.from.language_code).then((parsed) => {
                 replyWithMarkdown(i18n.t('mask', parsed));
             }).catch((error) => {
                 console.error(error);
@@ -109,7 +110,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
     const lanCode = inlineQuery.from.language_code;
     const pageLimit = 20;
     const offset = parseInt(inlineQuery.offset, 10) || 0;
-    const country = inlineQuery.from.language_code.split('-')[1] || 'US';
+    const country = inlineQuery.from.language_code.split('-')[1] || 'us';
     const opts = {
         country: country,
         limit: offset + pageLimit,

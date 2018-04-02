@@ -8,13 +8,12 @@
     "trackName": "Nerdcast",
     "collectionCensoredName": "Nerdcast",
     "trackCensoredName": "Nerdcast",
-    "collectionViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id1103141552?mt=2&uo=4",
+    "collectionViewUrl": "https://itunes.apple.com/br/podcast/nerdcast/id1103141552?mt=2&uo=4",
     "feedUrl": "http://feeds.soundcloud.com/users/soundcloud:users:219177314/sounds.rss",
-    "trackViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id1103141552?mt=2&uo=4",
+    "trackViewUrl": "https://itunes.apple.com/br/podcast/nerdcast/id1103141552?mt=2&uo=4",
     "artworkUrl30": "http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/30x30bb.jpg",
     "artworkUrl60": "http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/60x60bb.jpg",
     "artworkUrl100": "http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/100x100bb.jpg",
-    "artworkUrl600": "http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg",
     "collectionPrice": 0,
     "trackPrice": 0,
     "trackRentalPrice": 0,
@@ -25,10 +24,20 @@
     "collectionExplicitness": "cleaned",
     "trackExplicitness": "cleaned",
     "trackCount": 2,
-    "country": "USA",
-    "currency": "USD",
-    "primaryGenreName": "Comedy",
+    "country": "BRA",
+    "currency": "BRL",
+    "primaryGenreName": "Comédia",
     "contentAdvisoryRating": "Clean",
-    "genreIds": ["1303", "26"],
-    "genres": ["Comedy", "Podcasts"]
+    "artworkUrl600": "http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg",
+    "genreIds": [
+        "1303",
+        "26"
+    ],
+    "genres": [
+        "Comédia",
+        "Podcasts"
+    ],
+    "itunes": "https://goo.gl/3MqovR",
+    "rss": "https://goo.gl/bECbi2",
+    "latest": "11º julho 2016, 4:05 am"
 }
