@@ -1,13 +1,19 @@
-# Podsearchbot
+# Podsearch
 <h1 align="center">
     <br>
-    <img width="260" src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png" alt="Podsearchbot"/>
-	<br>
+    <img width="260" src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png" alt="Podsearch"/>
 	<br>
 	<br>
 </h1>
 
-> A solução que você precisava para poder compartilhar seus podcats favoritos com seus amigos :3
+<h3 align="center">
+
+[![English README](https://github.com/Fazendaaa/podsearch_bot/blob/master/README.md)](https://img.shields.io/badge/Language-EN-blue.svg?longCache=true&style=for-the-badge)
+[![Portuguese README](https://github.com/Fazendaaa/podsearch_bot/blob/master/readme/README_PT.md)](https://img.shields.io/badge/Language-PT-green.svg?longCache=true&style=for-the-badge)
+
+</h3>
+
+<h4 align="center">
 
 [![bitHound Overall Score](https://www.bithound.io/github/Fazendaaa/podsearch_bot/badges/score.svg?style=flat-square)](https://www.bithound.io/github/Fazendaaa/podsearch_bot)
 [![Dependencies](https://david-dm.org/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/blob/master/package.json)
@@ -18,6 +24,10 @@
 [![GitHub forks](https://img.shields.io/github/forks/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/network)
 [![GitHub stars](https://img.shields.io/github/stars/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/stargazers)
 [![GitHub license](https://img.shields.io/github/license/Fazendaaa/podsearch_bot.svg?style=flat-square)](https://github.com/Fazendaaa/podsearch_bot/blob/master/LICENSE)
+
+</h4>
+
+> A solução que você precisava para poder compartilhar seus podcats favoritos com seus amigos :3
 
 Um bot para [Telegram](https://www.telegram.org/) que realiza pesquisas de podcasts na loja da [iTunes](https://www.apple.com/lae/itunes/).
 
