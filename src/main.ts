@@ -58,8 +58,21 @@ bot.use(i18n.middleware());
 /**
  * Greetings to new users when chatting one-to-one.
  */
-bot.command('start', ({ i18n, replyWithMarkdown }) => {
+bot.command('start', ({ i18n, replyWithMarkdown, message }) => {
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+    i18n.locale(language);
+
     replyWithMarkdown(i18n.t('greetings'));
+});
+
+/**
+ * Message saying how to use this bot.
+ */
+bot.command('help', ({ i18n, replyWithMarkdown, message }) => {
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+    i18n.locale(language);
+
+    replyWithMarkdown(i18n.t('help'), { disable_web_page_preview: true });
 });
 
 /**
@@ -116,13 +129,6 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
             console.error(error);
         });
     }
-});
-
-/**
- * Message saying how to use this bot.
- */
-bot.command('help', ({ i18n, replyWithMarkdown}) => {
-    replyWithMarkdown(i18n.t('help'), { disable_web_page_preview: true });
 });
 
 /**
