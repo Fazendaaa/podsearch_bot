@@ -144,8 +144,8 @@ describe('Testing hasItAll function.', () => {
     test('Has it all.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mock: result) => {
-            return expect(hasItAll(mock)).toBeTruthy();
+        return readAsync('result.json').then((mockInput: result) => {
+            return expect(hasItAll(mockInput)).toBeTruthy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -158,10 +158,10 @@ describe('Testing hasItAll function.', () => {
     test('Without releaseDate.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mock: result) => {
-            delete mock.releaseDate;
+        return readAsync('result.json').then((mockInput: result) => {
+            delete mockInput.releaseDate;
 
-            return expect(hasItAll(mock)).toBeFalsy();
+            return expect(hasItAll(mockInput)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -170,10 +170,10 @@ describe('Testing hasItAll function.', () => {
     test('Without artworkUrl60.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mock: result) => {
-            delete mock.artworkUrl60;
+        return readAsync('result.json').then((mockInput: result) => {
+            delete mockInput.artworkUrl60;
 
-            return expect(hasItAll(mock)).toBeTruthy();
+            return expect(hasItAll(mockInput)).toBeTruthy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -182,10 +182,10 @@ describe('Testing hasItAll function.', () => {
     test('Without artworkUrl100.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mock: result) => {
-            delete mock.artworkUrl100;
+        return readAsync('result.json').then((mockInput: result) => {
+            delete mockInput.artworkUrl100;
 
-            return expect(hasItAll(mock)).toBeTruthy();
+            return expect(hasItAll(mockInput)).toBeTruthy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -194,11 +194,11 @@ describe('Testing hasItAll function.', () => {
     test('Without artworkUrl60 and artworkUrl100.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mock: result) => {
-            delete mock.artworkUrl60;
-            delete mock.artworkUrl100;
+        return readAsync('result.json').then((mockInput: result) => {
+            delete mockInput.artworkUrl60;
+            delete mockInput.artworkUrl100;
 
-            return expect(hasItAll(mock)).toBeFalsy();
+            return expect(hasItAll(mockInput)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -207,10 +207,10 @@ describe('Testing hasItAll function.', () => {
     test('Without artworkUrl600.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mock: result) => {
-            delete mock.artworkUrl600;
+        return readAsync('result.json').then((mockInput: result) => {
+            delete mockInput.artworkUrl600;
 
-            return expect(hasItAll(mock)).toBeFalsy();
+            return expect(hasItAll(mockInput)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -219,10 +219,10 @@ describe('Testing hasItAll function.', () => {
     test('Without artistName.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mock: result) => {
-            delete mock.artistName;
+        return readAsync('result.json').then((mockInput: result) => {
+            delete mockInput.artistName;
 
-            return expect(hasItAll(mock)).toBeFalsy();
+            return expect(hasItAll(mockInput)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -231,10 +231,10 @@ describe('Testing hasItAll function.', () => {
     test('Without country.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mock: result) => {
-            delete mock.country;
+        return readAsync('result.json').then((mockInput: result) => {
+            delete mockInput.country;
 
-            return expect(hasItAll(mock)).toBeFalsy();
+            return expect(hasItAll(mockInput)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -243,10 +243,10 @@ describe('Testing hasItAll function.', () => {
     test('Without trackCount.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mock: result) => {
-            delete mock.trackCount;
+        return readAsync('result.json').then((mockInput: result) => {
+            delete mockInput.trackCount;
 
-            return expect(hasItAll(mock)).toBeFalsy();
+            return expect(hasItAll(mockInput)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -255,10 +255,10 @@ describe('Testing hasItAll function.', () => {
     test('Without feedUrl.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mock: result) => {
-            delete mock.feedUrl;
+        return readAsync('result.json').then((mockInput: result) => {
+            delete mockInput.feedUrl;
 
-            return expect(hasItAll(mock)).toBeFalsy();
+            return expect(hasItAll(mockInput)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -267,10 +267,10 @@ describe('Testing hasItAll function.', () => {
     test('Without genres.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mock: result) => {
-            delete mock.genres;
+        return readAsync('result.json').then((mockInput: result) => {
+            delete mockInput.genres;
 
-            return expect(hasItAll(mock)).toBeFalsy();
+            return expect(hasItAll(mockInput)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -279,10 +279,10 @@ describe('Testing hasItAll function.', () => {
     test('Without collectionViewUrl.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mock: result) => {
-            delete mock.collectionViewUrl;
+        return readAsync('result.json').then((mockInput: result) => {
+            delete mockInput.collectionViewUrl;
 
-            return expect(hasItAll(mock)).toBeFalsy();
+            return expect(hasItAll(mockInput)).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -324,8 +324,8 @@ describe('Testing shortenLinks function.', () => {
     test('lanCode \"undefined\".', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            expect(shortenLinks(mockInput, undefined)).rejects.toMatch('Wrong argument.');
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: result) => {
+            expect(shortenLinks(mockInput.results[0], undefined)).rejects.toMatch('Wrong argument.');
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -334,9 +334,9 @@ describe('Testing shortenLinks function.', () => {
     test('Shorten all nerdcast links.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            return readAsync('nerdcast/en-us/outputFive.json').then((mockOutput: resultExtended) => {
-                return expect(shortenLinks(mockInput, 'en-us')).resolves.toEqual(mockOutput);
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            return readAsync('nerdcast/en-us/output/shortened.json').then((mockOutput: resultExtended) => {
+                return expect(shortenLinks(mockInput.results[0], 'en-us')).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw (error);
             });
@@ -348,10 +348,10 @@ describe('Testing shortenLinks function.', () => {
     test('Shorten nerdcast RSS link -- without iTunes link.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
-            delete mock.feedUrl;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].collectionViewUrl;
 
-            return expect(shortenLinks(mock, 'en-us')).rejects.toMatch('Has no RSS link available.');
+            return expect(shortenLinks(mockInput.results[0], 'en-us')).rejects.toMatch('Has no iTunes link available.');
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -360,10 +360,10 @@ describe('Testing shortenLinks function.', () => {
     test('Shorten nerdcast iTunes link -- without RSS link.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
-            delete mock.collectionViewUrl;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].feedUrl;
 
-            return expect(shortenLinks(mock, 'en-us')).rejects.toMatch('Has no iTunes link available.');
+            return expect(shortenLinks(mockInput.results[0], 'en-us')).rejects.toMatch('Has no RSS link available.');
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -384,13 +384,8 @@ describe('Testing parse function', () => {
     test('lanCode \"undefined\".', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mock]
-            };
-
-            return expect(parse(srcResponse, undefined)).rejects.toMatch('Empty results.');
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            return expect(parse(mockInput, undefined)).rejects.toMatch('Empty results.');
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -399,14 +394,9 @@ describe('Testing parse function', () => {
     test('Parsing nerdcast.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            return readAsync('nerdcast/en-us/outputOne.json').then((mockOutput: result) => {
-                const srcResponse: response = {
-                    resultCount: 1,
-                    results: [mockInput]
-                };
-
-                return expect(parse(srcResponse, 'en-us')).resolves.toEqual(mockOutput);
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            return readAsync('nerdcast/en-us/output/parsed.json').then((mockOutput: Array<resultExtended>) => {
+                return expect(parse(mockInput, 'en-us')).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw error;
             });
@@ -442,14 +432,10 @@ describe('Testing parse function', () => {
     test('Without releaseDate.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mock]
-            };
-            delete srcResponse.results[0].releaseDate;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].releaseDate;
 
-            return expect(parse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -458,15 +444,11 @@ describe('Testing parse function', () => {
     test('Without artworkUrl60.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            return readAsync('nerdcast/en-us/outputOne.json').then((mockOutput: result) => {
-                const srcResponse: response = {
-                    resultCount: 1,
-                    results: [mockInput]
-                };
-                delete srcResponse.results[0].artworkUrl60;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            return readAsync('nerdcast/en-us/output/parsed.1.json').then((mockOutput: Array<resultExtended>) => {
+                delete mockInput.results[0].artworkUrl60;
 
-                return expect(parse(srcResponse, 'en-us')).resolves.toEqual(mockOutput);
+                return expect(parse(mockInput, 'en-us')).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw error;
             });
@@ -478,15 +460,11 @@ describe('Testing parse function', () => {
     test('Without artworkUrl100.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            return readAsync('nerdcast/en-us/outputTwo.json').then((mockOutput: result) => {
-                const srcResponse: response = {
-                    resultCount: 1,
-                    results: [mockInput]
-                };
-                delete srcResponse.results[0].artworkUrl100;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            return readAsync('nerdcast/en-us/output/parsed.2.json').then((mockOutput: Array<resultExtended>) => {
+                delete mockInput.results[0].artworkUrl100;
 
-                return expect(parse(srcResponse, 'en-us')).resolves.toEqual(mockOutput);
+                return expect(parse(mockInput, 'en-us')).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw error;
             });
@@ -498,15 +476,11 @@ describe('Testing parse function', () => {
     test('Without artworkUrl60 and artworkUrl100.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mock]
-            };
-            delete srcResponse.results[0].artworkUrl60;
-            delete srcResponse.results[0].artworkUrl100;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].artworkUrl60;
+            delete mockInput.results[0].artworkUrl100;
 
-            return expect(parse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -515,14 +489,10 @@ describe('Testing parse function', () => {
     test('Without artworkUrl600.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mock]
-            };
-            delete srcResponse.results[0].artworkUrl600;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].artworkUrl600;
 
-            return expect(parse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -531,14 +501,10 @@ describe('Testing parse function', () => {
     test('Without artistName.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mock]
-            };
-            delete srcResponse.results[0].releaseDate;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].releaseDate;
 
-            return expect(parse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -547,14 +513,10 @@ describe('Testing parse function', () => {
     test('Without country.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mock]
-            };
-            delete srcResponse.results[0].country;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].country;
 
-            return expect(parse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -563,14 +525,10 @@ describe('Testing parse function', () => {
     test('Without trackCount.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mock]
-            };
-            delete srcResponse.results[0].trackCount;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].trackCount;
 
-            return expect(parse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -579,14 +537,10 @@ describe('Testing parse function', () => {
     test('Without feedUrl.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mock]
-            };
-            delete srcResponse.results[0].feedUrl;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].feedUrl;
 
-            return expect(parse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -595,14 +549,10 @@ describe('Testing parse function', () => {
     test('Without genres.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mock]
-            };
-            delete srcResponse.results[0].genres;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].genres;
 
-            return expect(parse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -611,14 +561,10 @@ describe('Testing parse function', () => {
     test('Without collectionViewUrl.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mock: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mock]
-            };
-            delete srcResponse.results[0].collectionViewUrl;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].collectionViewUrl;
 
-            return expect(parse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -639,13 +585,8 @@ describe('Testing parseResponse function', () => {
     test('lanCode \"undefined\".', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-
-            return expect(parseResponse(srcResponse, undefined)).rejects.toMatch('Empty results.');
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            return expect(parseResponse(mockInput, undefined)).rejects.toMatch('Empty results.');
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -654,14 +595,10 @@ describe('Testing parseResponse function', () => {
     test('Has no RSS link.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].feedUrl;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].feedUrl;
 
-            return expect(parseResponse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -670,14 +607,10 @@ describe('Testing parseResponse function', () => {
     test('Has no iTunes link.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].artworkUrl600;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].artworkUrl600;
 
-            return expect(parseResponse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -686,14 +619,10 @@ describe('Testing parseResponse function', () => {
     test('Has no latest episode date.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].releaseDate;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].releaseDate;
 
-            return expect(parseResponse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -702,14 +631,10 @@ describe('Testing parseResponse function', () => {
     test('Has no podcast artwork.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].artworkUrl600;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].artworkUrl600;
 
-            return expect(parseResponse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -718,14 +643,10 @@ describe('Testing parseResponse function', () => {
     test('Has no name.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].artistName;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].artistName;
 
-            return expect(parseResponse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -734,14 +655,10 @@ describe('Testing parseResponse function', () => {
     test('Has no country.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].country;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].country;
 
-            return expect(parseResponse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -750,14 +667,10 @@ describe('Testing parseResponse function', () => {
     test('Has no genre.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].genres;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].genres;
 
-            return expect(parseResponse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -766,27 +679,27 @@ describe('Testing parseResponse function', () => {
     test('Has no number of episodes.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].trackCount;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].trackCount;
 
-            return expect(parseResponse(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponse(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
     });
 });
 
+/**
+ * Why  use  searchCommand? Because if a search returns only one searched element and, that element, hasn't all the data
+ * complete, the search must return empty.
+ */
 describe('Testing parseResponseInline function', () => {
     const noComplete: string = 'No complete info in the results results to display it.';
 
     test('No lanCode', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputTwo.json').then((mockInput: response) => {
+        return readAsync('nerdcast/en-us/input/searchInline.json').then((mockInput: response) => {
             return expect(parseResponseInline(mockInput, undefined)).rejects.toMatch('No lanCode available.');
         }).catch((error: Error) => {
             console.error(error);
@@ -822,14 +735,10 @@ describe('Testing parseResponseInline function', () => {
     test('Has no RSS link', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].feedUrl;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].feedUrl;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponseInline(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -838,14 +747,10 @@ describe('Testing parseResponseInline function', () => {
     test('Has no iTunes link', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].artworkUrl600;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].artworkUrl600;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponseInline(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -854,14 +759,10 @@ describe('Testing parseResponseInline function', () => {
     test('Has no latest episode date.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].releaseDate;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].releaseDate;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponseInline(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -870,14 +771,10 @@ describe('Testing parseResponseInline function', () => {
     test('Has no podcast artwork.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].artworkUrl600;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].artworkUrl600;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponseInline(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -886,14 +783,10 @@ describe('Testing parseResponseInline function', () => {
     test('Has no name.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].artistName;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].artistName;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponseInline(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -902,14 +795,10 @@ describe('Testing parseResponseInline function', () => {
     test('Has no country.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].country;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].country;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponseInline(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -918,14 +807,10 @@ describe('Testing parseResponseInline function', () => {
     test('Has no genre.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].genres;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].genres;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponseInline(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -934,14 +819,10 @@ describe('Testing parseResponseInline function', () => {
     test('Has no number of episodes.', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/inputOne.json').then((mockInput: result) => {
-            const srcResponse: response = {
-                resultCount: 1,
-                results: [mockInput]
-            };
-            delete srcResponse.results[0].trackCount;
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].trackCount;
 
-            return expect(parseResponseInline(srcResponse, 'en-us')).rejects.toMatch(noComplete);
+            return expect(parseResponseInline(mockInput, 'en-us')).rejects.toMatch(noComplete);
         }).catch((error: Error) => {
             console.error(error);
         });

@@ -9,7 +9,6 @@ const goo_gl_1 = require("goo.gl");
 const i18n_node_yaml = require("i18n-node-yaml");
 const moment = require("moment");
 const path_1 = require("path");
-const fs_1 = require("fs");
 /**
  * Allows the code to run without passing the environment variables as arguments.
  */
@@ -137,6 +136,7 @@ exports.maskResponseInline = (data) => {
  * This will be only used locally, but there's need to exported to be tested later.
  */
 exports.shortenLinks = (data, lanCode) => new Promise((resolve, reject) => {
+    let latest = undefined;
     if (undefined !== data && undefined !== lanCode && 'string' === typeof (lanCode)) {
         goo_gl_1.shorten(data.feedUrl).then((rss) => {
             goo_gl_1.shorten(data.collectionViewUrl).then((itunes) => {
@@ -144,19 +144,11 @@ exports.shortenLinks = (data, lanCode) => new Promise((resolve, reject) => {
                  * There  is  no  need  to  check  whether or not releaseDate exists because the caller function already
                  * verified this. That being said, if releaseDate is undefined, moment will return the current OS date.
                  */
-                const latest = moment(data.releaseDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
+                latest = moment(data.releaseDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
                 if (undefined === latest) {
                     reject('Error occurred while converting date.');
                 }
                 else {
-                    fs_1.writeFile('outputThree.json', JSON.stringify(Object.assign({}, data, { itunes, rss, latest })), err => {
-                        if (err) {
-                            console.error(err);
-                        }
-                        else {
-                            console.log('Wrote.');
-                        }
-                    });
                     resolve(Object.assign({}, data, { itunes, rss, latest }));
                 }
             }).catch((error) => {
@@ -174,12 +166,13 @@ exports.shortenLinks = (data, lanCode) => new Promise((resolve, reject) => {
  * Parsing data.
  */
 exports.parse = (data, lanCode) => new Promise((resolve, reject) => {
-    if (undefined !== data && 0 < data.resultCount && undefined !== data.results) {
+    let filtered = undefined;
+    if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== lanCode) {
         /**
          * Some  data  info  comes  incomplete,  this  could  mean  an error later on the process; that's why it must be
          * filtered right here, to avoid it.
          */
-        const filtered = data.results.filter(exports.hasItAll);
+        filtered = data.results.filter(exports.hasItAll);
         if (0 < filtered.length) {
             Promise.all(filtered.map((element) => {
                 return exports.shortenLinks(element, lanCode).catch((error) => {
@@ -215,11 +208,12 @@ exports.parseResponse = (data, lanCode) => new Promise((resolve, reject) => {
  * Parse it the data for the inline mode of search.
  */
 exports.parseResponseInline = (data, lanCode) => new Promise((resolve, reject) => {
+    let lang = undefined;
     if (undefined !== lanCode && 'string' === typeof lanCode) {
         /**
          * Removing the country from the language option.
          */
-        const lang = lanCode.split('-')[0];
+        lang = lanCode.split('-')[0];
         exports.parse(data, lanCode).then((results) => {
             const parsed = results.map((element) => {
                 return exports.maskResponseInline(Object.assign({}, element, { lanCode: lang }));

@@ -17,7 +17,6 @@ import {
 import * as moment from 'moment';
 import { resolve } from 'path';
 import { telegramInline } from 'telegraf';
-import { writeFile } from 'fs';
 
 /**
  * Allows the code to run without passing the environment variables as arguments.
@@ -214,6 +213,8 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
  */
 export const shortenLinks = (data: result, lanCode: string): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
+    let latest: string = undefined;
+
     if (undefined !== data && undefined !== lanCode && 'string' === typeof (lanCode)) {
         shorten(data.feedUrl).then((rss: string) => {
             shorten(data.collectionViewUrl).then((itunes: string) => {
@@ -221,18 +222,11 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
                  * There  is  no  need  to  check  whether or not releaseDate exists because the caller function already
                  * verified this. That being said, if releaseDate is undefined, moment will return the current OS date.
                  */
-                const latest: string = moment(data.releaseDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
+                latest = moment(data.releaseDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
 
                 if (undefined === latest) {
                     reject('Error occurred while converting date.');
                 } else {
-                    writeFile('outputThree.json', JSON.stringify({ ...data, itunes, rss, latest }), err => {
-                        if (err) {
-                            console.error(err);
-                        } else {
-                            console.log('Wrote.');
-                        }
-                    });
                     resolve({ ...data, itunes, rss, latest });
                 }
             }).catch((error: string) => {
@@ -251,12 +245,14 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
  */
 export const parse = (data: response, lanCode: string): Promise<Array<resultExtended>> =>
 new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: string) => void) => {
-    if (undefined !== data && 0 < data.resultCount && undefined !== data.results) {
+    let filtered: Array<result> = undefined;
+
+    if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== lanCode) {
         /**
          * Some  data  info  comes  incomplete,  this  could  mean  an error later on the process; that's why it must be
          * filtered right here, to avoid it.
          */
-        const filtered: Array<result> = data.results.filter(hasItAll);
+        filtered = data.results.filter(hasItAll);
 
         if (0 < filtered.length) {
             Promise.all(filtered.map((element: result) => {
@@ -295,11 +291,13 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
  */
 export const parseResponseInline = (data: response, lanCode: string): Promise<Array<telegramInline>> =>
 new Promise((resolve: (data: Array<telegramInline>) => void, reject: (error: string) => void) => {
+    let lang: string = undefined;
+
     if (undefined !== lanCode && 'string' === typeof lanCode) {
         /**
          * Removing the country from the language option.
          */
-        const lang = lanCode.split('-')[0];
+        lang = lanCode.split('-')[0];
 
         parse(data, lanCode).then((results: Array<resultExtended>) => {
             const parsed: Array<telegramInline> = results.map((element: resultExtended) => {

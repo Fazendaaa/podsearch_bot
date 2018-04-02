@@ -3,21 +3,17 @@
  */
 'use strict';
 
-import { readFile } from 'fs';
 import {
     response,
     result
 } from 'itunes-search';
-import { join } from 'path';
 import {
     telegramInline
 } from 'telegraf';
 import {
     errorInline,
-    parse,
     parseResponse,
     parseResponseInline,
-    resultExtended,
     searchInline
 } from '../../src/utils';
 import {
@@ -26,63 +22,58 @@ import {
 
 jest.setTimeout(60000);
 
-// describe('[PT] Testing parseResponse function', () => {
-//     test('Parse nerdcast.', () => {
-//         expect.assertions(1);
+describe('[PT] Testing parseResponse function', () => {
+    test('Parse nerdcast.', () => {
+        expect.assertions(1);
 
-//         return readAsync('nerdcast/pt-br/inputOne.json').then((mockInput: result) => {
-//             return readAsync('nerdcast/pt-br/outputThree.json').then((mockOutput: result) => {
-//                 const srcResponse: response = {
-//                     resultCount: 1,
-//                     results: [mockInput]
-//                 };
+        return readAsync('nerdcast/pt-br/input/searchCommand.json').then((mockInput: response) => {
+            return readAsync('nerdcast/pt-br/output/parseResponse.json').then((mockOutput: result) => {
+                return expect(parseResponse(mockInput, 'pt-br')).resolves.toEqual(mockOutput);
+            }).catch((error: Error) => {
+                throw error;
+            });
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+});
 
-//                 return expect(parseResponse(srcResponse, 'pt-br')).resolves.toEqual(mockOutput);
-//             }).catch((error: Error) => {
-//                 throw error;
-//             });
-//         }).catch((error: Error) => {
-//             console.error(error);
-//         });
-//     });
-// });
+describe('[PT] Testing parseResponseInline function', () => {
+    test('Parse nerdcast', () => {
+        expect.assertions(1);
 
-// describe('[PT] Testing parseResponseInline function', () => {
-//     test('Parse nerdcast', () => {
-//         expect.assertions(1);
+        return readAsync('nerdcast/pt-br/input/searchInline.json').then((mockInput: response) => {
+            return readAsync('nerdcast/pt-br/output/parseResponseInline.json').then((mockOutput: Array<telegramInline>) => {
+                return expect(parseResponseInline(mockInput, 'pt-br')).resolves.toEqual(mockOutput);
+            }).catch((error: Error) => {
+                throw error;
+            });
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+});
 
-//         return readAsync('nerdcast/pt-br/inputTwo.json').then((mockInput: response) => {
-//             return readAsync('nerdcast/pt-br/outputFour.json').then((mockOutput: Array<telegramInline>) => {
-//                 return expect(parseResponseInline(mockInput, 'pt-br')).resolves.toEqual(mockOutput);
-//             }).catch((error: Error) => {
-//                 throw error;
-//             });
-//         }).catch((error: Error) => {
-//             console.error(error);
-//         });
-//     });
-// });
+describe('[PT] Testing errorInline function', () => {
+    test('lanCode equals to pt-br', () => {
+        expect.assertions(1);
 
-// describe('[PT] Testing errorInline function', () => {
-//     test('lanCode equals to pt-br', () => {
-//         expect.assertions(1);
+        return readAsync('/inlineMessages/pt-br/errorInline.json').then((file: Array<telegramInline>) => {
+            return expect(errorInline('pt-br')).toEqual(file);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+});
 
-//         return readAsync('/inline/pt-br/errorInline.json').then((file: Array<telegramInline>) => {
-//             return expect(errorInline('pt-br')).toEqual(file);
-//         }).catch((error: Error) => {
-//             console.error(error);
-//         });
-//     });
-// });
+describe('[PT] Testing searchInline function', () => {
+    test('lanCode equals to pt-br', () => {
+        expect.assertions(1);
 
-// describe('[PT] Testing searchInline function', () => {
-//     test('lanCode equals to pt-br', () => {
-//         expect.assertions(1);
-
-//         return readAsync('/inline/pt-br/searchInline.json').then(file => {
-//             return expect(searchInline('pt-br')).toEqual(file);
-//         }).catch((error: Error) => {
-//             console.error(error);
-//         });
-//     });
-// });
+        return readAsync('/inlineMessages/pt-br/searchInline.json').then(file => {
+            return expect(searchInline('pt-br')).toEqual(file);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+});

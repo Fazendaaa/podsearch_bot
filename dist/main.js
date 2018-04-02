@@ -8,7 +8,6 @@ const dotenv_1 = require("dotenv");
 const itunes_search_1 = require("itunes-search");
 const path_1 = require("path");
 const utils_1 = require("./utils");
-const fs_1 = require("fs");
 /**
  * Why using the "old" pattern instead of the new one?
  * I had a little bit of an issue making the typing for Telegraf package, had to open my own question in Stack Overflow.
@@ -70,14 +69,6 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
     i18n.locale(language);
     if (value !== '') {
         itunes_search_1.search(value, opts, (data) => {
-            fs_1.writeFile('inputOne.json', JSON.stringify(data), err => {
-                if (err) {
-                    console.error(err);
-                }
-                else {
-                    console.log('Wrote.');
-                }
-            });
             utils_1.parseResponse(data, message.from.language_code).then((parsed) => {
                 replyWithMarkdown(i18n.t('mask', parsed));
             }).catch((error) => {

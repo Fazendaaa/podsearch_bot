@@ -22,7 +22,6 @@ import {
     resultExtended,
     searchInline
 } from './utils';
-import { writeFile } from 'fs';
 
 /**
  * Why using the "old" pattern instead of the new one?
@@ -92,13 +91,6 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
 
     if (value !== '') {
         search(value, opts, (data: response) => {
-            writeFile('inputOne.json', JSON.stringify(data), err => {
-                if (err) {
-                    console.error(err);
-                } else {
-                    console.log('Wrote.');
-                }
-            });
             parseResponse(data, message.from.language_code).then((parsed: resultExtended) => {
                 replyWithMarkdown(i18n.t('mask', parsed));
             }).catch((error: string) => {
