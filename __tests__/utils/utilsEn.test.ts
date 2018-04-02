@@ -11,14 +11,14 @@ import {
     telegramInline
 } from 'telegraf';
 import {
+    readAsync
+} from '../../src/readAsync';
+import {
     errorInline,
     parseResponse,
     parseResponseInline,
     searchInline
 } from '../../src/utils';
-import {
-    readAsync
-} from './utilsBasic.test';
 
 jest.setTimeout(60000);
 
