@@ -33,7 +33,7 @@ setKey(process.env.GOOGLE_KEY);
  */
 const i18n = i18n_node_yaml({
     debug: true,
-    translationFolder: resolve(__dirname, '../locales'),
+    translationFolder: resolve(__dirname, '../../locales'),
     locales: ['en', 'pt']
 });
 

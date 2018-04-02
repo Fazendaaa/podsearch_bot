@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = require("dotenv");
 const itunes_search_1 = require("itunes-search");
 const path_1 = require("path");
-const utils_1 = require("./utils");
+const utils_1 = require("./others/utils");
 /**
  * Why using the "old" pattern instead of the new one?
  * I had a little bit of an issue making the typing for Telegraf package, had to open my own question in Stack Overflow.

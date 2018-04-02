@@ -22,7 +22,7 @@ goo_gl_1.setKey(process.env.GOOGLE_KEY);
  */
 const i18n = i18n_node_yaml({
     debug: true,
-    translationFolder: path_1.resolve(__dirname, '../locales'),
+    translationFolder: path_1.resolve(__dirname, '../../locales'),
     locales: ['en', 'pt']
 });
 /**

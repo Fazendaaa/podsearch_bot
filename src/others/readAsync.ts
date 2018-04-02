@@ -3,12 +3,13 @@
  * file  is  a nightmare of reading I/O -- need to correct ASAP this, if this continue tha way it is, scale testing will
  * be impossible.
  */
+'use strict';
 
 import { readFile } from 'fs';
 import { join } from 'path';
 
- export const readAsync = (filename: string) => new Promise((resolve, reject) => {
-    readFile(join(__dirname, `../__mocks__/${filename}`), 'utf8', (err: Error, data: string) => {
+export const readAsync = (filename: string) => new Promise((resolve, reject) => {
+    readFile(join(__dirname, `../../__mocks__/${filename}`), 'utf8', (err: Error, data: string) => {
         if (err) {
             reject(err);
         } else {

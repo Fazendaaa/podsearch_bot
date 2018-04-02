@@ -21,7 +21,7 @@ import {
 } from 'telegraf';
 import {
     readAsync
-} from '../../src/readAsync';
+} from '../../src/others/readAsync';
 import {
     errorInline,
     hasGenres,
@@ -36,7 +36,7 @@ import {
     resultExtended,
     searchInline,
     shortenLinks
-} from '../../src/utils';
+} from '../../src/others/utils';
 
 /**
  * Setting timeout to 60s === 60000ms.

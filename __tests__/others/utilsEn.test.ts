@@ -12,13 +12,13 @@ import {
 } from 'telegraf';
 import {
     readAsync
-} from '../../src/readAsync';
+} from '../../src/others/readAsync';
 import {
     errorInline,
     parseResponse,
     parseResponseInline,
     searchInline
-} from '../../src/utils';
+} from '../../src/others/utils';
 
 jest.setTimeout(60000);
 

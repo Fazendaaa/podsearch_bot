@@ -21,7 +21,7 @@ import {
     removeCmd,
     resultExtended,
     searchInline
-} from './utils';
+} from './others/utils';
 
 /**
  * Why using the "old" pattern instead of the new one?
