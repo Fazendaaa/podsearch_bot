@@ -158,23 +158,20 @@ There's also a [Travis CI](http://travis-ci.org/) integration.
 * [i18n-yaml](https://github.com/martinheidegger/i18n-node-yaml) - Since Telegraf-i18n only handles Telegraf context, there's a need to parse other kinds of context;
 * [dotenv](https://github.com/motdotla/dotenv) - Library that imports environment variables;
 * [goo.gl](https://github.com/kaimallea/node-googl) - Library that handles it the Google shorten API requests;
-* [itunes-search](https://github.com/connor/itunes-node) - One of many libraries that does the fetching from iTunes API, but this one is the only one that does it right;
+* [itunes-search](https://github.com/connor/itunes-node) - One of many libraries that does the fetching from iTunes API, but this one is the only one that does it right.
 # Contributing
 Please, I'm not a native/fluent english speaker, so whether you see a variable name wrote the wrong way or even some comment where I've wrote something with the wrong "past perfect way of life" or something like that, please let me know it. Not always is just about the code, but rather making it more clear to other people to learn from it.
 
-So, whether is code or not you can help me out making this code more accessible by reading the [CONTRIBUTING.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/CONTRIBUTING.md). 
+So, whether is code or not you can help me out making this code more accessible by reading the [CONTRIBUTING.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/contributing/CONTRIBUTING.md). 
 # Versioning
 I would love to say that [SemVer](https://semver.org/) or anything like that is used but, in my personal experience, this kind of approach doesn't work very well with me, the guy who could be committing in this project for two weeks in a roll and leave it for almost one year with no simple ```npm update```. So, no versioning system is used. 
 # TODO
 Since I will be keeping this README up to date with any major change and I don't use any versioning system to log all the fixed bugs or previous projects updates, you can still have a taste of what comes next right here:
 
-* Translate this README in the following languages -- still don't know how to do it but I know that is possible:
-    * English
-    * Portuguese
 * Write a CONTRIBUTING and making it possible so anyone can help even those who don't know coding just by translating the bot texts to the user native language;
 * Writing a notification system, so that upon a new episode release the user will be notified -- making it available this notification at user timezone;
 * Adding podcasts recommendations thanks to [_lowhigh_](https://www.reddit.com/r/TelegramBots/comments/875tsz/podsearchbot/dwao2qj/) feedback on Reddit;
-* Integration with wit.ai.
+* Integration with [wit.ia](https://wit.ai/).
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
 # License
