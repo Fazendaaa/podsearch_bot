@@ -17,6 +17,7 @@ import {
 import * as moment from 'moment';
 import { resolve } from 'path';
 import { telegramInline } from 'telegraf';
+import { resultExtended } from '../@types/utils/main';
 
 /**
  * Allows the code to run without passing the environment variables as arguments.
@@ -33,61 +34,9 @@ setKey(process.env.GOOGLE_KEY);
  */
 const i18n = i18n_node_yaml({
     debug: true,
-    translationFolder: resolve(__dirname, '../locales'),
+    translationFolder: resolve(__dirname, '../../locales'),
     locales: ['en', 'pt']
 });
-
-/**
- * This will be only used locally, but there's need to exported to be tested later.
- */
-export type resultExtended = {
-    wrapperType?: string;
-    kind?: string;
-    collectionId?: number;
-    trackId?: number;
-    artistName?: string;
-    collectionName?: string;
-    trackName?: string;
-    collectionCensoredName?: string;
-    trackCensoredName?: string;
-    collectionArtistId?: number;
-    collectionArtistViewUrl?: string;
-    collectionViewUrl?: string;
-    feedUrl?: string;
-    trackViewUrl?: string;
-    previewUrl?: string;
-    artworkUrl30?: string;
-    artworkUrl60?: string;
-    artworkUrl100?: string;
-    artworkUrl600?: string;
-    collectionPrice?: number;
-    trackPrice?: number;
-    trackRentalPrice?: number;
-    collectionHdPrice?: number;
-    trackHdPrice?: number;
-    trackHdRentalPrice?: number;
-    releaseDate?: string;
-    collectionExplicitness?: string;
-    trackExplicitness?: string;
-    discCount?: number;
-    discNumber?: number;
-    trackCount?: number;
-    trackNumber?: number;
-    trackTimeMillis?: number;
-    country?: string;
-    currency?: string;
-    primaryGenreName?: string;
-    contentAdvisoryRating?: string;
-    shortDescription?: string;
-    longDescription?: string;
-    hasITunesExtras?: boolean;
-    genreIds?: Array<string>;
-    genres?: Array<string> | string;
-    itunes?: string;
-    rss?: string;
-    latest?: string;
-    lanCode?: string;
-};
 
 /**
  * This function removes the '/cmd' of the command.

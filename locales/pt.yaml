@@ -31,11 +31,18 @@ wrongInputInline:
 
 help:
   "Esse bot realiza pesquisas de podcasts na loja da iTunes. Você pode realizar uma pesquisa através do comando o do modo inline. Veja em:\n\
-  /search\n\n\
-  Quer ver mais:\n\
+  /search\n\
+  Mais em:\n\
+  /about"
+about:
+  "Quer ver mais:\n\
   🤖 [Podsearch](https://fazendaaa.github.io/podsearch_bot/) — Código por trás deste bot.\n\
   😀 [Meu website](http://fazendaaa.me) — Veja mais dos meus outros projetos.\n\n\
-  Tem alguma sugestão ou erros para reportar? Sinta-se a vontade para me dizer em: @Farmy."
+  Ou até mesmo me ajudar:\n\
+  ☕ [Compre-me um café](https://www.buymeacoffee.com/Fazenda) — Doação.\n\
+  📅 [Apadrinhar](https://www.patreon.com/Fazenda/overview) — Assinatura.\n\n\
+  Tem alguma sugestão, erros para reportar ou até mesmo uma tradução para este bot?\n\
+  Sinta-se a vontade para me dizer em: @Farmy."
 
 errorInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Alguma coisa de errado aconteceu, por favor verifique o que digitou ou tente mais tarde."

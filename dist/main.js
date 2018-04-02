@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = require("dotenv");
 const itunes_search_1 = require("itunes-search");
 const path_1 = require("path");
-const utils_1 = require("./utils");
+const utils_1 = require("./others/utils");
 /**
  * Why using the "old" pattern instead of the new one?
  * I had a little bit of an issue making the typing for Telegraf package, had to open my own question in Stack Overflow.
@@ -50,7 +50,15 @@ bot.command('start', ({ i18n, replyWithMarkdown, message }) => {
 bot.command('help', ({ i18n, replyWithMarkdown, message }) => {
     const language = message.from.language_code.split('-')[0] || 'en';
     i18n.locale(language);
-    replyWithMarkdown(i18n.t('help'), { disable_web_page_preview: true });
+    replyWithMarkdown(i18n.t('help'));
+});
+/**
+ * Message saying more about this bot.
+ */
+bot.command('about', ({ i18n, replyWithMarkdown, message }) => {
+    const language = message.from.language_code.split('-')[0] || 'en';
+    i18n.locale(language);
+    replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
 });
 /**
  * /search + 'podcast name', then returns it to the user all the data.
