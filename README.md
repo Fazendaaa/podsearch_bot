@@ -8,8 +8,8 @@
 
 <h3 align="center">
 
-[![English README](https://github.com/Fazendaaa/podsearch_bot/blob/master/README.md)](https://img.shields.io/badge/Language-EN-blue.svg?longCache=true&style=for-the-badge)
-[![Portuguese README](https://github.com/Fazendaaa/podsearch_bot/blob/master/readme/README_PT.md)](https://img.shields.io/badge/Language-PT-green.svg?longCache=true&style=for-the-badge)
+[![English README](https://img.shields.io/badge/Language-EN-blue.svg?longCache=true&style=for-the-badge)](https://github.com/Fazendaaa/podsearch_bot/blob/master/README.md)
+[![Portuguese README](https://img.shields.io/badge/Linguagem-PT-green.svg?longCache=true&style=for-the-badge)](https://github.com/Fazendaaa/podsearch_bot/blob/master/readme/README_PT.md)
 
 </h3>
 
