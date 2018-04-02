@@ -13,13 +13,13 @@ import {
 } from 'itunes-search';
 import { resolve } from 'path';
 import { telegramInline } from 'telegraf';
+import { resultExtended } from './@types/utils/main';
 import {
     errorInline,
     messageToString,
     parseResponse,
     parseResponseInline,
     removeCmd,
-    resultExtended,
     searchInline
 } from './others/utils';
 
@@ -72,7 +72,17 @@ bot.command('help', ({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
     i18n.locale(language);
 
-    replyWithMarkdown(i18n.t('help'), { disable_web_page_preview: true });
+    replyWithMarkdown(i18n.t('help'));
+});
+
+/**
+ * Message saying more about this bot.
+ */
+bot.command('about', ({ i18n, replyWithMarkdown, message }) => {
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+    i18n.locale(language);
+
+    replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
 });
 
 /**

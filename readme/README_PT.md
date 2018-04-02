@@ -184,6 +184,14 @@ Como esse README estará sendo atualizado com as mudanças importantes, não pre
 * Integração com o [wit.ia](https://wit.ai/).
 # Autores
 * Apenas [eu](https://github.com/Fazendaaa) até agora.
+
+Considere me comprar um café:
+
+[![Buy Me a Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/Fazenda)
+
+Ou até mesmo se tornar um padrinho:
+
+[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/Fazenda/overview)
 # Licença
 Assim como muitos projetos de código livre, a licença MIT é utilizada aqui. Mais sobre em [LICENSE](https://github.com/Fazendaaa/podsearch_bot/blob/master/LICENSE).
 # Reconhecimentos

@@ -19,6 +19,7 @@ import {
 import {
     telegramInline
 } from 'telegraf';
+import { resultExtended } from '../../src/@types/utils/main';
 import {
     readAsync
 } from '../../src/others/readAsync';
@@ -33,7 +34,6 @@ import {
     parseResponse,
     parseResponseInline,
     removeCmd,
-    resultExtended,
     searchInline,
     shortenLinks
 } from '../../src/others/utils';
@@ -310,7 +310,7 @@ describe('Testing shortenLinks function.', () => {
     test('lanCode \"undefined\".', () => {
         expect.assertions(1);
 
-        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: result) => {
+        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
             expect(shortenLinks(mockInput.results[0], undefined)).rejects.toMatch('Wrong argument.');
         }).catch((error: Error) => {
             console.error(error);

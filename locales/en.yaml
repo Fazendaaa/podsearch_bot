@@ -33,11 +33,18 @@ wrongInputInline:
 
 help:
   "This bot searches in iTunes store about podcasts. You can do a search through the search command or the inline mode. Try it with:\n\
-  /search\n\n\
-  Wanna see more:\n\
+  /search\n\
+  More in:\n\
+  /about"
+about:
+  "Wanna see more:\n\
   🤖 [Podsearch](https://fazendaaa.github.io/podsearch_bot/) — See the code behind this bot.\n\
   😀 [My website](http://fazendaaa.me) — Check it out some of my other works.\n\n\
-  Has any suggestions or errors to report it? Fell free to tell me: @Farmy."
+  Or even helping out:\n\
+  ☕ [Buy me a coffee](https://www.buymeacoffee.com/Fazenda) — One time only.\n\
+  📅 [Patreon](https://www.patreon.com/Fazenda/overview) — Subscription.\n\n\
+  Has any suggestions, errors to report it or even request a translation?\n\
+  Fell free to tell me: @Farmy."
 
 errorInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Something went wrong, check your typing or try it again later."

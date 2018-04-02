@@ -50,7 +50,15 @@ bot.command('start', ({ i18n, replyWithMarkdown, message }) => {
 bot.command('help', ({ i18n, replyWithMarkdown, message }) => {
     const language = message.from.language_code.split('-')[0] || 'en';
     i18n.locale(language);
-    replyWithMarkdown(i18n.t('help'), { disable_web_page_preview: true });
+    replyWithMarkdown(i18n.t('help'));
+});
+/**
+ * Message saying more about this bot.
+ */
+bot.command('about', ({ i18n, replyWithMarkdown, message }) => {
+    const language = message.from.language_code.split('-')[0] || 'en';
+    i18n.locale(language);
+    replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
 });
 /**
  * /search + 'podcast name', then returns it to the user all the data.
