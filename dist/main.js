@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = require("dotenv");
 const itunes_search_1 = require("itunes-search");
 const path_1 = require("path");
+const parse_1 = require("./others/parse");
 const utils_1 = require("./others/utils");
 /**
  * Why using the "old" pattern instead of the new one?
@@ -87,7 +88,7 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
     i18n.locale(language);
     if (value !== '') {
         itunes_search_1.search(value, opts, (data) => {
-            utils_1.parseResponse(data, message.from.language_code).then((parsed) => {
+            parse_1.parseResponse(data, message.from.language_code).then((parsed) => {
                 replyWithMarkdown(i18n.t('mask', parsed));
             }).catch((error) => {
                 console.error(error);
@@ -144,7 +145,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                  * podcast options, or even none, in the search.
                  */
                 if (0 < data.results.length) {
-                    utils_1.parseResponseInline(data, lanCode).then((results) => {
+                    parse_1.parseResponseInline(data, lanCode).then((results) => {
                         answerInlineQuery(results, { next_offset: offset + pageLimit });
                     }).catch((error) => {
                         console.error(error);

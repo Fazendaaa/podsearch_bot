@@ -11,12 +11,12 @@ import {
     telegramInline
 } from 'telegraf';
 import {
-    readAsync
-} from '../../src/others/readAsync';
+    parseResponse,
+    parseResponseInline
+} from '../../src/others/parse';
 import {
     errorInline,
-    parseResponse,
-    parseResponseInline,
+    readAsync,
     searchInline
 } from '../../src/others/utils';
 

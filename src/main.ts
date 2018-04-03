@@ -15,10 +15,12 @@ import { resolve } from 'path';
 import { telegramInline } from 'telegraf';
 import { resultExtended } from './@types/utils/main';
 import {
+    parseResponse,
+    parseResponseInline
+} from './others/parse';
+import {
     errorInline,
     messageToString,
-    parseResponse,
-    parseResponseInline,
     removeCmd,
     searchInline
 } from './others/utils';

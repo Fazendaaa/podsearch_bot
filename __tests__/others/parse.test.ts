@@ -21,21 +21,21 @@ import {
 } from 'telegraf';
 import { resultExtended } from '../../src/@types/utils/main';
 import {
-    readAsync
-} from '../../src/others/readAsync';
-import {
-    errorInline,
     hasGenres,
     hasItAll,
     maskResponse,
     maskResponseInline,
-    messageToString,
     parse,
     parseResponse,
     parseResponseInline,
-    removeCmd,
-    searchInline,
     shortenLinks
+} from '../../src/others/parse';
+import {
+    errorInline,
+    messageToString,
+    readAsync,
+    removeCmd,
+    searchInline
 } from '../../src/others/utils';
 
 /**
