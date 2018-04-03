@@ -101,7 +101,6 @@ Eu adoraria dizer que [SemVer](https://semver.org/) ou algo do tipo fora utiliza
 # A realizar
 Como esse README estará sendo atualizado com as mudanças importantes, não pretendo utilizar nenhum histórico de atualizações de bugs corrigidos ou novas funcionalidades. Todavia, você pode ter uma noção do que virá:
 
-* Escrever CONTRIBUTING_PT de tal maneira a deixar claro que qualquer ajuda seja bem vinda, pricipalmente se for para traduzir o bot para outros idiomas;
 * Escrever um sistema de notificação para que usuário saiba quando saiu um novo episódio do podcast que ele ouve -- e fazer de tal maneira que leve em consideração a posição no globo que ele se encontra;
 * Adicionar recomendações de podcasts baseado no que ouve, ideia do [_lowhigh_](https://www.reddit.com/r/TelegramBots/comments/875tsz/podsearchbot/dwao2qj/) no feedback que me deu no Reddit;
 * Integração com o [wit.ia](https://wit.ai/).
