@@ -157,18 +157,28 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                         answerInlineQuery(results, { next_offset: offset + pageLimit });
                     }).catch((error) => {
                         console.error(error);
-                        answerInlineQuery(utils_1.errorInline(lanCode));
+                        utils_1.errorInline(lanCode).then((inline) => {
+                            answerInlineQuery([inline]);
+                        });
                     });
                     /**
                      * If there's nothing else to be presented at the user, this would mean an end of search.
                      */
                 }
                 else {
-                    answerInlineQuery(utils_1.endInline(lanCode));
+                    utils_1.endInline(lanCode).then((inline) => {
+                        answerInlineQuery([inline]);
+                    }).catch((error) => {
+                        console.error(error);
+                    });
                 }
             }
             else {
-                answerInlineQuery(utils_1.errorInline(lanCode));
+                utils_1.errorInline(lanCode).then((inline) => {
+                    answerInlineQuery([inline]);
+                }).catch((error) => {
+                    console.error(error);
+                });
             }
         });
         /**
@@ -176,7 +186,11 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
          */
     }
     else {
-        answerInlineQuery(utils_1.searchInline(lanCode));
+        utils_1.searchInline(lanCode).then((inline) => {
+            answerInlineQuery([inline]);
+        }).catch((error) => {
+            console.error(error);
+        });
     }
 });
 //# sourceMappingURL=main.js.map

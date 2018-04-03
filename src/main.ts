@@ -190,22 +190,36 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                         answerInlineQuery(results, { next_offset: offset + pageLimit });
                     }).catch((error: Error) => {
                         console.error(error);
-                        answerInlineQuery(errorInline(lanCode));
+                        errorInline(lanCode).then((inline: telegramInline) => {
+                            answerInlineQuery([inline]);
+                        });
                     });
                 /**
                  * If there's nothing else to be presented at the user, this would mean an end of search.
                  */
                 } else {
-                    answerInlineQuery(endInline(lanCode));
+                    endInline(lanCode).then((inline: telegramInline) => {
+                        answerInlineQuery([inline]);
+                    }).catch((error: Error) => {
+                        console.error(error);
+                    });
                 }
             } else {
-                answerInlineQuery(errorInline(lanCode));
+                errorInline(lanCode).then((inline: telegramInline) => {
+                    answerInlineQuery([inline]);
+                }).catch((error: Error) => {
+                    console.error(error);
+                });
             }
         });
     /**
      * Incentive the user to search for a podcast.
      */
     } else {
-        answerInlineQuery(searchInline(lanCode));
+        searchInline(lanCode).then((inline: telegramInline) => {
+            answerInlineQuery([inline]);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
     }
 });
