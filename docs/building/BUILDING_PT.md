@@ -2,7 +2,7 @@
 
 <h3 align="center">
 
-[![English BUILDING](https://img.shields.io/badge/Language-EN-blue.svg?longCache=true&style=for-the-badge)](https://github.com/Fazendaaa/podsearch_bot/blob/docs/building/BUILDING.md)
+[![English BUILDING](https://img.shields.io/badge/Language-EN-blue.svg?longCache=true&style=for-the-badge)](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/building/BUILDING.md)
 [![Portuguese BUILDING](https://img.shields.io/badge/Linguagem-PT-green.svg?longCache=true&style=for-the-badge)](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/building/BUILDING_PT.md)
 
 </h3>
