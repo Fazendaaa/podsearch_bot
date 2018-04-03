@@ -73,7 +73,7 @@ If you have any other questions about it just use it the help command:
 /help
 ```
 # How does it work?
-You can build yourself a bot just like this one, just follow the procedures listed in [BUILDING.md](https://github.com/Fazendaaa/podsearch_bot/blob/docs/building/BUILDING.md).
+You can build yourself a bot just like this one, just follow the procedures listed in [BUILDING.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/building/BUILDING.md).
 # Deployment
 This bot is up and running at [Heroku](http://heroku.com/) through the Github integration, that means that each new push to the ```master``` branch means that is the code serving the bot. You can see more about how does it run at the server by looking at the [Procfile](https://github.com/Fazendaaa/podsearch_bot/blob/master/Procfile). You can also deploy yourself this bot into Heroku through:
 
