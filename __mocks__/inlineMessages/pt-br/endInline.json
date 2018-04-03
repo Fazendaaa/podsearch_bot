@@ -1,0 +1,11 @@
+{
+    "id": "0",
+    "title": "Final dos resultados",
+    "type": "article",
+    "input_message_content": {
+        "message_text": "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)Não há mais resultados a serem apresentados nessa pesquisa.",
+        "parse_mode": "Markdown"
+    },
+    "description": "Não há mais resultados a serem apresentados nessa pesquisa.",
+    "thumb_url": "https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png"
+}

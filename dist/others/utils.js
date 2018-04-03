@@ -46,12 +46,12 @@ exports.messageToString = (message) => {
 /**
  * Just an error message to be sent to the user in case of failed search.
  */
-exports.errorInline = (lanCode) => {
-    let returnValue = undefined;
+exports.errorInline = (lanCode) => new Promise((resolve, reject) => {
     let lang = undefined;
     if (undefined !== lanCode && 'string' === typeof (lanCode)) {
         lang = lanCode.split('-')[0];
-        returnValue = [{
+        i18n.ready.then(() => {
+            resolve({
                 id: '0',
                 title: i18n.api(lang).t('errorTitle'),
                 type: 'article',
@@ -61,19 +61,24 @@ exports.errorInline = (lanCode) => {
                 },
                 description: i18n.api(lang).t('errorInlineDescription'),
                 thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
-            }];
+            });
+        }).catch((error) => {
+            reject(error);
+        });
     }
-    return returnValue;
-};
+    else {
+        reject(undefined);
+    }
+});
 /**
  * Just a search message to be sent to the user in case of an empty search query.
  */
-exports.searchInline = (lanCode) => {
-    let returnValue = undefined;
+exports.searchInline = (lanCode) => new Promise((resolve, reject) => {
     let lang = undefined;
     if (undefined !== lanCode && 'string' === typeof (lanCode)) {
         lang = lanCode.split('-')[0];
-        returnValue = [{
+        i18n.ready.then(() => {
+            resolve({
                 id: '0',
                 title: i18n.api(lang).t('searchTitle'),
                 type: 'article',
@@ -83,19 +88,24 @@ exports.searchInline = (lanCode) => {
                 },
                 description: i18n.api(lang).t('searchInlineDescription'),
                 thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
-            }];
+            });
+        }).catch((error) => {
+            reject(error);
+        });
     }
-    return returnValue;
-};
+    else {
+        reject(undefined);
+    }
+});
 /**
  * Just a end search message to be sent to the user at the bottom of search query.
  */
-exports.endInline = (lanCode) => {
-    let returnValue = undefined;
+exports.endInline = (lanCode) => new Promise((resolve, reject) => {
     let lang = undefined;
     if (undefined !== lanCode && 'string' === typeof (lanCode)) {
         lang = lanCode.split('-')[0];
-        returnValue = [{
+        i18n.ready.then(() => {
+            resolve({
                 id: '0',
                 title: i18n.api(lang).t('endTitle'),
                 type: 'article',
@@ -105,8 +115,13 @@ exports.endInline = (lanCode) => {
                 },
                 description: i18n.api(lang).t('endInlineDescription'),
                 thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
-            }];
+            });
+        }).catch((error) => {
+            reject(error);
+        });
     }
-    return returnValue;
-};
+    else {
+        reject(undefined);
+    }
+});
 //# sourceMappingURL=utils.js.map

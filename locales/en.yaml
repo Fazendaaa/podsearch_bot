@@ -6,7 +6,8 @@ text: |
   Hey, _${from.first_name}_.
   Right now I don't work on text only, my creator haven't implemented yet this feature. But feel free to check it out my page to see when this feature is coming.
 
-error: There has been an error in the search. Please, check your typing or try again later.
+error:
+  "There has been an error in the search. Please, check your typing or try again later."
 
 # The '\' after '\n' is just so, this way, the next line doesn't have a little spacing at the starting, and since this
 # string has a notation with colon has to be double-quoted also.
@@ -46,7 +47,8 @@ about:
   Has any suggestions, errors to report it or even request a translation?\n\
   Fell free to tell me: @Farmy."
 
-errorTitle: Error
+errorTitle:
+  "Error"
 
 errorInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Something went wrong, check your typing or try it again later."
@@ -54,7 +56,8 @@ errorInlineMessage:
 errorInlineDescription:
   "Something went wrong, check your typing or try it again later."
 
-searchTitle: Search Podcasts
+searchTitle:
+  "Search Podcasts"
 
 searchInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)Please, just type what your looking for."
@@ -62,7 +65,8 @@ searchInlineMessage:
 searchInlineDescription:
   "Please, just type what your looking for."
 
-endTitle: End of results
+endTitle:
+  "End of results"
 
 endInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)There's no other content to be presented."

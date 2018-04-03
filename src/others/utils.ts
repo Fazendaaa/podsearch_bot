@@ -25,7 +25,8 @@ const i18n = i18n_node_yaml({
  * file  is  a nightmare of reading I/O -- need to correct ASAP this, if this continue tha way it is, scale testing will
  * be impossible.
  */
-export const readAsync = (filename: string) => new Promise((resolve, reject) => {
+export const readAsync = (filename: string): Promise<object> =>
+new Promise((resolve: (data: object) => void, reject: (data: Error) => void) => {
     readFile(join(__dirname, `../../__mocks__/${filename}`), 'utf8', (err: Error, data: string) => {
         if (err) {
             reject(err);
@@ -54,77 +55,89 @@ export const messageToString = (message: string): string => {
 /**
  * Just an error message to be sent to the user in case of failed search.
  */
-export const errorInline = (lanCode: string): Array<telegramInline> => {
-    let returnValue: Array<telegramInline> = undefined;
+export const errorInline = (lanCode: string): Promise<telegramInline> =>
+new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => void) => {
     let lang: string = undefined;
 
     if (undefined !== lanCode && 'string' === typeof (lanCode)) {
         lang = lanCode.split('-')[0];
 
-        returnValue = [{
-            id: '0',
-            title: i18n.api(lang).t('errorTitle'),
-            type: 'article',
-            input_message_content: {
-                message_text: i18n.api(lang).t('errorInlineMessage'),
-                parse_mode: 'Markdown'
-            },
-            description: i18n.api(lang).t('errorInlineDescription'),
-            thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
-        }];
+        i18n.ready.then(() => {
+            resolve({
+                id: '0',
+                title: i18n.api(lang).t('errorTitle'),
+                type: 'article',
+                input_message_content: {
+                    message_text: i18n.api(lang).t('errorInlineMessage'),
+                    parse_mode: 'Markdown'
+                },
+                description: i18n.api(lang).t('errorInlineDescription'),
+                thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
+            });
+        }).catch((error: Error) => {
+            reject(error);
+        });
+    } else {
+        reject(undefined);
     }
-
-    return returnValue;
-};
+});
 
 /**
  * Just a search message to be sent to the user in case of an empty search query.
  */
-export const searchInline = (lanCode: string): Array<telegramInline> => {
-    let returnValue: Array<telegramInline> = undefined;
+export const searchInline = (lanCode: string): Promise<telegramInline> =>
+new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => void) => {
     let lang: string = undefined;
 
     if (undefined !== lanCode && 'string' === typeof (lanCode)) {
         lang = lanCode.split('-')[0];
 
-        returnValue = [{
-            id: '0',
-            title: i18n.api(lang).t('searchTitle'),
-            type: 'article',
-            input_message_content: {
-                message_text: i18n.api(lang).t('searchInlineMessage'),
-                parse_mode: 'Markdown'
-            },
-            description: i18n.api(lang).t('searchInlineDescription'),
-            thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
-        }];
+        i18n.ready.then(() => {
+            resolve({
+                id: '0',
+                title: i18n.api(lang).t('searchTitle'),
+                type: 'article',
+                input_message_content: {
+                    message_text: i18n.api(lang).t('searchInlineMessage'),
+                    parse_mode: 'Markdown'
+                },
+                description: i18n.api(lang).t('searchInlineDescription'),
+                thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
+            });
+        }).catch((error: Error) => {
+            reject(error);
+        });
+    } else {
+        reject(undefined);
     }
-
-    return returnValue;
-};
+});
 
 /**
  * Just a end search message to be sent to the user at the bottom of search query.
  */
-export const endInline = (lanCode: string): Array<telegramInline> => {
-    let returnValue: Array<telegramInline> = undefined;
+export const endInline = (lanCode: string): Promise<telegramInline> =>
+new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => void) => {
     let lang: string = undefined;
 
     if (undefined !== lanCode && 'string' === typeof (lanCode)) {
         lang = lanCode.split('-')[0];
 
-        returnValue = [{
-            id: '0',
-            title: i18n.api(lang).t('endTitle'),
-            type: 'article',
-            input_message_content: {
-                message_text: i18n.api(lang).t('endInlineMessage'),
-                parse_mode: 'Markdown'
-            },
-            description: i18n.api(lang).t('endInlineDescription'),
-            thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
-        }];
+        i18n.ready.then(() => {
+            resolve({
+                id: '0',
+                title: i18n.api(lang).t('endTitle'),
+                type: 'article',
+                input_message_content: {
+                    message_text: i18n.api(lang).t('endInlineMessage'),
+                    parse_mode: 'Markdown'
+                },
+                description: i18n.api(lang).t('endInlineDescription'),
+                thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
+            });
+        }).catch((error: Error) => {
+            reject(error);
+        });
+    } else {
+        reject(undefined);
     }
-
-    return returnValue;
-};
+});

@@ -1,79 +1,59 @@
-/**
- * Tests English.
- */
-'use strict';
+// /**
+//  * English tests for parse.
+//  */
+// 'use strict';
 
-import {
-    response,
-    result
-} from 'itunes-search';
-import {
-    telegramInline
-} from 'telegraf';
-import {
-    parseResponse,
-    parseResponseInline
-} from '../../src/others/parse';
-import {
-    errorInline,
-    readAsync,
-    searchInline
-} from '../../src/others/utils';
+// import {
+//     response,
+//     result
+// } from 'itunes-search';
+// import { telegramInline } from 'telegraf';
+// import { resultExtended } from '../../src/@types/parse/main';
+// import {
+//     hasGenres,
+//     hasItAll,
+//     maskResponse,
+//     maskResponseInline,
+//     parse,
+//     parseResponse,
+//     parseResponseInline,
+//     shortenLinks
+// } from '../../src/others/parse';
+// import { readAsync } from '../../src/others/utils';
 
-jest.setTimeout(60000);
+// jest.setTimeout(60000);
 
-describe('[EN] Testing parseResponse function', () => {
-    test('Parse nerdcast.', () => {
-        expect.assertions(1);
+// const mockUserId: number = 0;
+// const mockLanCode: string = 'en-us';
 
-        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
-            return readAsync('nerdcast/en-us/output/parseResponse.json').then((mockOutput: result) => {
-                return expect(parseResponse(mockInput, 'en-us')).resolves.toEqual(mockOutput);
-            }).catch((error: Error) => {
-                throw error;
-            });
-        }).catch((error: Error) => {
-            console.error(error);
-        });
-    });
-});
+// describe('[EN] Testing parseResponse function', () => {
+//     test('Parse nerdcast.', () => {
+//         expect.assertions(1);
 
-describe('[EN] Testing parseResponseInline function', () => {
-    test('Parse nerdcast', () => {
-        expect.assertions(1);
+//         return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
+//             return readAsync('nerdcast/en-us/output/parseResponse.json').then((mockOutput: result) => {
+//                 return expect(parseResponse(mockInput, mockUserId, mockLanCode)).resolves.toEqual(mockOutput);
+//             }).catch((error: Error) => {
+//                 throw error;
+//             });
+//         }).catch((error: Error) => {
+//             console.error(error);
+//         });
+//     });
+// });
 
-        return readAsync('nerdcast/en-us/input/searchInline.json').then((mockInput: response) => {
-            return readAsync('nerdcast/en-us/output/parseResponseInline.json').then((mockOutput: Array<telegramInline>) => {
-                return expect(parseResponseInline(mockInput, 'en-us')).resolves.toEqual(mockOutput);
-            }).catch((error: Error) => {
-                throw error;
-            });
-        }).catch((error: Error) => {
-            console.error(error);
-        });
-    });
-});
+// describe('[EN] Testing parseResponseInline function', () => {
+//     test('Parse nerdcast', () => {
+//         expect.assertions(1);
 
-describe('[EN] Testing errorInline function', () => {
-    test('lanCode equals to en-us', () => {
-        expect.assertions(1);
-
-        return readAsync('/inlineMessages/en-us/errorInline.json').then((file: Array<telegramInline>) => {
-            return expect(errorInline('en-us')).toEqual(file);
-        }).catch((error: Error) => {
-            console.error(error);
-        });
-    });
-});
-
-describe('[EN] Testing searchInline function', () => {
-    test('lanCode equals to en-us', () => {
-        expect.assertions(1);
-
-        return readAsync('/inlineMessages/en-us/searchInline.json').then(file => {
-            return expect(searchInline('en-us')).toEqual(file);
-        }).catch((error: Error) => {
-            console.error(error);
-        });
-    });
-});
+//         return readAsync('nerdcast/en-us/input/searchInline.json').then((mockInput: response) => {
+//             return readAsync('nerdcast/en-us/output/parseResponseInline.json').then((mockOutput: Array<telegramInline>) => {
+//                 return expect(parseResponseInline(mockInput, mockUserId, mockLanCode)).resolves.toEqual(mockOutput);
+//             }).catch((error: Error) => {
+//                 throw error;
+//             });
+//         }).catch((error: Error) => {
+//             console.error(error);
+//         });
+//     });
+// });
