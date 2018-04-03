@@ -46,14 +46,26 @@ about:
   Has any suggestions, errors to report it or even request a translation?\n\
   Fell free to tell me: @Farmy."
 
+errorTitle: Error
+
 errorInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Something went wrong, check your typing or try it again later."
 
 errorInlineDescription:
   "Something went wrong, check your typing or try it again later."
 
+searchTitle: Search Podcasts
+
 searchInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)Please, just type what your looking for."
 
 searchInlineDescription:
   "Please, just type what your looking for."
+
+endTitle: End of results
+
+endInlineMessage:
+  "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)There's no other content to be presented."
+
+endInlineDescription:
+  "There's no other content to be presented."

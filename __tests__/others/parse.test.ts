@@ -19,7 +19,7 @@ import {
 import {
     telegramInline
 } from 'telegraf';
-import { resultExtended } from '../../src/@types/utils/main';
+import { resultExtended } from '../../src/@types/parse/main';
 import {
     hasGenres,
     hasItAll,

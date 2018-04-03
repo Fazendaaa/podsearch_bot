@@ -10,6 +10,7 @@ declare module 'telegraf' {
             message_text: string;
             parse_mode: string;
         },
+        reply_markup?: any;
         description: string;
         thumb_url: string;
     };

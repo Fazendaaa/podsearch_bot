@@ -44,14 +44,26 @@ about:
   Tem alguma sugestão, erros para reportar ou até mesmo uma tradução para este bot?\n\
   Sinta-se a vontade para me dizer em: @Farmy."
 
+errorTitle: Erro
+
 errorInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Alguma coisa de errado aconteceu, por favor verifique o que digitou ou tente mais tarde."
 
 errorInlineDescription:
   "Alguma coisa de errado aconteceu, por favor verifique o que digitou ou tente mais tarde."
 
+searchTitle: Pesquise a podcast que deseja
+
 searchInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)Por favor, digite o nome do podcast que está procurando."
 
 searchInlineDescription:
   "Por favor, digite o nome do podcast que está procurando."
+
+endTitle: Final dos resultados
+
+endInlineMessage:
+  "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)Não há mais resultados a serem apresentados nessa pesquisa."
+
+endInlineDescription:
+  "Não há mais resultados a serem apresentados nessa pesquisa."

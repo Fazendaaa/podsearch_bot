@@ -9,6 +9,7 @@ const goo_gl_1 = require("goo.gl");
 const i18n_node_yaml = require("i18n-node-yaml");
 const moment = require("moment");
 const path_1 = require("path");
+const Extra = require('telegraf').Extra;
 /**
  * Allows the code to run without passing the environment variables as arguments.
  */
@@ -49,7 +50,11 @@ exports.hasGenres = (genres) => {
 exports.hasItAll = (data) => {
     let returnValue = false;
     if (undefined !== data &&
-        undefined !== data.releaseDate && (undefined !== data.artworkUrl60 ||
+        undefined !== data.releaseDate && (
+    /**
+     * Why not both? Because only one is needed to an inline preview.
+     */
+    undefined !== data.artworkUrl60 ||
         undefined !== data.artworkUrl100) &&
         undefined !== data.artworkUrl600 &&
         undefined !== data.artistName &&
@@ -78,7 +83,8 @@ exports.maskResponse = (data) => {
         trackCount: data.trackCount,
         itunes: data.itunes,
         rss: data.rss,
-        latest: data.latest
+        latest: data.latest,
+        keyboard: data.keyboard
     } : undefined;
 };
 /**
@@ -110,6 +116,7 @@ exports.maskResponseInline = (data) => {
                 message_text: i18n.api(data.lanCode).t('mask', data),
                 parse_mode: 'Markdown'
             },
+            reply_markup: data.keyboard.reply_markup,
             description: exports.hasGenres(data.genres),
             thumb_url: preview
         };
@@ -117,26 +124,13 @@ exports.maskResponseInline = (data) => {
     return returnValue;
 };
 /**
- * This  function takes an result a then returns it with the shortened links about it and it latest episode release in a
- * readable way.
- * This will be only used locally, but there's need to exported to be tested later.
+ * This function takes an result a then returns it with the shortened links about it.
  */
 exports.shortenLinks = (data, lanCode) => new Promise((resolve, reject) => {
-    let latest = undefined;
     if (undefined !== data && undefined !== lanCode && 'string' === typeof (lanCode)) {
         goo_gl_1.shorten(data.feedUrl).then((rss) => {
             goo_gl_1.shorten(data.collectionViewUrl).then((itunes) => {
-                /**
-                 * There  is  no  need  to  check  whether or not releaseDate exists because the caller function already
-                 * verified this. That being said, if releaseDate is undefined, moment will return the current OS date.
-                 */
-                latest = moment(data.releaseDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
-                if (undefined === latest) {
-                    reject('Error occurred while converting date.');
-                }
-                else {
-                    resolve(Object.assign({}, data, { itunes, rss, latest }));
-                }
+                resolve(Object.assign({}, data, { itunes, rss }));
             }).catch((error) => {
                 reject('Has no iTunes link available.');
             });
@@ -151,9 +145,13 @@ exports.shortenLinks = (data, lanCode) => new Promise((resolve, reject) => {
 /**
  * Parsing data.
  */
-exports.parse = (data, lanCode) => new Promise((resolve, reject) => {
+exports.parse = (data, userId, lanCode) => new Promise((resolve, reject) => {
     let filtered = undefined;
-    if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== lanCode) {
+    let latest = undefined;
+    let keyboard = undefined;
+    let podcastId = undefined;
+    if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== userId &&
+        undefined !== lanCode && 'string' === typeof (lanCode)) {
         /**
          * Some  data  info  comes  incomplete,  this  could  mean  an error later on the process; that's why it must be
          * filtered right here, to avoid it.
@@ -161,7 +159,36 @@ exports.parse = (data, lanCode) => new Promise((resolve, reject) => {
         filtered = data.results.filter(exports.hasItAll);
         if (0 < filtered.length) {
             Promise.all(filtered.map((element) => {
-                return exports.shortenLinks(element, lanCode).catch((error) => {
+                return exports.shortenLinks(element, lanCode).then((shortened) => {
+                    /**
+                     * There  is  no need to check whether or not releaseDate exists because the caller function already
+                     * verified  this.  That  being said, if releaseDate is undefined, moment will return the current OS
+                     * date.
+                     */
+                    latest = moment(shortened.releaseDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
+                    /**
+                     * Why worry about the collectionId and trackId? Because the in the case, I know that probably won't
+                     * happen ever -- but, "just in case" --, if any of it don't happen to be available, that would mean
+                     * a simple "double check".
+                     */
+                    podcastId = shortened.collectionId || shortened.trackId;
+                    /**
+                     * The  "subscribe/userId/podcastID"  will  be  used  for subscribing to episodes notifications upon
+                     * release.
+                     */
+                    keyboard = Extra.markdown().markup((m) => {
+                        return m.inlineKeyboard([m.callbackButton('Subscribe', `subscribe/${userId}/${podcastId}`)]);
+                    });
+                    if (undefined === latest || undefined === keyboard) {
+                        reject('Error occurred while converting date or keyboard.');
+                    }
+                    else {
+                        /**
+                         * Striping the country option from lanCode.
+                         */
+                        return Object.assign({}, shortened, { latest, keyboard, lanCode: lanCode.split('-')[0] });
+                    }
+                }).catch((error) => {
                     throw error;
                 });
             })).then((parsed) => {
@@ -183,8 +210,8 @@ exports.parse = (data, lanCode) => new Promise((resolve, reject) => {
  * user.  Only  takes  it  the  first  searched  response  because  it  is  a chat with the bot, maybe later when wit.ai
  * integration is implemented, the user can give some feedback and polishing more the search.
  */
-exports.parseResponse = (data, lanCode) => new Promise((resolve, reject) => {
-    exports.parse(data, lanCode).then((results) => {
+exports.parseResponse = (data, userId, lanCode) => new Promise((resolve, reject) => {
+    exports.parse(data, userId, lanCode).then((results) => {
         resolve(exports.maskResponse(results[0]));
     }).catch((error) => {
         reject(error);
@@ -193,24 +220,17 @@ exports.parseResponse = (data, lanCode) => new Promise((resolve, reject) => {
 /**
  * Parse it the data for the inline mode of search.
  */
-exports.parseResponseInline = (data, lanCode) => new Promise((resolve, reject) => {
-    let lang = undefined;
-    if (undefined !== lanCode && 'string' === typeof lanCode) {
-        /**
-         * Removing the country from the language option.
-         */
-        lang = lanCode.split('-')[0];
-        exports.parse(data, lanCode).then((results) => {
-            const parsed = results.map((element) => {
-                return exports.maskResponseInline(Object.assign({}, element, { lanCode: lang }));
-            });
+exports.parseResponseInline = (data, userId, lanCode) => new Promise((resolve, reject) => {
+    exports.parse(data, userId, lanCode).then((results) => {
+        Promise.all(results.map((element) => {
+            return exports.maskResponseInline(element);
+        })).then((parsed) => {
             resolve(parsed);
         }).catch((error) => {
-            reject(error);
+            throw (error);
         });
-    }
-    else {
-        reject('No lanCode available.');
-    }
+    }).catch((error) => {
+        reject(error);
+    });
 });
 //# sourceMappingURL=parse.js.map

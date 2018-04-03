@@ -63,7 +63,7 @@ export const errorInline = (lanCode: string): Array<telegramInline> => {
 
         returnValue = [{
             id: '0',
-            title: 'Error',
+            title: i18n.api(lang).t('errorTitle'),
             type: 'article',
             input_message_content: {
                 message_text: i18n.api(lang).t('errorInlineMessage'),
@@ -89,13 +89,39 @@ export const searchInline = (lanCode: string): Array<telegramInline> => {
 
         returnValue = [{
             id: '0',
-            title: 'Search Podcasts',
+            title: i18n.api(lang).t('searchTitle'),
             type: 'article',
             input_message_content: {
                 message_text: i18n.api(lang).t('searchInlineMessage'),
                 parse_mode: 'Markdown'
             },
             description: i18n.api(lang).t('searchInlineDescription'),
+            thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
+        }];
+    }
+
+    return returnValue;
+};
+
+/**
+ * Just a end search message to be sent to the user at the bottom of search query.
+ */
+export const endInline = (lanCode: string): Array<telegramInline> => {
+    let returnValue: Array<telegramInline> = undefined;
+    let lang: string = undefined;
+
+    if (undefined !== lanCode && 'string' === typeof (lanCode)) {
+        lang = lanCode.split('-')[0];
+
+        returnValue = [{
+            id: '0',
+            title: i18n.api(lang).t('endTitle'),
+            type: 'article',
+            input_message_content: {
+                message_text: i18n.api(lang).t('endInlineMessage'),
+                parse_mode: 'Markdown'
+            },
+            description: i18n.api(lang).t('endInlineDescription'),
             thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
         }];
     }

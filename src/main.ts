@@ -13,12 +13,13 @@ import {
 } from 'itunes-search';
 import { resolve } from 'path';
 import { telegramInline } from 'telegraf';
-import { resultExtended } from './@types/utils/main';
+import { resultExtended } from './@types/parse/main';
 import {
     parseResponse,
     parseResponseInline
 } from './others/parse';
 import {
+    endInline,
     errorInline,
     messageToString,
     removeCmd,
@@ -60,18 +61,26 @@ bot.use(i18n.middleware());
 /**
  * Greetings to new users when chatting one-to-one.
  */
-bot.command('start', ({ i18n, replyWithMarkdown, message }) => {
+bot.start(({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
+    const keyboard: any = telegraf.Extra.markdown().markup((m: any) => {
+        m.resize().keyboard(['Menu', 'Help', 'About']);
+    });
+
+    /**
+     * Setting up locale language info.
+     */
     i18n.locale(language);
 
-    replyWithMarkdown(i18n.t('greetings'));
+    replyWithMarkdown(i18n.t('greetings'), keyboard);
 });
 
 /**
  * Message saying how to use this bot.
  */
-bot.command('help', ({ i18n, replyWithMarkdown, message }) => {
+bot.help(({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
+
     i18n.locale(language);
 
     replyWithMarkdown(i18n.t('help'));
@@ -96,6 +105,7 @@ bot.command('about', ({ i18n, replyWithMarkdown, message }) => {
  */
 bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
     const value: string = removeCmd(message.text);
+    const userId: number = message.from.id;
     /**
      * This  option  is  an  option  to  language, since works better -- sincerely still don't know why, maybe something
      * related to iTunes API -- to return data in user native language.
@@ -109,15 +119,12 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
         limit: 1
     };
 
-    /**
-     * Setting up locale language info.
-     */
     i18n.locale(language);
 
     if (value !== '') {
         search(value, opts, (data: response) => {
-            parseResponse(data, message.from.language_code).then((parsed: resultExtended) => {
-                replyWithMarkdown(i18n.t('mask', parsed));
+            parseResponse(data, userId, message.from.language_code).then((parsed: resultExtended) => {
+                replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
             }).catch((error: string) => {
                 console.error(error);
                 replyWithMarkdown(i18n.t('error'));
@@ -148,6 +155,7 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
  */
 bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
     const value: string = messageToString(inlineQuery.query);
+    const userId: number = inlineQuery.from.id;
     const lanCode: string = inlineQuery.from.language_code;
     const pageLimit: number = 20;
     const offset: number = parseInt(inlineQuery.offset, 10) || 0;
@@ -166,7 +174,10 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         search(value, opts, (data: response) => {
             if (0 < data.resultCount) {
                 /**
-                 * "Pseudo-pagination", since this API doesn't allow it true pagination.
+                 * "Pseudo-pagination",  since this API doesn't allow it true pagination. And this is a lot of overwork,
+                 * because each scroll down the bot will search all the already presented results again and again. Kind
+                 * of to read the next page of a book you would need to read all the pages that you already read so that
+                 * you can continue.
                  */
                 data.results = data.results.slice(offset, offset + pageLimit);
 
@@ -175,12 +186,17 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                  * podcast options, or even none, in the search.
                  */
                 if (0 < data.results.length) {
-                    parseResponseInline(data, lanCode).then((results: Array<telegramInline>) => {
+                    parseResponseInline(data, userId, lanCode).then((results: Array<telegramInline>) => {
                         answerInlineQuery(results, { next_offset: offset + pageLimit });
                     }).catch((error: Error) => {
                         console.error(error);
                         answerInlineQuery(errorInline(lanCode));
                     });
+                /**
+                 * If there's nothing else to be presented at the user, this would mean an end of search.
+                 */
+                } else {
+                    answerInlineQuery(endInline(lanCode));
                 }
             } else {
                 answerInlineQuery(errorInline(lanCode));

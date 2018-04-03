@@ -40,15 +40,21 @@ bot.use(i18n.middleware());
 /**
  * Greetings to new users when chatting one-to-one.
  */
-bot.command('start', ({ i18n, replyWithMarkdown, message }) => {
+bot.start(({ i18n, replyWithMarkdown, message }) => {
     const language = message.from.language_code.split('-')[0] || 'en';
+    const keyboard = telegraf.Extra.markdown().markup((m) => {
+        m.resize().keyboard(['Menu', 'Help', 'About']);
+    });
+    /**
+     * Setting up locale language info.
+     */
     i18n.locale(language);
-    replyWithMarkdown(i18n.t('greetings'));
+    replyWithMarkdown(i18n.t('greetings'), keyboard);
 });
 /**
  * Message saying how to use this bot.
  */
-bot.command('help', ({ i18n, replyWithMarkdown, message }) => {
+bot.help(({ i18n, replyWithMarkdown, message }) => {
     const language = message.from.language_code.split('-')[0] || 'en';
     i18n.locale(language);
     replyWithMarkdown(i18n.t('help'));
@@ -70,6 +76,7 @@ bot.command('about', ({ i18n, replyWithMarkdown, message }) => {
  */
 bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
     const value = utils_1.removeCmd(message.text);
+    const userId = message.from.id;
     /**
      * This  option  is  an  option  to  language, since works better -- sincerely still don't know why, maybe something
      * related to iTunes API -- to return data in user native language.
@@ -82,14 +89,11 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
         entity: 'podcast',
         limit: 1
     };
-    /**
-     * Setting up locale language info.
-     */
     i18n.locale(language);
     if (value !== '') {
         itunes_search_1.search(value, opts, (data) => {
-            parse_1.parseResponse(data, message.from.language_code).then((parsed) => {
-                replyWithMarkdown(i18n.t('mask', parsed));
+            parse_1.parseResponse(data, userId, message.from.language_code).then((parsed) => {
+                replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
             }).catch((error) => {
                 console.error(error);
                 replyWithMarkdown(i18n.t('error'));
@@ -120,6 +124,7 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
  */
 bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
     const value = utils_1.messageToString(inlineQuery.query);
+    const userId = inlineQuery.from.id;
     const lanCode = inlineQuery.from.language_code;
     const pageLimit = 20;
     const offset = parseInt(inlineQuery.offset, 10) || 0;
@@ -137,7 +142,10 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         itunes_search_1.search(value, opts, (data) => {
             if (0 < data.resultCount) {
                 /**
-                 * "Pseudo-pagination", since this API doesn't allow it true pagination.
+                 * "Pseudo-pagination",  since this API doesn't allow it true pagination. And this is a lot of overwork,
+                 * because each scroll down the bot will search all the already presented results again and again. Kind
+                 * of to read the next page of a book you would need to read all the pages that you already read so that
+                 * you can continue.
                  */
                 data.results = data.results.slice(offset, offset + pageLimit);
                 /**
@@ -145,12 +153,18 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                  * podcast options, or even none, in the search.
                  */
                 if (0 < data.results.length) {
-                    parse_1.parseResponseInline(data, lanCode).then((results) => {
+                    parse_1.parseResponseInline(data, userId, lanCode).then((results) => {
                         answerInlineQuery(results, { next_offset: offset + pageLimit });
                     }).catch((error) => {
                         console.error(error);
                         answerInlineQuery(utils_1.errorInline(lanCode));
                     });
+                    /**
+                     * If there's nothing else to be presented at the user, this would mean an end of search.
+                     */
+                }
+                else {
+                    answerInlineQuery(utils_1.endInline(lanCode));
                 }
             }
             else {

@@ -17,7 +17,8 @@ import {
 import * as moment from 'moment';
 import { resolve } from 'path';
 import { telegramInline } from 'telegraf';
-import { resultExtended } from '../@types/utils/main';
+import { resultExtended } from '../@types/parse/main';
+const Extra = require('telegraf').Extra;
 
 /**
  * Allows the code to run without passing the environment variables as arguments.
@@ -66,6 +67,9 @@ export const hasItAll = (data: result): boolean => {
 
     if (undefined !== data &&
         undefined !== data.releaseDate && (
+        /**
+         * Why not both? Because only one is needed to an inline preview.
+         */
             undefined !== data.artworkUrl60 ||
             undefined !== data.artworkUrl100
         ) &&
@@ -98,7 +102,8 @@ export const maskResponse = (data: resultExtended): resultExtended => {
         trackCount: data.trackCount,
         itunes: data.itunes,
         rss: data.rss,
-        latest: data.latest
+        latest: data.latest,
+        keyboard: data.keyboard
     } : undefined;
 };
 
@@ -131,6 +136,7 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
                 message_text: i18n.api(data.lanCode).t('mask', data),
                 parse_mode: 'Markdown'
             },
+            reply_markup: data.keyboard.reply_markup,
             description: hasGenres(<Array<string>> data.genres),
             thumb_url: preview
         };
@@ -140,28 +146,14 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
 };
 
 /**
- * This  function takes an result a then returns it with the shortened links about it and it latest episode release in a
- * readable way.
- * This will be only used locally, but there's need to exported to be tested later.
+ * This function takes an result a then returns it with the shortened links about it.
  */
 export const shortenLinks = (data: result, lanCode: string): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
-    let latest: string = undefined;
-
     if (undefined !== data && undefined !== lanCode && 'string' === typeof (lanCode)) {
         shorten(data.feedUrl).then((rss: string) => {
             shorten(data.collectionViewUrl).then((itunes: string) => {
-                /**
-                 * There  is  no  need  to  check  whether or not releaseDate exists because the caller function already
-                 * verified this. That being said, if releaseDate is undefined, moment will return the current OS date.
-                 */
-                latest = moment(data.releaseDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
-
-                if (undefined === latest) {
-                    reject('Error occurred while converting date.');
-                } else {
-                    resolve({ ...data, itunes, rss, latest });
-                }
+                resolve({ ...data, itunes, rss });
             }).catch((error: string) => {
                 reject('Has no iTunes link available.');
             });
@@ -176,11 +168,15 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
 /**
  * Parsing data.
  */
-export const parse = (data: response, lanCode: string): Promise<Array<resultExtended>> =>
+export const parse = (data: response, userId: number, lanCode: string): Promise<Array<resultExtended>> =>
 new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: string) => void) => {
     let filtered: Array<result> = undefined;
+    let latest: string = undefined;
+    let keyboard: any = undefined;
+    let podcastId: number = undefined;
 
-    if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== lanCode) {
+    if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== userId &&
+        undefined !== lanCode && 'string' === typeof(lanCode)) {
         /**
          * Some  data  info  comes  incomplete,  this  could  mean  an error later on the process; that's why it must be
          * filtered right here, to avoid it.
@@ -189,7 +185,36 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
 
         if (0 < filtered.length) {
             Promise.all(filtered.map((element: result) => {
-                return shortenLinks(element, lanCode).catch((error: string) => {
+                return shortenLinks(element, lanCode).then((shortened: resultExtended) => {
+                    /**
+                     * There  is  no need to check whether or not releaseDate exists because the caller function already
+                     * verified  this.  That  being said, if releaseDate is undefined, moment will return the current OS
+                     * date.
+                     */
+                    latest = moment(shortened.releaseDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
+                    /**
+                     * Why worry about the collectionId and trackId? Because the in the case, I know that probably won't
+                     * happen ever -- but, "just in case" --, if any of it don't happen to be available, that would mean
+                     * a simple "double check".
+                     */
+                    podcastId = shortened.collectionId || shortened.trackId;
+                    /**
+                     * The  "subscribe/userId/podcastID"  will  be  used  for subscribing to episodes notifications upon
+                     * release.
+                     */
+                    keyboard = Extra.markdown().markup((m: any) => {
+                        return m.inlineKeyboard([m.callbackButton('Subscribe', `subscribe/${userId}/${podcastId}`) ]);
+                    });
+
+                    if (undefined === latest || undefined === keyboard) {
+                        reject('Error occurred while converting date or keyboard.');
+                    } else {
+                        /**
+                         * Striping the country option from lanCode.
+                         */
+                        return { ...shortened, latest, keyboard, lanCode: lanCode.split('-')[0] };
+                    }
+                }).catch((error: string) => {
                     throw error;
                 });
             })).then((parsed: Array<resultExtended>) => {
@@ -210,9 +235,9 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
  * user.  Only  takes  it  the  first  searched  response  because  it  is  a chat with the bot, maybe later when wit.ai
  * integration is implemented, the user can give some feedback and polishing more the search.
  */
-export const parseResponse = (data: response, lanCode: string): Promise<resultExtended> =>
+export const parseResponse = (data: response, userId: number, lanCode: string): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
-    parse(data, lanCode).then((results: Array<resultExtended>) => {
+    parse(data, userId, lanCode).then((results: Array<resultExtended>) => {
         resolve(maskResponse(results[0]));
     }).catch((error: string) => {
         reject(error);
@@ -222,26 +247,17 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
 /**
  * Parse it the data for the inline mode of search.
  */
-export const parseResponseInline = (data: response, lanCode: string): Promise<Array<telegramInline>> =>
+export const parseResponseInline = (data: response, userId: number, lanCode: string): Promise<Array<telegramInline>> =>
 new Promise((resolve: (data: Array<telegramInline>) => void, reject: (error: string) => void) => {
-    let lang: string = undefined;
-
-    if (undefined !== lanCode && 'string' === typeof lanCode) {
-        /**
-         * Removing the country from the language option.
-         */
-        lang = lanCode.split('-')[0];
-
-        parse(data, lanCode).then((results: Array<resultExtended>) => {
-            const parsed: Array<telegramInline> = results.map((element: resultExtended) => {
-                return maskResponseInline({ ...element, lanCode: lang });
-            });
-
+    parse(data, userId, lanCode).then((results: Array<resultExtended>) => {
+        Promise.all(results.map((element: resultExtended) => {
+            return maskResponseInline(element);
+        })).then((parsed: Array<telegramInline>) => {
             resolve(parsed);
         }).catch((error: string) => {
-            reject(error);
+            throw(error);
         });
-    } else {
-        reject('No lanCode available.');
-    }
+    }).catch((error: string) => {
+        reject(error);
+    });
 });
