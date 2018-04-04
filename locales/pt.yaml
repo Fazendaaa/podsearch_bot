@@ -70,3 +70,5 @@ endInlineMessage:
 
 endInlineDescription:
   "Não há mais resultados a serem apresentados nessa pesquisa."
+
+keyboard: !!seq [ Ajuda, Sobre ]

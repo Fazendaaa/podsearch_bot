@@ -73,3 +73,5 @@ endInlineMessage:
 
 endInlineDescription:
   "There's no other content to be presented."
+
+keyboard: !!seq [ Help, About ]

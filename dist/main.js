@@ -50,13 +50,18 @@ bot.catch((err) => {
  */
 bot.start(({ i18n, replyWithMarkdown, message }) => {
     const language = message.from.language_code.split('-')[0] || 'en';
+    const buttons = new Array(2);
     let keyboard = undefined;
     /**
      * Setting up locale language info.
      */
     i18n.locale(language);
-    keyboard = telegraf.Markup.keyboard([['help', 'about']]).resize().extra();
-    console.log(i18n.t('keyboard'));
+    /**
+     * The ugliest thing in this code.
+     */
+    buttons.push(i18n.repository[language].keyboard[0]());
+    buttons.push(i18n.repository[language].keyboard[1]());
+    keyboard = telegraf.Markup.keyboard([buttons]).resize().extra();
     replyWithMarkdown(i18n.t('greetings'), keyboard);
 });
 /**
@@ -97,7 +102,6 @@ bot.command(['search', 'pesquise'], ({ i18n, replyWithMarkdown, replyWithVideo, 
         entity: 'podcast',
         limit: 1
     };
-    i18n.locale(language);
     if (value !== '') {
         itunes_search_1.search(value, opts, (data) => {
             parse_1.parseResponse(data, userId, message.from.language_code).then((parsed) => {
@@ -128,7 +132,9 @@ bot.command(['search', 'pesquise'], ({ i18n, replyWithMarkdown, replyWithVideo, 
     }
 });
 /**
- * Handles the inline searching.
+ * Handles  the  inline  searching.  Since all the parsing language data is done behind in the library parse, there's no
+ * need  in  setting telegraf-i18n here -- only if the user wanna change it's default search language to be different of
+ * his Telegram's language.
  */
 bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
     const value = utils_1.messageToString(inlineQuery.query);
