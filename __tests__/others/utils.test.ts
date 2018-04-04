@@ -6,6 +6,7 @@
 import { join } from 'path';
 import { telegramInline } from 'telegraf';
 import {
+    arrayLoad,
     endInline,
     errorInline,
     messageToString,
@@ -20,6 +21,33 @@ jest.setTimeout(60000);
 const mockUserId: number = 0;
 const mockLanCode: string = 'en-us';
 const unsupportedLanCode: string = 'nothing';
+
+describe('Testing arrayLoad function.', () => {
+    test('options \"undefined\".', () => {
+        expect(() => {
+            return arrayLoad(undefined);
+        }).toThrowError('Wrong argument.');
+    });
+
+    test('options with wrong argument.', () => {
+        expect(() => {
+            return arrayLoad([[]]);
+        }).toThrowError();
+    });
+
+    test('Parsing right argument.', () => {
+        const array: Array<object> = [
+            () => {
+                return 'foo';
+            },
+            () => {
+                return 'bar';
+            }
+        ];
+
+        expect(arrayLoad(array)).toEqual(['foo', 'bar']);
+    });
+});
 
 describe('Testing readAsync function.', () => {
     test('filename \"undefined\".', () => {

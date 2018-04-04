@@ -37,13 +37,13 @@ new Promise((resolve: (data: object) => void, reject: (data: Error) => void) => 
 /**
  * Retrieves telegraf-i18n array string.
  */
-export const arrayLoad = (options: Array<any>): Array<string> => {
+export const arrayLoad = (options: Array<object>): Array<string> | Error => {
     if (undefined !== options && 'object' === typeof(options)) {
         return options.map((element: Function) => {
             return element();
         });
     } else {
-        throw(new Error('Wrong argument.'));
+        throw new Error('Wrong argument.');
     }
 };
 

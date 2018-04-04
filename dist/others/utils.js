@@ -40,7 +40,7 @@ exports.arrayLoad = (options) => {
         });
     }
     else {
-        throw (new Error('Wrong argument.'));
+        throw new Error('Wrong argument.');
     }
 };
 /**

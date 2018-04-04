@@ -65,9 +65,9 @@ bot.use(i18n.middleware());
  * This could leas to a problem someday(?)
  */
 const commands = i18n.repository.commands;
-const helpCommand: Array<string> = arrayLoad(commands.help);
-const aboutCommand: Array<string> = arrayLoad(commands.about);
-const searchCommand: Array<string> = arrayLoad(commands.search);
+const helpCommand: Array<string> = <Array<string>> arrayLoad(commands.help);
+const aboutCommand: Array<string> = <Array<string>> arrayLoad(commands.about);
+const searchCommand: Array<string> = <Array<string>> arrayLoad(commands.search);
 
 /**
  * telegraf.log() will print all errors as well but, since this bot is running at Heroku, when an error occurs it's shut
@@ -91,7 +91,7 @@ bot.start(({ i18n, replyWithMarkdown, message }) => {
      */
     i18n.locale(language);
 
-    buttons = arrayLoad(i18n.repository[language].keyboard);
+    buttons = <Array<string>> arrayLoad(i18n.repository[language].keyboard);
     keyboard = telegraf.Markup.keyboard([buttons]).resize().extra();
 
     replyWithMarkdown(i18n.t('greetings'), keyboard);
