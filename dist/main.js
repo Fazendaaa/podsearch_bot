@@ -38,23 +38,31 @@ bot.startPolling();
 bot.use(telegraf.log());
 bot.use(i18n.middleware());
 /**
+ * telegraf.log() will print all errors as well but, since this bot is running at Heroku, when an error occurs it's shut
+ * down, consuming this error might help out -- still working on it to see if was any improvement.
+ * Unfortunately, there's no way of reporting to the user that an error occurred once is consumed here.
+ */
+bot.catch((err) => {
+    console.log(err);
+});
+/**
  * Greetings to new users when chatting one-to-one.
  */
 bot.start(({ i18n, replyWithMarkdown, message }) => {
     const language = message.from.language_code.split('-')[0] || 'en';
-    const keyboard = telegraf.Extra.markdown().markup((m) => {
-        m.resize().keyboard(['Menu', 'Help', 'About']);
-    });
+    let keyboard = undefined;
     /**
      * Setting up locale language info.
      */
     i18n.locale(language);
+    keyboard = telegraf.Markup.keyboard([['help', 'about']]).resize().extra();
+    console.log(i18n.t('keyboard'));
     replyWithMarkdown(i18n.t('greetings'), keyboard);
 });
 /**
  * Message saying how to use this bot.
  */
-bot.help(({ i18n, replyWithMarkdown, message }) => {
+bot.command(['help', 'ajuda'], ({ i18n, replyWithMarkdown, message }) => {
     const language = message.from.language_code.split('-')[0] || 'en';
     i18n.locale(language);
     replyWithMarkdown(i18n.t('help'));
@@ -62,7 +70,7 @@ bot.help(({ i18n, replyWithMarkdown, message }) => {
 /**
  * Message saying more about this bot.
  */
-bot.command('about', ({ i18n, replyWithMarkdown, message }) => {
+bot.command(['about', 'sobre'], ({ i18n, replyWithMarkdown, message }) => {
     const language = message.from.language_code.split('-')[0] || 'en';
     i18n.locale(language);
     replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
@@ -74,7 +82,7 @@ bot.command('about', ({ i18n, replyWithMarkdown, message }) => {
  * on  podcast,  this arguments must be set. And, this command works only talking to the bot, so there's no need to show
  * more than one result.
  */
-bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
+bot.command(['search', 'pesquise'], ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
     const value = utils_1.removeCmd(message.text);
     const userId = message.from.id;
     /**
@@ -192,5 +200,11 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
             console.error(error);
         });
     }
+});
+/**
+ * Handling buttons request.
+ */
+bot.on('callback_query', (ctx) => {
+    ctx.answerCbQuery('Not working yet.');
 });
 //# sourceMappingURL=main.js.map

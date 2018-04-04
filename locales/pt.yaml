@@ -22,18 +22,18 @@ noResult: |
 
 wrongInputCmd:
   "Por favor envie uma pesquisa válida no seguinte formato:\n
-  /search _nome do podcast_\n\n\
+  /pesquise _nome do podcast_\n\n\
   Exemplo:\n\
-  /search _nerdcast_\n"
+  /pesquise _nerdcast_\n"
 
 wrongInputInline:
   "Ou você pode experimentar a pesquisa inline:"
 
 help:
   "Esse bot realiza pesquisas de podcasts na loja da iTunes. Você pode realizar uma pesquisa através do comando o do modo inline. Veja em:\n\
-  /search\n\
+  /pesquise\n\
   Mais em:\n\
-  /about"
+  /sobre"
 about:
   "Quer ver mais:\n\
   🤖 [Podsearch](https://fazendaaa.github.io/podsearch_bot/) — Veja como este bot funciona.\n\

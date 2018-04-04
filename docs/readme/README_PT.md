@@ -41,16 +41,18 @@ Duas coisas novas em um projeto só? Sim, e a terceira é [Continuos Integration
 Eu escrevi um pouco mais sobre como foi o processo de escrever esse bot no [Medium](https://medium.com/@Fazendaaa/como-construir-um-bot-para-telegram-com-node-ts-testes-ci-e-deploy-para-o-heroku-e763b83fc44e), caso você se interesse sobre e gostaria de fazer um igual.
 ## Como utilizar?
 Primeiro de tudo, abra uma conversa com o [@podsearchbot](https://telegram.me/podsearchbot).
+### Aviso
+Por padrão os comandos se encontram por em Inglês mas possuem seu equivalente em Português. 
 ### Pesquisa
 Há duas maneiras de se fazer isso:
-#### ```/search```
+#### ```/pesquise```
 Uma vez no chat com o bot, utilize o seguinte comando como em outros bots:
 ```
-/search podcast name
+/pesquise nome do podcast
 ```
 Exemplo:
 ```
-/search The Story by The Mission
+/pesquise The Story by The Mission
 ```
 <h1 align="center">
     <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
@@ -59,7 +61,7 @@ Exemplo:
 #### Inline
 O modo de pesquisa inline funciona na conversa com o Podsearch ou qualquer outra:
 ```
-@podsearchbot podcast name
+@podsearchbot nome do podcast
 ```
 Exemplo:
 ```
@@ -72,7 +74,7 @@ Exemplo:
 ##### Ajuda
 Caso precise de ajuda ou algo do tipo, use o comando:
 ```
-/help
+/ajuda
 ```
 # Como funciona?
 Você pode construir um bot igual a esse daqui, basta seguir os procedimentos listados em [BUILDING_PT.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/building/BUILDING_PT.md).

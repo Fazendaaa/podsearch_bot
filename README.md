@@ -39,6 +39,8 @@ Two new things in one project? Yes, and a third one is [Continuos Integration](h
 Like so, once I've "finished" this code I intend to write an article at [Medium](https://medium.com/) talking about it. All the knowledge that I've got it because some one laid a trail so that I can build my own on it.
 ## How to use it
 First of all, talk to [@podsearchbot](https://telegram.me/podsearchbot).
+### Disclaimer
+By default all the commands are in English, but you can see if que same command is available in your language.
 ### Search
 There're two ways of doing that:
 #### ```/search```
