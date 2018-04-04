@@ -101,7 +101,8 @@ Since I will be keeping this README up to date with any major change and I don't
 
 * Writing a notification system, so that upon a new episode release the user will be notified -- making it available this notification at user timezone;
 * Adding podcasts recommendations thanks to [_lowhigh_](https://www.reddit.com/r/TelegramBots/comments/875tsz/podsearchbot/dwao2qj/) feedback on Reddit;
-* Integration with [wit.ia](https://wit.ai/).
+* Integration with [wit.ia](https://wit.ai/);
+* Change URL shortener since Goo.gl will be shut down.
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
 

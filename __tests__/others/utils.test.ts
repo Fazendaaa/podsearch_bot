@@ -18,7 +18,7 @@ jest.setTimeout(60000);
 
 const mockUserId: number = 0;
 const mockLanCode: string = 'en-us';
-const unsupportedLanCode: string = 'fr-fr';
+const unsupportedLanCode: string = 'nothing';
 
 describe('Testing readAsync function.', () => {
     test('filename \"undefined\".', () => {

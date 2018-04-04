@@ -107,13 +107,20 @@ exports.maskResponseInline = (data) => {
         }
         else if (undefined !== data.artworkUrl600) {
             preview = data.artworkUrl600;
+            /**
+             * If  this  else is being called id because artworkUrl600 is not available, in that case, one must be set to be
+             * presented to the user at message.
+             */
+        }
+        else {
+            data.artworkUrl600 = preview;
         }
         returnValue = {
             id: `${data.trackId}`,
             title: data.artistName,
             type: 'article',
             input_message_content: {
-                message_text: i18n.api(data.lanCode).t('mask', data),
+                message_text: i18n.api().t('mask', data, data.lanCode),
                 parse_mode: 'Markdown'
             },
             reply_markup: data.keyboard.reply_markup,
@@ -126,8 +133,8 @@ exports.maskResponseInline = (data) => {
 /**
  * This function takes an result a then returns it with the shortened links about it.
  */
-exports.shortenLinks = (data, lanCode) => new Promise((resolve, reject) => {
-    if (undefined !== data && undefined !== lanCode && 'string' === typeof (lanCode)) {
+exports.shortenLinks = (data) => new Promise((resolve, reject) => {
+    if (undefined !== data) {
         goo_gl_1.shorten(data.feedUrl).then((rss) => {
             goo_gl_1.shorten(data.collectionViewUrl).then((itunes) => {
                 resolve(Object.assign({}, data, { itunes, rss }));
@@ -159,7 +166,7 @@ exports.parse = (data, userId, lanCode) => new Promise((resolve, reject) => {
         filtered = data.results.filter(exports.hasItAll);
         if (0 < filtered.length) {
             Promise.all(filtered.map((element) => {
-                return exports.shortenLinks(element, lanCode).then((shortened) => {
+                return exports.shortenLinks(element).then((shortened) => {
                     /**
                      * There  is  no need to check whether or not releaseDate exists because the caller function already
                      * verified  this.  That  being said, if releaseDate is undefined, moment will return the current OS
@@ -179,15 +186,10 @@ exports.parse = (data, userId, lanCode) => new Promise((resolve, reject) => {
                     keyboard = Extra.markdown().markup((m) => {
                         return m.inlineKeyboard([m.callbackButton('Subscribe', `subscribe/${userId}/${podcastId}`)]);
                     });
-                    if (undefined === latest || undefined === keyboard) {
-                        reject('Error occurred while converting date or keyboard.');
-                    }
-                    else {
-                        /**
-                         * Striping the country option from lanCode.
-                         */
-                        return Object.assign({}, shortened, { latest, keyboard, lanCode: lanCode.split('-')[0] });
-                    }
+                    /**
+                     * Striping the country option from lanCode.
+                     */
+                    return Object.assign({}, shortened, { latest, keyboard, lanCode: lanCode.split('-')[0] });
                 }).catch((error) => {
                     throw error;
                 });

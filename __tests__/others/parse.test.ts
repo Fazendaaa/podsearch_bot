@@ -16,6 +16,7 @@ import {
     response,
     result
 } from 'itunes-search';
+import { telegramInline } from 'telegraf';
 import { resultExtended } from '../../src/@types/parse/main';
 import {
     hasGenres,
@@ -36,6 +37,10 @@ jest.setTimeout(60000);
 
 const mockUserId: number = 0;
 const mockLanCode: string = 'en-us';
+/**
+ * Why not use a real language code instead? Because of the overhead of refactoring if that language becomes available.
+ */
+const unsupportedLanCode: string = 'nothing';
 
 describe('Testing hasGenres function', () => {
     test('Only \"undefined\".', () => {
@@ -71,8 +76,8 @@ describe('Testing hasItAll function.', () => {
     test('Has it all.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mockInput: result) => {
-            return expect(hasItAll(mockInput)).toBeTruthy();
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            return expect(hasItAll(mockInput.results[0])).toBeTruthy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -85,10 +90,10 @@ describe('Testing hasItAll function.', () => {
     test('Without releaseDate.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mockInput: result) => {
-            delete mockInput.releaseDate;
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].releaseDate;
 
-            return expect(hasItAll(mockInput)).toBeFalsy();
+            return expect(hasItAll(mockInput.results[0])).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -97,10 +102,10 @@ describe('Testing hasItAll function.', () => {
     test('Without artworkUrl60.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mockInput: result) => {
-            delete mockInput.artworkUrl60;
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].artworkUrl60;
 
-            return expect(hasItAll(mockInput)).toBeTruthy();
+            return expect(hasItAll(mockInput.results[0])).toBeTruthy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -109,10 +114,10 @@ describe('Testing hasItAll function.', () => {
     test('Without artworkUrl100.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mockInput: result) => {
-            delete mockInput.artworkUrl100;
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].artworkUrl100;
 
-            return expect(hasItAll(mockInput)).toBeTruthy();
+            return expect(hasItAll(mockInput.results[0])).toBeTruthy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -121,11 +126,11 @@ describe('Testing hasItAll function.', () => {
     test('Without artworkUrl60 and artworkUrl100.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mockInput: result) => {
-            delete mockInput.artworkUrl60;
-            delete mockInput.artworkUrl100;
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].artworkUrl60;
+            delete mockInput.results[0].artworkUrl100;
 
-            return expect(hasItAll(mockInput)).toBeFalsy();
+            return expect(hasItAll(mockInput.results[0])).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -134,10 +139,10 @@ describe('Testing hasItAll function.', () => {
     test('Without artworkUrl600.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mockInput: result) => {
-            delete mockInput.artworkUrl600;
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].artworkUrl600;
 
-            return expect(hasItAll(mockInput)).toBeFalsy();
+            return expect(hasItAll(mockInput.results[0])).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -146,10 +151,10 @@ describe('Testing hasItAll function.', () => {
     test('Without artistName.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mockInput: result) => {
-            delete mockInput.artistName;
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].artistName;
 
-            return expect(hasItAll(mockInput)).toBeFalsy();
+            return expect(hasItAll(mockInput.results[0])).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -158,10 +163,10 @@ describe('Testing hasItAll function.', () => {
     test('Without country.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mockInput: result) => {
-            delete mockInput.country;
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].country;
 
-            return expect(hasItAll(mockInput)).toBeFalsy();
+            return expect(hasItAll(mockInput.results[0])).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -170,10 +175,10 @@ describe('Testing hasItAll function.', () => {
     test('Without trackCount.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mockInput: result) => {
-            delete mockInput.trackCount;
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].trackCount;
 
-            return expect(hasItAll(mockInput)).toBeFalsy();
+            return expect(hasItAll(mockInput.results[0])).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -182,10 +187,10 @@ describe('Testing hasItAll function.', () => {
     test('Without feedUrl.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mockInput: result) => {
-            delete mockInput.feedUrl;
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].feedUrl;
 
-            return expect(hasItAll(mockInput)).toBeFalsy();
+            return expect(hasItAll(mockInput.results[0])).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -194,10 +199,10 @@ describe('Testing hasItAll function.', () => {
     test('Without genres.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mockInput: result) => {
-            delete mockInput.genres;
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].genres;
 
-            return expect(hasItAll(mockInput)).toBeFalsy();
+            return expect(hasItAll(mockInput.results[0])).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -206,10 +211,10 @@ describe('Testing hasItAll function.', () => {
     test('Without collectionViewUrl.', () => {
         expect.assertions(1);
 
-        return readAsync('result.json').then((mockInput: result) => {
-            delete mockInput.collectionViewUrl;
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            delete mockInput.results[0].collectionViewUrl;
 
-            return expect(hasItAll(mockInput)).toBeFalsy();
+            return expect(hasItAll(mockInput.results[0])).toBeFalsy();
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -230,6 +235,61 @@ describe('Testing maskResponseInline function.', () => {
     test('Only \"undefined\".', () => {
         expect(maskResponseInline(undefined)).toBeUndefined();
     });
+
+    test('Without artworkUrl60, artworkUrl100 and artworkUrl600.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/maskResponseInline.json').then((mockInput: resultExtended) => {
+            return readAsync('nerdcast/unsupported/output/maskResponseInline.1.json').then((mockOutput: resultExtended) => {
+                delete mockInput.artworkUrl60;
+                delete mockInput.artworkUrl100;
+                delete mockInput.artworkUrl600;
+
+                return expect(maskResponseInline(mockInput)).toEqual(mockOutput);
+            }).catch((error: Error) => {
+                throw(error);
+            });
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
+    test('Without artworkUrl60 and artworkUrl100.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/maskResponseInline.json').then((mockInput: resultExtended) => {
+            return readAsync('nerdcast/unsupported/output/maskResponseInline.2.json').then((mockOutput: resultExtended) => {
+                delete mockInput.artworkUrl60;
+                delete mockInput.artworkUrl100;
+
+                return expect(maskResponseInline(mockInput)).toEqual(mockOutput);
+            }).catch((error: Error) => {
+                throw (error);
+            });
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
+    /**
+     * There's  no  1need  to  check  without  artworkUrl100  and  artworkUrl600  because  when  if both are missing and
+     * artworkUrl60 is presented it will be used.
+     */
+    test('Without artworkUrl60.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/maskResponseInline.json').then((mockInput: resultExtended) => {
+            return readAsync('nerdcast/unsupported/output/maskResponseInline.3.json').then((mockOutput: resultExtended) => {
+                delete mockInput.artworkUrl60;
+
+                return expect(maskResponseInline(mockInput)).toEqual(mockOutput);
+            }).catch((error: Error) => {
+                throw (error);
+            });
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
 });
 
 /**
@@ -240,30 +300,17 @@ describe('Testing maskResponseInline function.', () => {
  * test for it.
  */
 describe('Testing shortenLinks function.', () => {
-    test('Both \"undefined\".', () => {
-        expect(shortenLinks(undefined, undefined)).rejects.toMatch('Wrong argument.');
-    });
-
     test('data \"undefined\".', () => {
-        expect(shortenLinks(undefined, mockLanCode)).rejects.toMatch('Wrong argument.');
+        expect(shortenLinks(undefined)).rejects.toMatch('Wrong argument.');
     });
 
-    test('lanCode \"undefined\".', () => {
-        expect.assertions(1);
-
-        return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
-            expect(shortenLinks(mockInput.results[0], undefined)).rejects.toMatch('Wrong argument.');
-        }).catch((error: Error) => {
-            console.error(error);
-        });
-    });
 
     test('Shorten all nerdcast links.', () => {
         expect.assertions(1);
 
         return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
             return readAsync('nerdcast/en-us/output/shortened.json').then((mockOutput: resultExtended) => {
-                return expect(shortenLinks(mockInput.results[0], mockLanCode)).resolves.toEqual(mockOutput);
+                return expect(shortenLinks(mockInput.results[0])).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw (error);
             });
@@ -278,7 +325,7 @@ describe('Testing shortenLinks function.', () => {
         return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
             delete mockInput.results[0].collectionViewUrl;
 
-            return expect(shortenLinks(mockInput.results[0], mockLanCode)).rejects.toMatch('Has no iTunes link available.');
+            return expect(shortenLinks(mockInput.results[0])).rejects.toMatch('Has no iTunes link available.');
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -290,7 +337,32 @@ describe('Testing shortenLinks function.', () => {
         return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
             delete mockInput.results[0].feedUrl;
 
-            return expect(shortenLinks(mockInput.results[0], mockLanCode)).rejects.toMatch('Has no RSS link available.');
+            return expect(shortenLinks(mockInput.results[0])).rejects.toMatch('Has no RSS link available.');
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
+    test('Shorten a non-link in RSS.', () => {
+        expect.assertions(1);
+
+        /**
+         * A  new  unsupported folder is needed because this kind of test is too closed, when changes occur to supported
+         * languages won't be need to refactor each time this test; that's why relaying in the en-us to this case isn't
+         * the best approach at first sight.
+         */
+        return readAsync('nerdcast/unsupported/input/searchCommand.1.json').then((mockInput: response) => {
+            return expect(shortenLinks(mockInput.results[0])).rejects.toMatch('Has no RSS link available.');
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
+    test('Shorten a non-link in iTunes.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/searchCommand.2.json').then((mockInput: response) => {
+            return expect(shortenLinks(mockInput.results[0])).rejects.toMatch('Has no iTunes link available.');
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -524,6 +596,34 @@ describe('Testing parse function', () => {
             console.error(error);
         });
     });
+
+    test('Unsupported lanCode.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            return readAsync('nerdcast/unsupported/output/parsed.json').then((mockOutput: Array<resultExtended>) => {
+                return expect(parse(mockInput, mockUserId, unsupportedLanCode)).resolves.toEqual(mockOutput);
+            }).catch((error: Error) => {
+                throw error;
+            });
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
+    test('Unsupported releaseDate.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/searchCommand.3.json').then((mockInput: response) => {
+            return readAsync('nerdcast/unsupported/output/parsed.1.json').then((mockOutput: Array<resultExtended>) => {
+                return expect(parse(mockInput, mockUserId, unsupportedLanCode)).resolves.toEqual(mockOutput);
+            }).catch((error: Error) => {
+                throw error;
+            });
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
 });
 
 describe('Testing parseResponse function', () => {
@@ -666,6 +766,20 @@ describe('Testing parseResponse function', () => {
             delete mockInput.results[0].trackCount;
 
             return expect(parseResponse(mockInput, mockUserId, mockLanCode)).rejects.toMatch(noComplete);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
+    test('Unsupported lanCode.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            return readAsync('nerdcast/unsupported/output/parseResponse.json').then((mockOutput: Array<resultExtended>) => {
+                return expect(parseResponse(mockInput, mockUserId, unsupportedLanCode)).resolves.toEqual(mockOutput);
+            }).catch((error: Error) => {
+                throw error;
+            });
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -836,6 +950,20 @@ describe('Testing parseResponseInline function', () => {
             delete mockInput.results[0].trackCount;
 
             return expect(parseResponseInline(mockInput, mockUserId, mockLanCode)).rejects.toMatch(noComplete);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
+    test('Unsupported lanCode.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/searchInline.json').then((mockInput: response) => {
+            return readAsync('nerdcast/unsupported/output/parseResponseInline.json').then((mockOutput: Array<telegramInline>) => {
+                return expect(parseResponseInline(mockInput, mockUserId, unsupportedLanCode)).resolves.toEqual(mockOutput);
+            }).catch((error: Error) => {
+                throw error;
+            });
         }).catch((error: Error) => {
             console.error(error);
         });

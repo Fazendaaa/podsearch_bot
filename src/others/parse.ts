@@ -126,6 +126,12 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
             preview = data.artworkUrl100;
         } else if (undefined !== data.artworkUrl600) {
             preview = data.artworkUrl600;
+        /**
+         * If  this  else is being called id because artworkUrl600 is not available, in that case, one must be set to be
+         * presented to the user at message.
+         */
+        } else {
+            data.artworkUrl600 = preview;
         }
 
         returnValue = {
@@ -133,7 +139,7 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
             title: data.artistName,
             type: 'article',
             input_message_content: {
-                message_text: i18n.api(data.lanCode).t('mask', data),
+                message_text: i18n.api().t('mask', data, data.lanCode),
                 parse_mode: 'Markdown'
             },
             reply_markup: data.keyboard.reply_markup,
@@ -148,9 +154,9 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
 /**
  * This function takes an result a then returns it with the shortened links about it.
  */
-export const shortenLinks = (data: result, lanCode: string): Promise<resultExtended> =>
+export const shortenLinks = (data: result): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
-    if (undefined !== data && undefined !== lanCode && 'string' === typeof (lanCode)) {
+    if (undefined !== data) {
         shorten(data.feedUrl).then((rss: string) => {
             shorten(data.collectionViewUrl).then((itunes: string) => {
                 resolve({ ...data, itunes, rss });
@@ -176,7 +182,7 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
     let podcastId: number = undefined;
 
     if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== userId &&
-        undefined !== lanCode && 'string' === typeof(lanCode)) {
+        undefined !== lanCode && 'string' === typeof (lanCode)) {
         /**
          * Some  data  info  comes  incomplete,  this  could  mean  an error later on the process; that's why it must be
          * filtered right here, to avoid it.
@@ -185,7 +191,7 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
 
         if (0 < filtered.length) {
             Promise.all(filtered.map((element: result) => {
-                return shortenLinks(element, lanCode).then((shortened: resultExtended) => {
+                return shortenLinks(element).then((shortened: resultExtended) => {
                     /**
                      * There  is  no need to check whether or not releaseDate exists because the caller function already
                      * verified  this.  That  being said, if releaseDate is undefined, moment will return the current OS
@@ -206,14 +212,10 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
                         return m.inlineKeyboard([m.callbackButton('Subscribe', `subscribe/${userId}/${podcastId}`) ]);
                     });
 
-                    if (undefined === latest || undefined === keyboard) {
-                        reject('Error occurred while converting date or keyboard.');
-                    } else {
-                        /**
-                         * Striping the country option from lanCode.
-                         */
-                        return { ...shortened, latest, keyboard, lanCode: lanCode.split('-')[0] };
-                    }
+                    /**
+                     * Striping the country option from lanCode.
+                     */
+                    return { ...shortened, latest, keyboard, lanCode: lanCode.split('-')[0] };
                 }).catch((error: string) => {
                     throw error;
                 });
