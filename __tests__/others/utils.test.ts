@@ -3,11 +3,13 @@
  */
 'use strict';
 
+import { join } from 'path';
 import { telegramInline } from 'telegraf';
 import {
     endInline,
     errorInline,
     messageToString,
+    readAsync,
     removeCmd,
     searchInline
 } from '../../src/others/utils';
@@ -16,6 +18,17 @@ jest.setTimeout(60000);
 
 const mockUserId: number = 0;
 const mockLanCode: string = 'en-us';
+const unsupportedLanCode: string = 'fr-fr';
+
+describe('Testing readAsync function.', () => {
+    test('filename \"undefined\".', () => {
+        const filePath: string = join(__dirname, '../../__mocks__/undefined')
+        const errorMessage: string = `ENOENT: no such file or directory, open \'${filePath}\'`;
+        expect.assertions(1);
+
+        return expect(readAsync(undefined)).rejects.toThrowError(errorMessage);
+    });
+});
 
 describe('Testing removeCmd function', () => {
     test('Searching \"/search Nerdcast\".', () => {
@@ -70,26 +83,59 @@ describe('Testing messageToString function.', () => {
     });
 });
 
-describe('Testing errorInline function', () => {
-    test('lanCode equals to undefined', () => {
+describe('Testing errorInline function.', () => {
+    test('lanCode equals to undefined.', () => {
         expect.assertions(1);
 
         return expect(errorInline(undefined)).rejects.toBeUndefined();
     });
+
+    /**
+     * Falls back to English when encounter a non supported language.
+     */
+    test('Unsupported lanCode.', () => {
+        expect.assertions(1);
+
+        return readAsync('/inlineMessages/en-us/errorInline.json').then(file => {
+            return expect(errorInline(unsupportedLanCode)).resolves.toEqual(file);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
 });
 
-describe('Testing searchInline function', () => {
-    test('lanCode equals to undefined', () => {
+describe('Testing searchInline function.', () => {
+    test('lanCode equals to undefined.', () => {
         expect.assertions(1);
 
         return expect(searchInline(undefined)).rejects.toBeUndefined();
     });
+
+    test('Unsupported lanCode.', () => {
+        expect.assertions(1);
+
+        return readAsync('/inlineMessages/en-us/searchInline.json').then(file => {
+            return expect(searchInline(unsupportedLanCode)).resolves.toEqual(file);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
 });
 
-describe('Testing endInline function', () => {
-    test('lanCode equals to undefined', () => {
+describe('Testing endInline function.', () => {
+    test('lanCode equals to undefined.', () => {
         expect.assertions(1);
 
         return expect(endInline(undefined)).rejects.toBeUndefined();
+    });
+
+    test('Unsupported lanCode.', () => {
+        expect.assertions(1);
+
+        return readAsync('/inlineMessages/en-us/endInline.json').then(file => {
+            return expect(endInline(unsupportedLanCode)).resolves.toEqual(file);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
     });
 });

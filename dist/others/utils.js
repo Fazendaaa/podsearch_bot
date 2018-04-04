@@ -11,7 +11,8 @@ const path_1 = require("path");
  */
 const i18n = i18n_node_yaml({
     debug: true,
-    translationFolder: path_1.resolve(__dirname, '../../locales'),
+    translationFolder: path_1.join(__dirname, '../../locales'),
+    defaultLocale: 'en',
     locales: ['en', 'pt']
 });
 /**
@@ -53,13 +54,17 @@ exports.errorInline = (lanCode) => new Promise((resolve, reject) => {
         i18n.ready.then(() => {
             resolve({
                 id: '0',
-                title: i18n.api(lang).t('errorTitle'),
+                /**
+                 * Passing lang in api() call didn't fall to default when language isn't supported. That's why needed it
+                 * change to call it in t().
+                 */
+                title: i18n.api().t('errorTitle', {}, lang),
                 type: 'article',
                 input_message_content: {
-                    message_text: i18n.api(lang).t('errorInlineMessage'),
+                    message_text: i18n.api().t('errorInlineMessage', {}, lang),
                     parse_mode: 'Markdown'
                 },
-                description: i18n.api(lang).t('errorInlineDescription'),
+                description: i18n.api().t('errorInlineDescription', {}, lang),
                 thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
             });
         }).catch((error) => {
@@ -80,13 +85,13 @@ exports.searchInline = (lanCode) => new Promise((resolve, reject) => {
         i18n.ready.then(() => {
             resolve({
                 id: '0',
-                title: i18n.api(lang).t('searchTitle'),
+                title: i18n.api().t('searchTitle', {}, lang),
                 type: 'article',
                 input_message_content: {
-                    message_text: i18n.api(lang).t('searchInlineMessage'),
+                    message_text: i18n.api().t('searchInlineMessage', {}, lang),
                     parse_mode: 'Markdown'
                 },
-                description: i18n.api(lang).t('searchInlineDescription'),
+                description: i18n.api().t('searchInlineDescription', {}, lang),
                 thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
             });
         }).catch((error) => {
@@ -107,13 +112,13 @@ exports.endInline = (lanCode) => new Promise((resolve, reject) => {
         i18n.ready.then(() => {
             resolve({
                 id: '0',
-                title: i18n.api(lang).t('endTitle'),
+                title: i18n.api().t('endTitle', {}, lang),
                 type: 'article',
                 input_message_content: {
-                    message_text: i18n.api(lang).t('endInlineMessage'),
+                    message_text: i18n.api().t('endInlineMessage', {}, lang),
                     parse_mode: 'Markdown'
                 },
-                description: i18n.api(lang).t('endInlineDescription'),
+                description: i18n.api().t('endInlineDescription', {}, lang),
                 thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
             });
         }).catch((error) => {
