@@ -8,6 +8,7 @@ import {
     endInline,
     errorInline,
     messageToString,
+    notFoundInline,
     readAsync,
     removeCmd,
     searchInline
@@ -16,6 +17,18 @@ import {
 jest.setTimeout(60000);
 
 const mockLanCode: string = 'en-us';
+
+describe('[EN] Testing notFoundInline function.', () => {
+    test('lanCode equals to en-us', () => {
+        expect.assertions(1);
+
+        return readAsync('/inlineMessages/en-us/notFoundInline.json').then(file => {
+            return expect(notFoundInline('mistyped', mockLanCode)).resolves.toEqual(file);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+});
 
 describe('[EN] Testing errorInline function', () => {
     test('lanCode equals to en-us', () => {

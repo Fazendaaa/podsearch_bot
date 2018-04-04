@@ -9,6 +9,7 @@ import {
     endInline,
     errorInline,
     messageToString,
+    notFoundInline,
     readAsync,
     removeCmd,
     searchInline
@@ -83,6 +84,39 @@ describe('Testing messageToString function.', () => {
     });
 });
 
+describe('Testing notFoundInline function.', () => {
+    test('both equals to undefined.', () => {
+        expect.assertions(1);
+
+        return expect(notFoundInline(undefined, undefined)).rejects.toBeUndefined();
+    });
+
+    test('lanCode equals to undefined.', () => {
+        expect.assertions(1);
+
+        return expect(notFoundInline('mistyped', undefined)).rejects.toBeUndefined();
+    });
+
+    test('value equals to undefined.', () => {
+        expect.assertions(1);
+
+        return expect(notFoundInline(undefined, 'en-us')).rejects.toBeUndefined();
+    });
+
+    /**
+     * Falls back to English when encounter a non supported language.
+     */
+    test('Unsupported lanCode.', () => {
+        expect.assertions(1);
+
+        return readAsync('/inlineMessages/en-us/notFoundInline.json').then(file => {
+            return expect(notFoundInline('mistyped', unsupportedLanCode)).resolves.toEqual(file);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+});
+
 describe('Testing errorInline function.', () => {
     test('lanCode equals to undefined.', () => {
         expect.assertions(1);
@@ -90,9 +124,6 @@ describe('Testing errorInline function.', () => {
         return expect(errorInline(undefined)).rejects.toBeUndefined();
     });
 
-    /**
-     * Falls back to English when encounter a non supported language.
-     */
     test('Unsupported lanCode.', () => {
         expect.assertions(1);
 

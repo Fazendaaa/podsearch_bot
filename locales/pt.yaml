@@ -44,7 +44,17 @@ about:
   Tem alguma sugestão, erros para reportar ou até mesmo uma tradução para este bot?\n\
   Sinta-se a vontade para me dizer em: @Farmy."
 
-errorTitle:
+notFoundInlineTitle:
+  "Não encontrado"
+
+notFoundInlineMessage:
+  "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Algo de errado aconteceu, não encontrei resultados para *${value}*.\n\
+  Por favor, verifique se digitou corretamente."
+
+notFoundInlineDescription:
+  "Não encontrei resultados para ${value}. Por favor, verifique sua pesquisa."
+
+errorInlineTitle:
   "Erro"
 
 errorInlineMessage:
@@ -53,7 +63,7 @@ errorInlineMessage:
 errorInlineDescription:
   "Alguma coisa de errado aconteceu, por favor verifique o que digitou ou tente mais tarde."
 
-searchTitle:
+searchInlineTitle:
   "Pesquise a podcast que deseja"
 
 searchInlineMessage:
@@ -62,7 +72,7 @@ searchInlineMessage:
 searchInlineDescription:
   "Por favor, digite o nome do podcast que está procurando."
 
-endTitle:
+endInlineTitle:
   "Final dos resultados"
 
 endInlineMessage:

@@ -47,7 +47,17 @@ about:
   Has any suggestions, errors to report it or even request a translation?\n\
   Fell free to tell me: @Farmy."
 
-errorTitle:
+notFoundInlineTitle:
+  "Not found"
+
+notFoundInlineMessage:
+  "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Something went wrong, no results available to *${value}*.\n\
+  Please, check your typing."
+
+notFoundInlineDescription:
+  "No results available to ${value}. Please, check your typing."
+
+errorInlineTitle:
   "Error"
 
 errorInlineMessage:
@@ -56,7 +66,7 @@ errorInlineMessage:
 errorInlineDescription:
   "Something went wrong, check your typing or try it again later."
 
-searchTitle:
+searchInlineTitle:
   "Search Podcasts"
 
 searchInlineMessage:
@@ -65,7 +75,7 @@ searchInlineMessage:
 searchInlineDescription:
   "Please, just type what your looking for."
 
-endTitle:
+endInlineTitle:
   "End of results"
 
 endInlineMessage:

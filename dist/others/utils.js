@@ -31,6 +31,19 @@ exports.readAsync = (filename) => new Promise((resolve, reject) => {
     });
 });
 /**
+ * Retrieves telegraf-i18n array string.
+ */
+exports.arrayLoad = (options) => {
+    if (undefined !== options && 'object' === typeof (options)) {
+        return options.map((element) => {
+            return element();
+        });
+    }
+    else {
+        throw (new Error('Wrong argument.'));
+    }
+};
+/**
  * This function removes the '/cmd' of the command.
  */
 exports.removeCmd = (cmd) => {
@@ -45,6 +58,37 @@ exports.messageToString = (message) => {
         undefined;
 };
 /**
+ * Just an not found message to be sent to the user in case of failed search.
+ */
+exports.notFoundInline = (value, lanCode) => new Promise((resolve, reject) => {
+    let lang = undefined;
+    if (undefined !== value && 'string' === typeof (value) && undefined !== lanCode && 'string' === typeof (lanCode)) {
+        lang = lanCode.split('-')[0];
+        i18n.ready.then(() => {
+            resolve({
+                id: '0',
+                /**
+                 * Passing lang in api() call didn't fall to default when language isn't supported. That's why needed it
+                 * change to call it in t().
+                 */
+                title: i18n.api().t('notFoundInlineTitle', { value }, lang),
+                type: 'article',
+                input_message_content: {
+                    message_text: i18n.api().t('notFoundInlineMessage', { value }, lang),
+                    parse_mode: 'Markdown'
+                },
+                description: i18n.api().t('notFoundInlineDescription', { value }, lang),
+                thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
+            });
+        }).catch((error) => {
+            reject(error);
+        });
+    }
+    else {
+        reject(undefined);
+    }
+});
+/**
  * Just an error message to be sent to the user in case of failed search.
  */
 exports.errorInline = (lanCode) => new Promise((resolve, reject) => {
@@ -58,7 +102,7 @@ exports.errorInline = (lanCode) => new Promise((resolve, reject) => {
                  * Passing lang in api() call didn't fall to default when language isn't supported. That's why needed it
                  * change to call it in t().
                  */
-                title: i18n.api().t('errorTitle', {}, lang),
+                title: i18n.api().t('errorInlineTitle', {}, lang),
                 type: 'article',
                 input_message_content: {
                     message_text: i18n.api().t('errorInlineMessage', {}, lang),
@@ -85,7 +129,7 @@ exports.searchInline = (lanCode) => new Promise((resolve, reject) => {
         i18n.ready.then(() => {
             resolve({
                 id: '0',
-                title: i18n.api().t('searchTitle', {}, lang),
+                title: i18n.api().t('searchInlineTitle', {}, lang),
                 type: 'article',
                 input_message_content: {
                     message_text: i18n.api().t('searchInlineMessage', {}, lang),
@@ -112,7 +156,7 @@ exports.endInline = (lanCode) => new Promise((resolve, reject) => {
         i18n.ready.then(() => {
             resolve({
                 id: '0',
-                title: i18n.api().t('endTitle', {}, lang),
+                title: i18n.api().t('endInlineTitle', {}, lang),
                 type: 'article',
                 input_message_content: {
                     message_text: i18n.api().t('endInlineMessage', {}, lang),

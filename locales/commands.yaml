@@ -1,0 +1,5 @@
+help: !!seq [ help, ajuda ]
+
+about: !!seq [ about, sobre ]
+
+search: !!seq [ search, pesquise ]

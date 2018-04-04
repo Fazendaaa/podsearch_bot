@@ -35,6 +35,19 @@ new Promise((resolve: (data: object) => void, reject: (data: Error) => void) => 
 });
 
 /**
+ * Retrieves telegraf-i18n array string.
+ */
+export const arrayLoad = (options: Array<any>): Array<string> => {
+    if (undefined !== options && 'object' === typeof(options)) {
+        return options.map((element: Function) => {
+            return element();
+        });
+    } else {
+        throw(new Error('Wrong argument.'));
+    }
+};
+
+/**
  * This function removes the '/cmd' of the command.
  */
 export const removeCmd = (cmd: string): string => {
@@ -49,6 +62,40 @@ export const messageToString = (message: string): string => {
         Buffer.from(message, 'ascii').toString('ascii').replace(/(?:=\(|:0|:o|: o|: 0)/, ': o') :
         undefined;
 };
+
+/**
+ * Just an not found message to be sent to the user in case of failed search.
+ */
+export const notFoundInline = (value: string, lanCode: string): Promise<telegramInline> =>
+new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => void) => {
+    let lang: string = undefined;
+
+    if (undefined !== value && 'string' === typeof (value) && undefined !== lanCode && 'string' === typeof (lanCode)) {
+        lang = lanCode.split('-')[0];
+
+        i18n.ready.then(() => {
+            resolve({
+                id: '0',
+                /**
+                 * Passing lang in api() call didn't fall to default when language isn't supported. That's why needed it
+                 * change to call it in t().
+                 */
+                title: i18n.api().t('notFoundInlineTitle', { value }, lang),
+                type: 'article',
+                input_message_content: {
+                    message_text: i18n.api().t('notFoundInlineMessage', { value }, lang),
+                    parse_mode: 'Markdown'
+                },
+                description: i18n.api().t('notFoundInlineDescription', { value }, lang),
+                thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
+            });
+        }).catch((error: Error) => {
+            reject(error);
+        });
+    } else {
+        reject(undefined);
+    }
+});
 
 /**
  * Just an error message to be sent to the user in case of failed search.
@@ -67,7 +114,7 @@ new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => v
                  * Passing lang in api() call didn't fall to default when language isn't supported. That's why needed it
                  * change to call it in t().
                  */
-                title: i18n.api().t('errorTitle', {}, lang),
+                title: i18n.api().t('errorInlineTitle', {}, lang),
                 type: 'article',
                 input_message_content: {
                     message_text: i18n.api().t('errorInlineMessage', {}, lang),
@@ -97,7 +144,7 @@ new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => v
         i18n.ready.then(() => {
             resolve({
                 id: '0',
-                title: i18n.api().t('searchTitle', {}, lang),
+                title: i18n.api().t('searchInlineTitle', {}, lang),
                 type: 'article',
                 input_message_content: {
                     message_text: i18n.api().t('searchInlineMessage', {}, lang),
@@ -127,7 +174,7 @@ new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => v
         i18n.ready.then(() => {
             resolve({
                 id: '0',
-                title: i18n.api().t('endTitle', {}, lang),
+                title: i18n.api().t('endInlineTitle', {}, lang),
                 type: 'article',
                 input_message_content: {
                     message_text: i18n.api().t('endInlineMessage', {}, lang),

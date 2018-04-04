@@ -19,9 +19,11 @@ import {
     parseResponseInline
 } from './others/parse';
 import {
+    arrayLoad,
     endInline,
     errorInline,
     messageToString,
+    notFoundInline,
     removeCmd,
     searchInline
 } from './others/utils';
@@ -45,7 +47,8 @@ config();
  *  - Default markdown option for message parsing;
  *  - Polling;
  *  - Log each bot requisition;
- *  - Internationalization support.
+ *  - Internationalization support;
+ *  - Bot commands -- with internationalization support.
  */
 const bot = new telegraf(process.env.BOT_KEY);
 const i18n = new telegrafI18n({
@@ -57,6 +60,14 @@ const i18n = new telegrafI18n({
 bot.startPolling();
 bot.use(telegraf.log());
 bot.use(i18n.middleware());
+
+/**
+ * This could leas to a problem someday(?)
+ */
+const commands = i18n.repository.commands;
+const helpCommand: Array<string> = arrayLoad(commands.help);
+const aboutCommand: Array<string> = arrayLoad(commands.about);
+const searchCommand: Array<string> = arrayLoad(commands.search);
 
 /**
  * telegraf.log() will print all errors as well but, since this bot is running at Heroku, when an error occurs it's shut
@@ -72,19 +83,15 @@ bot.catch((err) => {
  */
 bot.start(({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
-    const buttons: Array<string> = new Array(2);
+    let buttons: Array<string> = undefined;
     let keyboard: any = undefined;
 
     /**
      * Setting up locale language info.
      */
     i18n.locale(language);
-    /**
-     * The ugliest thing in this code.
-     */
-    buttons.push(i18n.repository[language].keyboard[0]());
-    buttons.push(i18n.repository[language].keyboard[1]());
 
+    buttons = arrayLoad(i18n.repository[language].keyboard);
     keyboard = telegraf.Markup.keyboard([buttons]).resize().extra();
 
     replyWithMarkdown(i18n.t('greetings'), keyboard);
@@ -93,7 +100,7 @@ bot.start(({ i18n, replyWithMarkdown, message }) => {
 /**
  * Message saying how to use this bot.
  */
-bot.command(['help', 'ajuda'], ({ i18n, replyWithMarkdown, message }) => {
+bot.command(helpCommand, ({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
 
     i18n.locale(language);
@@ -104,7 +111,7 @@ bot.command(['help', 'ajuda'], ({ i18n, replyWithMarkdown, message }) => {
 /**
  * Message saying more about this bot.
  */
-bot.command(['about', 'sobre'], ({ i18n, replyWithMarkdown, message }) => {
+bot.command(aboutCommand, ({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
 
     i18n.locale(language);
@@ -119,7 +126,7 @@ bot.command(['about', 'sobre'], ({ i18n, replyWithMarkdown, message }) => {
  * on  podcast,  this arguments must be set. And, this command works only talking to the bot, so there's no need to show
  * more than one result.
  */
-bot.command(['search', 'pesquise'], ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
+bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
     const value: string = removeCmd(message.text);
     const userId: number = message.from.id;
     /**
@@ -220,8 +227,11 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                         console.error(error);
                     });
                 }
+            /**
+             * In case that the user search anything that isn't available in iTunes store or mistyping.
+             */
             } else {
-                errorInline(lanCode).then((inline: telegramInline) => {
+                notFoundInline(value, lanCode).then((inline: telegramInline) => {
                     answerInlineQuery([inline]);
                 }).catch((error: Error) => {
                     console.error(error);
