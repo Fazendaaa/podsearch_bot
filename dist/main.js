@@ -65,7 +65,7 @@ talkingSearch.on('text', ({ i18n, replyWithMarkdown, message, scene }) => {
      * Setting up locale language info.
      */
     i18n.locale(language);
-    replyWithMarkdown('Searching...').then(({ message_id, chat }) => {
+    replyWithMarkdown(i18n.t('searching')).then(({ message_id, chat }) => {
         itunes_search_1.search(value, opts, (data) => {
             parse_1.parseResponse(data, userId, message.from.language_code).then((parsed) => {
                 telegramCore.editMessageText(chat.id, message_id, undefined, i18n.t('mask', parsed), parsed.keyboard);
@@ -277,10 +277,10 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
 /**
  * Handling buttons request.
  */
-bot.on('callback_query', ({ i18n, answerCbQuery, message }) => {
-    const language = message.from.language_code.split('-')[0] || 'en';
+bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
+    const language = update.callback_query.from.language_code.split('-')[0] || 'en';
     i18n.locale(language);
-    answerCbQuery(i18n.t('working'));
+    answerCbQuery(i18n.t('working'), true);
 });
 /**
  * Handling help button.
