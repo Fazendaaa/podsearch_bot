@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = require("fs");
 const i18n_node_yaml = require("i18n-node-yaml");
 const path_1 = require("path");
+const remove_accents_1 = require("remove-accents");
 /**
  * Configure internationalization options.
  */
@@ -62,7 +63,7 @@ exports.removeCmd = (cmd) => {
  */
 exports.messageToString = (message) => {
     return (undefined !== message && 'string' === typeof message) ?
-        Buffer.from(message, 'ascii').toString('ascii').replace(/(?:=\(|:0|:o|: o|: 0)/, ': o') :
+        Buffer.from(remove_accents_1.remove(message), 'ascii').toString('ascii').replace(/(?:=\(|:0|:o|: o|: 0)/, ': o') :
         undefined;
 };
 /**

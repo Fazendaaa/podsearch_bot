@@ -99,6 +99,7 @@ Há também um integração com [Travis CI](http://travis-ci.org/).
 * [i18n-yaml](https://github.com/martinheidegger/i18n-node-yaml) - Como Telegraf-i18n apenas funciona com Telegraf, há a necessidade de se traduzir outros contextos;
 * [dotenv](https://github.com/motdotla/dotenv) - Biblioteca que importa variáveis de ambiente;
 * [goo.gl](https://github.com/kaimallea/node-googl) - Biblioteca que reduz os tamanhos dos links;
+* * [remove-accents](https://github.com/tyxla/remove-accents) - Essa biblioteca remove os acentos das pesquisas -- como o conteúdo da iTunes store não necessariamente terá acentos, ao remover eles isso facilitará a pesquisa;
 * [itunes-search](https://github.com/connor/itunes-node) - Uma das várias bibliotecas que realiza a integração com a loja do iTunes, porém essa é a que melhor o faz.
 # Contribuindo
 Por favor, eu não sou nativo/fluente em Inglês, então se você ver uma variável escrita errada ou até mesmo um comentário que eu escrevi de maneira errada, me avise. Contribuições não necessariamente devem ser feitas através de código apenas, elas tem a ver com melhorar o que já está presente das mais diversas maneiras para que mais pessoas possam aprender sobre.
