@@ -41,25 +41,14 @@ Duas coisas novas em um projeto só? Sim, e a terceira é [Continuos Integration
 Eu escrevi um pouco mais sobre como foi o processo de escrever esse bot no [Medium](https://medium.com/@Fazendaaa/como-construir-um-bot-para-telegram-com-node-ts-testes-ci-e-deploy-para-o-heroku-e763b83fc44e), caso você se interesse sobre e gostaria de fazer um igual.
 ## Como utilizar?
 Primeiro de tudo, abra uma conversa com o [@podsearchbot](https://telegram.me/podsearchbot).
+### Aviso
+Por padrão os comandos se encontram por em Inglês mas possuem seu equivalente em Português. 
 ### Pesquisa
-Há duas maneiras de se fazer isso:
-#### ```/search```
-Uma vez no chat com o bot, utilize o seguinte comando como em outros bots:
-```
-/search podcast name
-```
-Exemplo:
-```
-/search The Story by The Mission
-```
-<h1 align="center">
-    <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
-</h1>
-
+Há três maneiras de se fazer isso:
 #### Inline
 O modo de pesquisa inline funciona na conversa com o Podsearch ou qualquer outra:
 ```
-@podsearchbot podcast name
+@podsearchbot nome do podcast
 ```
 Exemplo:
 ```
@@ -69,10 +58,29 @@ Exemplo:
     <img src="https://media.giphy.com/media/3CVtxjnZ9HKGhjeeiD/giphy.gif" width="500" height="550" />
 </h1>
 
+#### Botões
+Apenas pressione o botão de pesquisa, ele irá lhe pedir o nome do podcast que deseja pesquisar e realizar a pesquisa.
+<h1 align="center">
+    <img src="https://media.giphy.com/media/3CVtxjnZ9HKGhjeeiD/giphy.gif" width="500" height="550" />
+</h1>
+
+#### ```/pesquise```
+Uma vez no chat com o bot, utilize o seguinte comando como em outros bots:
+```
+/pesquise nome do podcast
+```
+Exemplo:
+```
+/pesquise The Story by The Mission
+```
+<h1 align="center">
+    <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
+</h1>
+
 ##### Ajuda
 Caso precise de ajuda ou algo do tipo, use o comando:
 ```
-/help
+/ajuda
 ```
 # Como funciona?
 Você pode construir um bot igual a esse daqui, basta seguir os procedimentos listados em [BUILDING_PT.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/building/BUILDING_PT.md).
@@ -103,7 +111,8 @@ Como esse README estará sendo atualizado com as mudanças importantes, não pre
 
 * Escrever um sistema de notificação para que usuário saiba quando saiu um novo episódio do podcast que ele ouve -- e fazer de tal maneira que leve em consideração a posição no globo que ele se encontra;
 * Adicionar recomendações de podcasts baseado no que ouve, ideia do [_lowhigh_](https://www.reddit.com/r/TelegramBots/comments/875tsz/podsearchbot/dwao2qj/) no feedback que me deu no Reddit;
-* Integração com o [wit.ia](https://wit.ai/).
+* Integração com o [wit.ia](https://wit.ai/);
+* Mudar o encurtardor de URL já que o Goo.gl será desativado.
 # Autores
 * Apenas [eu](https://github.com/Fazendaaa) até agora.
 

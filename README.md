@@ -39,20 +39,10 @@ Two new things in one project? Yes, and a third one is [Continuos Integration](h
 Like so, once I've "finished" this code I intend to write an article at [Medium](https://medium.com/) talking about it. All the knowledge that I've got it because some one laid a trail so that I can build my own on it.
 ## How to use it
 First of all, talk to [@podsearchbot](https://telegram.me/podsearchbot).
+### Disclaimer
+By default all the commands are in English, but you can see if que same command is available in your language.
 ### Search
-There're two ways of doing that:
-#### ```/search```
-Just open it a chat with Podsearchbot and then use it like this:
-```
-/search podcast name
-```
-Example:
-```
-/search The Story by The Mission
-```
-<h1 align="center">
-    <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
-</h1>
+There're three ways of doing that:
 
 #### Inline mode
 The inline mode works both in the Podsearchbot chat or any other chat:
@@ -65,6 +55,25 @@ Example:
 ```
 <h1 align="center">
     <img src="https://media.giphy.com/media/3CVtxjnZ9HKGhjeeiD/giphy.gif" width="500" height="550" />
+</h1>
+
+#### Button
+Just press search button available, it will ask you for podcast name and then does the search.
+<h1 align="center">
+    <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
+</h1>
+
+#### ```/search```
+Just open it a chat with Podsearchbot and then use it like this:
+```
+/search podcast name
+```
+Example:
+```
+/search The Story by The Mission
+```
+<h1 align="center">
+    <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
 </h1>
 
 ##### Help
@@ -101,7 +110,8 @@ Since I will be keeping this README up to date with any major change and I don't
 
 * Writing a notification system, so that upon a new episode release the user will be notified -- making it available this notification at user timezone;
 * Adding podcasts recommendations thanks to [_lowhigh_](https://www.reddit.com/r/TelegramBots/comments/875tsz/podsearchbot/dwao2qj/) feedback on Reddit;
-* Integration with [wit.ia](https://wit.ai/).
+* Integration with [wit.ia](https://wit.ai/);
+* Change URL shortener since Goo.gl will be shut down.
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
 

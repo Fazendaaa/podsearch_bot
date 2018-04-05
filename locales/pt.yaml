@@ -6,7 +6,14 @@ text: |
   Olá, _${from.first_name}_.
   Eu ainda não tenho suporte a conversas, meu criador ainda não me configurou para tal. Mas sinta-se a vontade para olhar o meu site e ver para quando isso está previsto.
 
-error: Algo aconteceu de errado. Por favor, mais tarde tente novamente.
+error:
+  "Algo aconteceu de errado. Por favor, mais tarde tente novamente."
+
+search:
+  "Agora envie-me o nome do podcast do qual gostaria pesquisar sobre."
+
+working:
+  "Nossos robôs escrvavos estão trabalhando nisso. Em alguns dias estará pronto."
 
 mask:
   "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\
@@ -22,21 +29,21 @@ noResult: |
 
 wrongInputCmd:
   "Por favor envie uma pesquisa válida no seguinte formato:\n
-  /search _nome do podcast_\n\n\
+  /pesquise _nome do podcast_\n\n\
   Exemplo:\n\
-  /search _nerdcast_\n"
+  /pesquise _nerdcast_\n"
 
 wrongInputInline:
   "Ou você pode experimentar a pesquisa inline:"
 
 help:
   "Esse bot realiza pesquisas de podcasts na loja da iTunes. Você pode realizar uma pesquisa através do comando o do modo inline. Veja em:\n\
-  /search\n\
+  /pesquise\n\
   Mais em:\n\
-  /about"
+  /sobre"
 about:
   "Quer ver mais:\n\
-  🤖 [Podsearch](https://fazendaaa.github.io/podsearch_bot/) — Código por trás deste bot.\n\
+  🤖 [Podsearch](https://fazendaaa.github.io/podsearch_bot/) — Veja como este bot funciona.\n\
   😀 [Meu website](http://fazendaaa.me) — Veja mais dos meus outros projetos.\n\n\
   Ou até mesmo me ajudar:\n\
   ☕ [Compre-me um café](https://www.buymeacoffee.com/Fazenda) — Doação.\n\
@@ -44,14 +51,41 @@ about:
   Tem alguma sugestão, erros para reportar ou até mesmo uma tradução para este bot?\n\
   Sinta-se a vontade para me dizer em: @Farmy."
 
+notFoundInlineTitle:
+  "Não encontrado"
+
+notFoundInlineMessage:
+  "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Algo de errado aconteceu, não encontrei resultados para *${value}*.\n\
+  Por favor, verifique se digitou corretamente."
+
+notFoundInlineDescription:
+  "Não encontrei resultados para ${value}. Por favor, verifique sua pesquisa."
+
+errorInlineTitle:
+  "Erro"
+
 errorInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Alguma coisa de errado aconteceu, por favor verifique o que digitou ou tente mais tarde."
 
 errorInlineDescription:
   "Alguma coisa de errado aconteceu, por favor verifique o que digitou ou tente mais tarde."
 
+searchInlineTitle:
+  "Pesquise a podcast que deseja"
+
 searchInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)Por favor, digite o nome do podcast que está procurando."
 
 searchInlineDescription:
   "Por favor, digite o nome do podcast que está procurando."
+
+endInlineTitle:
+  "Final dos resultados"
+
+endInlineMessage:
+  "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)Não há mais resultados a serem apresentados nessa pesquisa."
+
+endInlineDescription:
+  "Não há mais resultados a serem apresentados nessa pesquisa."
+
+keyboard: !!seq [ [ pesquise ], [ ajuda, sobre ] ]

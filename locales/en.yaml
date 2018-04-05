@@ -6,7 +6,14 @@ text: |
   Hey, _${from.first_name}_.
   Right now I don't work on text only, my creator haven't implemented yet this feature. But feel free to check it out my page to see when this feature is coming.
 
-error: There has been an error in the search. Please, check your typing or try again later.
+error:
+  "There has been an error in the search. Please, check your typing or try again later."
+
+search:
+  "Now, send me the podcast name that you want to search for it."
+
+working:
+  "Our slaves robots are currently working on it. In a few days will be done."
 
 # The '\' after '\n' is just so, this way, the next line doesn't have a little spacing at the starting, and since this
 # string has a notation with colon has to be double-quoted also.
@@ -38,13 +45,26 @@ help:
   /about"
 about:
   "Wanna see more:\n\
-  🤖 [Podsearch](https://fazendaaa.github.io/podsearch_bot/) — See the code behind this bot.\n\
+  🤖 [Podsearch](https://fazendaaa.github.io/podsearch_bot/) — See how this bot works.\n\
   😀 [My website](http://fazendaaa.me) — Check it out some of my other works.\n\n\
-  Or even helping out:\n\
+  Or even supporting me:\n\
   ☕ [Buy me a coffee](https://www.buymeacoffee.com/Fazenda) — One time only.\n\
   📅 [Patreon](https://www.patreon.com/Fazenda/overview) — Subscription.\n\n\
   Has any suggestions, errors to report it or even request a translation?\n\
   Fell free to tell me: @Farmy."
+
+notFoundInlineTitle:
+  "Not found"
+
+notFoundInlineMessage:
+  "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Something went wrong, no results available to *${value}*.\n\
+  Please, check your typing."
+
+notFoundInlineDescription:
+  "No results available to ${value}. Please, check your typing."
+
+errorInlineTitle:
+  "Error"
 
 errorInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Something went wrong, check your typing or try it again later."
@@ -52,8 +72,22 @@ errorInlineMessage:
 errorInlineDescription:
   "Something went wrong, check your typing or try it again later."
 
+searchInlineTitle:
+  "Search Podcasts"
+
 searchInlineMessage:
   "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)Please, just type what your looking for."
 
 searchInlineDescription:
   "Please, just type what your looking for."
+
+endInlineTitle:
+  "End of results"
+
+endInlineMessage:
+  "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)There's no other content to be presented."
+
+endInlineDescription:
+  "There's no other content to be presented."
+
+keyboard: !!seq [ [ search ], [ help, about ] ]

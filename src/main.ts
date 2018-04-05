@@ -13,12 +13,17 @@ import {
 } from 'itunes-search';
 import { resolve } from 'path';
 import { telegramInline } from 'telegraf';
-import { resultExtended } from './@types/utils/main';
+import { resultExtended } from './@types/parse/main';
 import {
+    parseResponse,
+    parseResponseInline
+} from './others/parse';
+import {
+    arrayLoad,
+    endInline,
     errorInline,
     messageToString,
-    parseResponse,
-    parseResponseInline,
+    notFoundInline,
     removeCmd,
     searchInline
 } from './others/utils';
@@ -30,7 +35,13 @@ import {
  * brentatkins opened my eys to the real issue: https://stackoverflow.com/q/49348607/7092954
  */
 const telegraf = require('telegraf');
+const telegram = require('telegraf/telegram');
+const Markup = telegraf.Markup;
 const telegrafI18n = require('telegraf-i18n');
+const session = require('telegraf/session');
+const stage = require('telegraf/stage');
+const scene = require('telegraf/scenes/base');
+const { leave } = stage;
 
 /**
  * Allows the code to run without passing the environment variables as arguments.
@@ -38,62 +49,32 @@ const telegrafI18n = require('telegraf-i18n');
 config();
 
 /**
- * Start bot and then set options like:
- *  - Default markdown option for message parsing;
- *  - Polling;
- *  - Log each bot requisition;
- *  - Internationalization support.
+ * Just a little "hack".
  */
-const bot = new telegraf(process.env.BOT_KEY);
-const i18n = new telegrafI18n({
-    defaultLanguage: 'en',
-    allowMissing: true,
-    directory: resolve(__dirname, '../locales')
-});
-
-bot.startPolling();
-bot.use(telegraf.log());
-bot.use(i18n.middleware());
+const telegramCore = new telegram(process.env.BOT_KEY);
 
 /**
- * Greetings to new users when chatting one-to-one.
+ * Handling podcast search through talking to bot.
  */
-bot.command('start', ({ i18n, replyWithMarkdown, message }) => {
+const talkingSearch = new scene('talkingSearch');
+
+/**
+ * Message asking for the podcast name for search for it.
+ */
+talkingSearch.enter(({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
+
     i18n.locale(language);
 
-    replyWithMarkdown(i18n.t('greetings'));
+    replyWithMarkdown(i18n.t('search'), Markup.forceReply().extra());
 });
 
 /**
- * Message saying how to use this bot.
+ * Catching the podcast name for search for it.
  */
-bot.command('help', ({ i18n, replyWithMarkdown, message }) => {
-    const language: string = message.from.language_code.split('-')[0] || 'en';
-    i18n.locale(language);
-
-    replyWithMarkdown(i18n.t('help'));
-});
-
-/**
- * Message saying more about this bot.
- */
-bot.command('about', ({ i18n, replyWithMarkdown, message }) => {
-    const language: string = message.from.language_code.split('-')[0] || 'en';
-    i18n.locale(language);
-
-    replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
-});
-
-/**
- * /search + 'podcast name', then returns it to the user all the data.
- *
- * iTunes  search  options for podcast, since this API searches anything in iTunes store and this bot it's only for uses
- * on  podcast,  this arguments must be set. And, this command works only talking to the bot, so there's no need to show
- * more than one result.
- */
-bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
-    const value: string = removeCmd(message.text);
+talkingSearch.on('text', ({ i18n, replyWithMarkdown, message, scene }) => {
+    const value: string = message.text;
+    const userId: number = message.from.id;
     /**
      * This  option  is  an  option  to  language, since works better -- sincerely still don't know why, maybe something
      * related to iTunes API -- to return data in user native language.
@@ -112,13 +93,132 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
      */
     i18n.locale(language);
 
-    if (value !== '') {
+    replyWithMarkdown('Searching...').then(({ message_id, chat }) => {
         search(value, opts, (data: response) => {
-            parseResponse(data, message.from.language_code).then((parsed: resultExtended) => {
-                replyWithMarkdown(i18n.t('mask', parsed));
+            parseResponse(data, userId, message.from.language_code).then((parsed: resultExtended) => {
+                telegramCore.editMessageText(chat.id, message_id, undefined, i18n.t('mask', parsed), parsed.keyboard);
+                scene.leave();
             }).catch((error: string) => {
                 console.error(error);
-                replyWithMarkdown(i18n.t('error'));
+                replyWithMarkdown(i18n.t('noResult', { value }));
+            });
+        });
+    }).catch((error: Error) => {
+        replyWithMarkdown(i18n.t('error'));
+        console.error(error);
+    });
+});
+
+/**
+ * Creating "conversation" handler.
+ */
+const talkingSearchManager = new stage();
+talkingSearchManager.register(talkingSearch);
+
+/**
+ * Start bot and then setting its options like:
+ *  - Internationalization support;
+ *  - Polling;
+ *  - Log each bot requisition;
+ *  - Bot commands -- with internationalization support;
+ *  - Conversation handler.
+ */
+const bot = new telegraf(process.env.BOT_KEY);
+const i18n = new telegrafI18n({
+    defaultLanguage: 'en',
+    allowMissing: true,
+    directory: resolve(__dirname, '../locales')
+});
+
+bot.startPolling();
+bot.use(session());
+bot.use(telegraf.log());
+bot.use(i18n.middleware());
+bot.use(talkingSearchManager.middleware());
+
+/**
+ * This could lead to a problem someday(?)
+ */
+const commands = i18n.repository.commands;
+const helpCommand: Array<string> = <Array<string>> arrayLoad(commands.help);
+const aboutCommand: Array<string> = <Array<string>> arrayLoad(commands.about);
+const searchCommand: Array<string> = <Array<string>> arrayLoad(commands.search);
+
+/**
+ * telegraf.log() will print all errors as well but, since this bot is running at Heroku, when an error occurs it's shut
+ * down, consuming this error might help out -- still working on it to see if was any improvement.
+ * Unfortunately, there's no way of reporting to the user that an error occurred once is consumed here.
+ */
+bot.catch((err) => {
+    console.log(err);
+});
+
+/**
+ * Greetings to new users when chatting one-to-one.
+ */
+bot.start(({ i18n, replyWithMarkdown, message }) => {
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+    let buttons: Array<object> = undefined;
+    let keyboard: any = undefined;
+
+    i18n.locale(language);
+
+    buttons = <Array<object>> arrayLoad(i18n.repository[language].keyboard);
+    keyboard = telegraf.Markup.keyboard(buttons).resize().extra();
+
+    replyWithMarkdown(i18n.t('greetings'), keyboard);
+});
+
+/**
+ * Message saying how to use this bot.
+ */
+bot.command(helpCommand, ({ i18n, replyWithMarkdown, message }) => {
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+
+    i18n.locale(language);
+
+    replyWithMarkdown(i18n.t('help'));
+});
+
+/**
+ * Message saying more about this bot.
+ */
+bot.command(aboutCommand, ({ i18n, replyWithMarkdown, message }) => {
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+
+    i18n.locale(language);
+
+    replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
+});
+
+/**
+ * /search + 'podcast name', then returns it to the user all the data.
+ *
+ * iTunes  search  options for podcast, since this API searches anything in iTunes store and this bot it's only for uses
+ * on  podcast,  this arguments must be set. And, this command works only talking to the bot, so there's no need to show
+ * more than one result.
+ */
+bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
+    const value: string = removeCmd(message.text);
+    const userId: number = message.from.id;
+    const country: string = message.from.language_code.split('-')[1] || 'us';
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+    const opts: options = {
+        country: country,
+        media: 'podcast',
+        entity: 'podcast',
+        limit: 1
+    };
+
+    i18n.locale(language);
+
+    if (value !== '') {
+        search(value, opts, (data: response) => {
+            parseResponse(data, userId, message.from.language_code).then((parsed: resultExtended) => {
+                replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
+            }).catch((error: string) => {
+                console.error(error);
+                replyWithMarkdown(i18n.t('noResult', {value}));
             });
         });
     } else {
@@ -142,10 +242,13 @@ bot.command('search', ({ i18n, replyWithMarkdown, replyWithVideo, message }) => 
 });
 
 /**
- * Handles the inline searching.
+ * Handles  the  inline  searching.  Since all the parsing language data is done behind in the library parse, there's no
+ * need  in  setting telegraf-i18n here -- only if the user wanna change it's default search language to be different of
+ * his Telegram's language.
  */
 bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
     const value: string = messageToString(inlineQuery.query);
+    const userId: number = inlineQuery.from.id;
     const lanCode: string = inlineQuery.from.language_code;
     const pageLimit: number = 20;
     const offset: number = parseInt(inlineQuery.offset, 10) || 0;
@@ -164,7 +267,10 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         search(value, opts, (data: response) => {
             if (0 < data.resultCount) {
                 /**
-                 * "Pseudo-pagination", since this API doesn't allow it true pagination.
+                 * "Pseudo-pagination",  since this API doesn't allow it true pagination. And this is a lot of overwork,
+                 * because each scroll down the bot will search all the already presented results again and again. Kind
+                 * of to read the next page of a book you would need to read all the pages that you already read so that
+                 * you can continue.
                  */
                 data.results = data.results.slice(offset, offset + pageLimit);
 
@@ -173,21 +279,83 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                  * podcast options, or even none, in the search.
                  */
                 if (0 < data.results.length) {
-                    parseResponseInline(data, lanCode).then((results: Array<telegramInline>) => {
+                    parseResponseInline(data, userId, lanCode).then((results: Array<telegramInline>) => {
                         answerInlineQuery(results, { next_offset: offset + pageLimit });
                     }).catch((error: Error) => {
                         console.error(error);
-                        answerInlineQuery(errorInline(lanCode));
+                        errorInline(lanCode).then((inline: telegramInline) => {
+                            answerInlineQuery([inline]);
+                        });
+                    });
+                /**
+                 * If there's nothing else to be presented at the user, this would mean an end of search.
+                 */
+                } else {
+                    endInline(lanCode).then((inline: telegramInline) => {
+                        answerInlineQuery([inline]);
+                    }).catch((error: Error) => {
+                        console.error(error);
                     });
                 }
+            /**
+             * In case that the user search anything that isn't available in iTunes store or mistyping.
+             */
             } else {
-                answerInlineQuery(errorInline(lanCode));
+                notFoundInline(value, lanCode).then((inline: telegramInline) => {
+                    answerInlineQuery([inline]);
+                }).catch((error: Error) => {
+                    console.error(error);
+                });
             }
         });
     /**
      * Incentive the user to search for a podcast.
      */
     } else {
-        answerInlineQuery(searchInline(lanCode));
+        searchInline(lanCode).then((inline: telegramInline) => {
+            answerInlineQuery([inline]);
+        }).catch((error: Error) => {
+            console.error(error);
+        });
     }
+});
+
+/**
+ * Handling buttons request.
+ */
+bot.on('callback_query', ({ i18n, answerCbQuery, message }) => {
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+
+    i18n.locale(language);
+
+    answerCbQuery(i18n.t('working'));
+});
+
+/**
+ * Handling help button.
+ */
+bot.hears(helpCommand, ({ i18n, replyWithMarkdown, message }) => {
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+
+    i18n.locale(language);
+
+    replyWithMarkdown(i18n.t('help'));
+});
+
+/**
+ * Handling about button.
+ */
+bot.hears(aboutCommand, ({ i18n, replyWithMarkdown, message }) => {
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+
+    i18n.locale(language);
+
+    replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
+});
+
+/**
+ * Handling search button.
+ */
+bot.hears(searchCommand, ({ scene }) => {
+    scene.enter('talkingSearch');
 });

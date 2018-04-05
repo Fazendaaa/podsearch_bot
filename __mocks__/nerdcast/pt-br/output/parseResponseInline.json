@@ -7,6 +7,17 @@
             "message_text": "[​](http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg)*Nome*: _Nerdcast_\n*Gêneros*: _Comédia,Podcasts_\n*Episódios*: _2_\n*Último episódio*: _11º julho 2016, 4:05 am_\n*RSS*: https://goo.gl/bECbi2\n*iTunes*: https://goo.gl/3MqovR\n",
             "parse_mode": "Markdown"
         },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/1103141552",
+                        "hide": false
+                    }
+                ]
+            ]
+        },
         "description": "Comédia | Podcasts",
         "thumb_url": "http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/60x60bb.jpg"
     },
@@ -17,6 +28,17 @@
         "input_message_content": {
             "message_text": "[​](http://is5.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/600x600bb.jpg)*Nome*: _Jovem Nerd_\n*Gêneros*: _Sociedade e cultura,Podcasts_\n*Episódios*: _300_\n*Último episódio*: _30º março 2018, 7:22 am_\n*RSS*: https://goo.gl/5rxTdH\n*iTunes*: https://goo.gl/o3X3jQ\n",
             "parse_mode": "Markdown"
+        },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/381816509",
+                        "hide": false
+                    }
+                ]
+            ]
         },
         "description": "Sociedade e cultura | Podcasts",
         "thumb_url": "http://is5.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/60x60bb.jpg"
@@ -29,19 +51,19 @@
             "message_text": "[​](http://is5.mzstatic.com/image/thumb/Music71/v4/37/ef/65/37ef65b7-95f4-8580-dcd8-01253bc68580/source/600x600bb.jpg)*Nome*: _ComiConverse_\n*Gêneros*: _TV e filme,Podcasts_\n*Episódios*: _45_\n*Último episódio*: _18º fevereiro 2018, 10:02 am_\n*RSS*: https://goo.gl/mMVf3Q\n*iTunes*: https://goo.gl/aU7VVo\n",
             "parse_mode": "Markdown"
         },
-        "description": "TV e filme | Podcasts",
-        "thumb_url": "http://is5.mzstatic.com/image/thumb/Music71/v4/37/ef/65/37ef65b7-95f4-8580-dcd8-01253bc68580/source/60x60bb.jpg"
-    },
-    {
-        "id": "1201380216",
-        "title": "FilmFella",
-        "type": "article",
-        "input_message_content": {
-            "message_text": "[​](http://is4.mzstatic.com/image/thumb/Music122/v4/22/71/cf/2271cf4f-4793-32d8-af58-b7c7b5427216/source/600x600bb.jpg)*Nome*: _FilmFella_\n*Gêneros*: _TV e filme,Podcasts_\n*Episódios*: _1_\n*Último episódio*: _5º março 2017, 2:36 pm_\n*RSS*: https://goo.gl/7a2ffA\n*iTunes*: https://goo.gl/Am1UgT\n",
-            "parse_mode": "Markdown"
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/1013472013",
+                        "hide": false
+                    }
+                ]
+            ]
         },
         "description": "TV e filme | Podcasts",
-        "thumb_url": "http://is4.mzstatic.com/image/thumb/Music122/v4/22/71/cf/2271cf4f-4793-32d8-af58-b7c7b5427216/source/60x60bb.jpg"
+        "thumb_url": "http://is5.mzstatic.com/image/thumb/Music71/v4/37/ef/65/37ef65b7-95f4-8580-dcd8-01253bc68580/source/60x60bb.jpg"
     },
     {
         "id": "1111319839",
@@ -51,8 +73,41 @@
             "message_text": "[​](http://is1.mzstatic.com/image/thumb/Music91/v4/32/5a/16/325a16ac-2ee8-1024-61e1-7c7a4005e352/source/600x600bb.jpg)*Nome*: _POLITICO / Panoply_\n*Gêneros*: _Notícias e política,Podcasts_\n*Episódios*: _107_\n*Último episódio*: _30º março 2018, 6:00 am_\n*RSS*: https://goo.gl/U7MCho\n*iTunes*: https://goo.gl/Qc1ZGx\n",
             "parse_mode": "Markdown"
         },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/1111319839",
+                        "hide": false
+                    }
+                ]
+            ]
+        },
         "description": "Notícias e política | Podcasts",
         "thumb_url": "http://is1.mzstatic.com/image/thumb/Music91/v4/32/5a/16/325a16ac-2ee8-1024-61e1-7c7a4005e352/source/60x60bb.jpg"
+    },
+    {
+        "id": "1201380216",
+        "title": "FilmFella",
+        "type": "article",
+        "input_message_content": {
+            "message_text": "[​](http://is4.mzstatic.com/image/thumb/Music122/v4/22/71/cf/2271cf4f-4793-32d8-af58-b7c7b5427216/source/600x600bb.jpg)*Nome*: _FilmFella_\n*Gêneros*: _TV e filme,Podcasts_\n*Episódios*: _1_\n*Último episódio*: _5º março 2017, 2:36 pm_\n*RSS*: https://goo.gl/7a2ffA\n*iTunes*: https://goo.gl/Am1UgT\n",
+            "parse_mode": "Markdown"
+        },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/1201380216",
+                        "hide": false
+                    }
+                ]
+            ]
+        },
+        "description": "TV e filme | Podcasts",
+        "thumb_url": "http://is4.mzstatic.com/image/thumb/Music122/v4/22/71/cf/2271cf4f-4793-32d8-af58-b7c7b5427216/source/60x60bb.jpg"
     },
     {
         "id": "1180390208",
@@ -61,6 +116,17 @@
         "input_message_content": {
             "message_text": "[​](http://is1.mzstatic.com/image/thumb/Music71/v4/87/3a/5f/873a5fe1-e704-79e0-a7b4-e0af61591b3c/source/600x600bb.jpg)*Nome*: _Ben Fidanza_\n*Gêneros*: _Jogos e hobbies,Podcasts_\n*Episódios*: _6_\n*Último episódio*: _31º maio 2017, 2:21 am_\n*RSS*: https://goo.gl/tyn7Gq\n*iTunes*: https://goo.gl/aiuJS3\n",
             "parse_mode": "Markdown"
+        },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/1180390208",
+                        "hide": false
+                    }
+                ]
+            ]
         },
         "description": "Jogos e hobbies | Podcasts",
         "thumb_url": "http://is1.mzstatic.com/image/thumb/Music71/v4/87/3a/5f/873a5fe1-e704-79e0-a7b4-e0af61591b3c/source/60x60bb.jpg"
@@ -73,6 +139,17 @@
             "message_text": "[​](http://is2.mzstatic.com/image/thumb/Music/v4/36/1b/ea/361bea94-8c34-beff-dcaf-78971d36497e/source/600x600bb.jpg)*Nome*: _SEGA Nerdcast_\n*Gêneros*: _Videogames,Podcasts,Jogos e hobbies_\n*Episódios*: _10_\n*Último episódio*: _21º março 2018, 11:43 am_\n*RSS*: https://goo.gl/eEeu92\n*iTunes*: https://goo.gl/8nhWRs\n",
             "parse_mode": "Markdown"
         },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/635644349",
+                        "hide": false
+                    }
+                ]
+            ]
+        },
         "description": "Videogames | Podcasts | Jogos e hobbies",
         "thumb_url": "http://is2.mzstatic.com/image/thumb/Music/v4/36/1b/ea/361bea94-8c34-beff-dcaf-78971d36497e/source/60x60bb.jpg"
     },
@@ -84,6 +161,17 @@
             "message_text": "[​](http://is3.mzstatic.com/image/thumb/Music62/v4/57/8c/7d/578c7df0-8481-922d-564f-3c615c441e7f/source/600x600bb.jpg)*Nome*: _The Amazing Nerdcast_\n*Gêneros*: _Artes visuais,Podcasts,Artes,TV e filme,Jogos e hobbies,Hobbies_\n*Episódios*: _57_\n*Último episódio*: _27º agosto 2017, 10:31 am_\n*RSS*: https://goo.gl/yMgqoB\n*iTunes*: https://goo.gl/Z1QRkb\n",
             "parse_mode": "Markdown"
         },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/1083394658",
+                        "hide": false
+                    }
+                ]
+            ]
+        },
         "description": "Artes visuais | Podcasts | Artes | TV e filme | Jogos e hobbies | Hobbies",
         "thumb_url": "http://is3.mzstatic.com/image/thumb/Music62/v4/57/8c/7d/578c7df0-8481-922d-564f-3c615c441e7f/source/60x60bb.jpg"
     },
@@ -92,8 +180,19 @@
         "title": "The Weekly Standard",
         "type": "article",
         "input_message_content": {
-            "message_text": "[​](http://is5.mzstatic.com/image/thumb/Music71/v4/8e/49/66/8e496642-7fca-8b68-14b4-ed5a1111ce50/source/600x600bb.jpg)*Nome*: _The Weekly Standard_\n*Gêneros*: _TV e filme,Podcasts,Sociedade e cultura,Jogos e hobbies_\n*Episódios*: _100_\n*Último episódio*: _29º março 2018, 11:38 am_\n*RSS*: https://goo.gl/opFhMA\n*iTunes*: https://goo.gl/sk3dCV\n",
+            "message_text": "[​](http://is5.mzstatic.com/image/thumb/Music71/v4/8e/49/66/8e496642-7fca-8b68-14b4-ed5a1111ce50/source/600x600bb.jpg)*Nome*: _The Weekly Standard_\n*Gêneros*: _TV e filme,Podcasts,Sociedade e cultura,Jogos e hobbies_\n*Episódios*: _100_\n*Último episódio*: _2º abril 2018, 1:20 pm_\n*RSS*: https://goo.gl/opFhMA\n*iTunes*: https://goo.gl/sk3dCV\n",
             "parse_mode": "Markdown"
+        },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/1177021658",
+                        "hide": false
+                    }
+                ]
+            ]
         },
         "description": "TV e filme | Podcasts | Sociedade e cultura | Jogos e hobbies",
         "thumb_url": "http://is5.mzstatic.com/image/thumb/Music71/v4/8e/49/66/8e496642-7fca-8b68-14b4-ed5a1111ce50/source/60x60bb.jpg"
@@ -106,6 +205,17 @@
             "message_text": "[​](http://is4.mzstatic.com/image/thumb/Music62/v4/2a/e0/8d/2ae08df9-30fb-163b-a8e0-6feb0a37259f/source/600x600bb.jpg)*Nome*: _HourlyNerd_\n*Gêneros*: _Notícias de negócios,Podcasts,Negócios_\n*Episódios*: _15_\n*Último episódio*: _27º dezembro 2017, 11:36 am_\n*RSS*: https://goo.gl/wsTUwp\n*iTunes*: https://goo.gl/sdXNCR\n",
             "parse_mode": "Markdown"
         },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/1029942395",
+                        "hide": false
+                    }
+                ]
+            ]
+        },
         "description": "Notícias de negócios | Podcasts | Negócios",
         "thumb_url": "http://is4.mzstatic.com/image/thumb/Music62/v4/2a/e0/8d/2ae08df9-30fb-163b-a8e0-6feb0a37259f/source/60x60bb.jpg"
     },
@@ -116,6 +226,17 @@
         "input_message_content": {
             "message_text": "[​](http://is4.mzstatic.com/image/thumb/Music111/v4/1b/df/ee/1bdfeef3-cd78-def1-bc63-7967ec8412eb/source/600x600bb.jpg)*Nome*: _The Powerful Nerdcast_\n*Gêneros*: _TV e filme,Podcasts_\n*Episódios*: _83_\n*Último episódio*: _1º dezembro 2017, 2:00 pm_\n*RSS*: https://goo.gl/e67zhM\n*iTunes*: https://goo.gl/sivF1d\n",
             "parse_mode": "Markdown"
+        },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/1019138641",
+                        "hide": false
+                    }
+                ]
+            ]
         },
         "description": "TV e filme | Podcasts",
         "thumb_url": "http://is4.mzstatic.com/image/thumb/Music111/v4/1b/df/ee/1bdfeef3-cd78-def1-bc63-7967ec8412eb/source/60x60bb.jpg"
@@ -128,6 +249,17 @@
             "message_text": "[​](http://is2.mzstatic.com/image/thumb/Music62/v4/ad/a8/97/ada897bd-3dfb-395c-5e98-6d68f229331c/source/600x600bb.jpg)*Nome*: _Keith M. Sedor & Benjamin Rockwell_\n*Gêneros*: _Notícias de tecnologia,Podcasts,Tecnologia,TV e filme,Comédia_\n*Episódios*: _32_\n*Último episódio*: _27º fevereiro 2018, 10:55 pm_\n*RSS*: https://goo.gl/gqcKPp\n*iTunes*: https://goo.gl/q8EDBb\n",
             "parse_mode": "Markdown"
         },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/993457863",
+                        "hide": false
+                    }
+                ]
+            ]
+        },
         "description": "Notícias de tecnologia | Podcasts | Tecnologia | TV e filme | Comédia",
         "thumb_url": "http://is2.mzstatic.com/image/thumb/Music62/v4/ad/a8/97/ada897bd-3dfb-395c-5e98-6d68f229331c/source/60x60bb.jpg"
     },
@@ -138,6 +270,17 @@
         "input_message_content": {
             "message_text": "[​](http://is5.mzstatic.com/image/thumb/Music71/v4/64/82/74/64827497-6eea-5c3a-b541-5af702f939ea/source/600x600bb.jpg)*Nome*: _Monolith NerdCast_\n*Gêneros*: _Jogos e hobbies,Podcasts_\n*Episódios*: _2_\n*Último episódio*: _15º outubro 2016, 11:55 pm_\n*RSS*: https://goo.gl/hBQPcu\n*iTunes*: https://goo.gl/a1Vm8U\n",
             "parse_mode": "Markdown"
+        },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/1086906162",
+                        "hide": false
+                    }
+                ]
+            ]
         },
         "description": "Jogos e hobbies | Podcasts",
         "thumb_url": "http://is5.mzstatic.com/image/thumb/Music71/v4/64/82/74/64827497-6eea-5c3a-b541-5af702f939ea/source/60x60bb.jpg"
@@ -150,6 +293,17 @@
             "message_text": "[​](http://is3.mzstatic.com/image/thumb/Music71/v4/f7/13/b7/f713b7c9-9454-a669-ea3d-51093a25574a/source/600x600bb.jpg)*Nome*: _nanohero_\n*Gêneros*: _Videogames,Podcasts,Jogos e hobbies_\n*Episódios*: _2_\n*Último episódio*: _16º março 2011, 4:04 am_\n*RSS*: https://goo.gl/SHHbva\n*iTunes*: https://goo.gl/QZ2D8R\n",
             "parse_mode": "Markdown"
         },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/418090026",
+                        "hide": false
+                    }
+                ]
+            ]
+        },
         "description": "Videogames | Podcasts | Jogos e hobbies",
         "thumb_url": "http://is3.mzstatic.com/image/thumb/Music71/v4/f7/13/b7/f713b7c9-9454-a669-ea3d-51093a25574a/source/60x60bb.jpg"
     },
@@ -161,6 +315,17 @@
             "message_text": "[​](http://is3.mzstatic.com/image/thumb/Music4/v4/ef/c1/9e/efc19ec1-2771-f462-869e-06d62c9cc1f9/source/600x600bb.jpg)*Nome*: _NerdPartyPlus_\n*Gêneros*: _Comédia,Podcasts,Jogos e hobbies,Videogames_\n*Episódios*: _33_\n*Último episódio*: _6º agosto 2014, 11:19 pm_\n*RSS*: https://goo.gl/o6G2HR\n*iTunes*: https://goo.gl/WrBAUy\n",
             "parse_mode": "Markdown"
         },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/507356099",
+                        "hide": false
+                    }
+                ]
+            ]
+        },
         "description": "Comédia | Podcasts | Jogos e hobbies | Videogames",
         "thumb_url": "http://is3.mzstatic.com/image/thumb/Music4/v4/ef/c1/9e/efc19ec1-2771-f462-869e-06d62c9cc1f9/source/60x60bb.jpg"
     },
@@ -169,8 +334,19 @@
         "title": "Gifted Sounds Network",
         "type": "article",
         "input_message_content": {
-            "message_text": "[​](http://is2.mzstatic.com/image/thumb/Music118/v4/c8/55/c6/c855c664-4478-5c5c-f049-ab05c823bc76/source/600x600bb.jpg)*Nome*: _Gifted Sounds Network_\n*Gêneros*: _Videogames,Podcasts,Jogos e hobbies,Sociedade e cultura,Diários,TV e filme_\n*Episódios*: _99_\n*Último episódio*: _17º março 2018, 7:00 am_\n*RSS*: https://goo.gl/4ZSnLh\n*iTunes*: https://goo.gl/AcKMbx\n",
+            "message_text": "[​](http://is2.mzstatic.com/image/thumb/Music118/v4/c8/55/c6/c855c664-4478-5c5c-f049-ab05c823bc76/source/600x600bb.jpg)*Nome*: _Gifted Sounds Network_\n*Gêneros*: _Videogames,Podcasts,Jogos e hobbies,Sociedade e cultura,Diários,TV e filme_\n*Episódios*: _99_\n*Último episódio*: _2º abril 2018, 5:36 pm_\n*RSS*: https://goo.gl/4ZSnLh\n*iTunes*: https://goo.gl/AcKMbx\n",
             "parse_mode": "Markdown"
+        },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/904750036",
+                        "hide": false
+                    }
+                ]
+            ]
         },
         "description": "Videogames | Podcasts | Jogos e hobbies | Sociedade e cultura | Diários | TV e filme",
         "thumb_url": "http://is2.mzstatic.com/image/thumb/Music118/v4/c8/55/c6/c855c664-4478-5c5c-f049-ab05c823bc76/source/60x60bb.jpg"
@@ -183,6 +359,17 @@
             "message_text": "[​](http://is3.mzstatic.com/image/thumb/Music71/v4/6b/74/64/6b74642e-edbf-24fa-2aee-540568838a10/source/600x600bb.jpg)*Nome*: _NW Nerdcast_\n*Gêneros*: _Outros jogos,Podcasts,Jogos e hobbies_\n*Episódios*: _20_\n*Último episódio*: _8º março 2018, 11:21 pm_\n*RSS*: https://goo.gl/Q6LJGA\n*iTunes*: https://goo.gl/cY3wmh\n",
             "parse_mode": "Markdown"
         },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/559852003",
+                        "hide": false
+                    }
+                ]
+            ]
+        },
         "description": "Outros jogos | Podcasts | Jogos e hobbies",
         "thumb_url": "http://is3.mzstatic.com/image/thumb/Music71/v4/6b/74/64/6b74642e-edbf-24fa-2aee-540568838a10/source/60x60bb.jpg"
     },
@@ -193,6 +380,17 @@
         "input_message_content": {
             "message_text": "[​](http://is2.mzstatic.com/image/thumb/Music71/v4/84/0a/cf/840acfa1-44ee-f6e3-b2b7-fd3b5c6f39f6/source/600x600bb.jpg)*Nome*: _Old Fashioned Nerdcast_\n*Gêneros*: _Videogames,Podcasts,Jogos e hobbies_\n*Episódios*: _20_\n*Último episódio*: _4º maio 2017, 12:28 am_\n*RSS*: https://goo.gl/5mMrCP\n*iTunes*: https://goo.gl/B4J4hW\n",
             "parse_mode": "Markdown"
+        },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/1027223336",
+                        "hide": false
+                    }
+                ]
+            ]
         },
         "description": "Videogames | Podcasts | Jogos e hobbies",
         "thumb_url": "http://is2.mzstatic.com/image/thumb/Music71/v4/84/0a/cf/840acfa1-44ee-f6e3-b2b7-fd3b5c6f39f6/source/60x60bb.jpg"
@@ -205,6 +403,17 @@
             "message_text": "[​](http://is3.mzstatic.com/image/thumb/Music3/v4/29/6a/42/296a42d7-7d71-613d-758c-44e7485039b4/source/600x600bb.jpg)*Nome*: _Wizard Nerdcast_\n*Gêneros*: _Comédia,Podcasts,Jogos e hobbies,Videogames,Notícias e política,Outros jogos,TV e filme_\n*Episódios*: _3_\n*Último episódio*: _14º novembro 2016, 10:00 pm_\n*RSS*: https://goo.gl/7qNnVv\n*iTunes*: https://goo.gl/rSZmqd\n",
             "parse_mode": "Markdown"
         },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/955039842",
+                        "hide": false
+                    }
+                ]
+            ]
+        },
         "description": "Comédia | Podcasts | Jogos e hobbies | Videogames | Notícias e política | Outros jogos | TV e filme",
         "thumb_url": "http://is3.mzstatic.com/image/thumb/Music3/v4/29/6a/42/296a42d7-7d71-613d-758c-44e7485039b4/source/60x60bb.jpg"
     },
@@ -215,6 +424,17 @@
         "input_message_content": {
             "message_text": "[​](http://is1.mzstatic.com/image/thumb/Music71/v4/ad/a7/3d/ada73ded-6f4a-fd82-df08-716bf9d0403d/source/600x600bb.jpg)*Nome*: _Dinosaur Man Nerdcast_\n*Gêneros*: _TV e filme,Podcasts,Comédia,Jogos e hobbies,Videogames_\n*Episódios*: _202_\n*Último episódio*: _1º abril 2018, 4:00 am_\n*RSS*: https://goo.gl/WZqSyD\n*iTunes*: https://goo.gl/A82o3b\n",
             "parse_mode": "Markdown"
+        },
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/0/964630457",
+                        "hide": false
+                    }
+                ]
+            ]
         },
         "description": "TV e filme | Podcasts | Comédia | Jogos e hobbies | Videogames",
         "thumb_url": "http://is1.mzstatic.com/image/thumb/Music71/v4/ad/a7/3d/ada73ded-6f4a-fd82-df08-716bf9d0403d/source/60x60bb.jpg"

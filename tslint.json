@@ -23,7 +23,8 @@
         "prefer-array-literal": false,
         "align": false,
         "no-unnecessary-initializer": false,
-        "export-name": false
+        "export-name": false,
+        "no-submodule-imports": false
     },
     "rulesDirectory": []
 }

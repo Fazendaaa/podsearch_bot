@@ -1,8 +1,9 @@
 /**
- * Utils typings.
+ * Parse typings.
  */
 /**
  * This will be only used locally, but there's need to exported to be tested later.
+ * Since Markup still doesn't have any typing, it will be any.
  */
 export type resultExtended = {
     wrapperType?: string;
@@ -51,4 +52,5 @@ export type resultExtended = {
     rss?: string;
     latest?: string;
     lanCode?: string;
+    keyboard?: any;
 };

@@ -1,0 +1,11 @@
+{
+    "id": "0",
+    "title": "Not found",
+    "type": "article",
+    "input_message_content": {
+        "message_text": "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png)Something went wrong, no results available to *mistyped*.\nPlease, check your typing.",
+        "parse_mode": "Markdown"
+    },
+    "description": "No results available to mistyped. Please, check your typing.",
+    "thumb_url": "https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png"
+}

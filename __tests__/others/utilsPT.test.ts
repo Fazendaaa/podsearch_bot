@@ -1,5 +1,5 @@
 /**
- * English tests for parse.
+ * Portuguese tests for parse.
  */
 'use strict';
 
@@ -16,13 +16,13 @@ import {
 
 jest.setTimeout(60000);
 
-const mockLanCode: string = 'en-us';
+const mockLanCode: string = 'pt-br';
 
-describe('[EN] Testing notFoundInline function.', () => {
-    test('lanCode equals to en-us', () => {
+describe('[PT] Testing notFoundInline function.', () => {
+    test('lanCode equals to pt-br', () => {
         expect.assertions(1);
 
-        return readAsync('/inlineMessages/en-us/notFoundInline.json').then(file => {
+        return readAsync('/inlineMessages/pt-br/notFoundInline.json').then(file => {
             return expect(notFoundInline('mistyped', mockLanCode)).resolves.toEqual(file);
         }).catch((error: Error) => {
             console.error(error);
@@ -30,11 +30,11 @@ describe('[EN] Testing notFoundInline function.', () => {
     });
 });
 
-describe('[EN] Testing errorInline function', () => {
-    test('lanCode equals to en-us', () => {
+describe('[PT] Testing errorInline function', () => {
+    test('lanCode equals to pt-br', () => {
         expect.assertions(1);
 
-        return readAsync('/inlineMessages/en-us/errorInline.json').then((file: Array<telegramInline>) => {
+        return readAsync('/inlineMessages/pt-br/errorInline.json').then((file: Array<telegramInline>) => {
             return expect(errorInline(mockLanCode)).resolves.toEqual(file);
         }).catch((error: Error) => {
             console.error(error);
@@ -42,11 +42,11 @@ describe('[EN] Testing errorInline function', () => {
     });
 });
 
-describe('[EN] Testing searchInline function', () => {
-    test('lanCode equals to en-us', () => {
+describe('[PT] Testing searchInline function', () => {
+    test('lanCode equals to pt-br', () => {
         expect.assertions(1);
 
-        return readAsync('/inlineMessages/en-us/searchInline.json').then(file => {
+        return readAsync('/inlineMessages/pt-br/searchInline.json').then(file => {
             return expect(searchInline(mockLanCode)).resolves.toEqual(file);
         }).catch((error: Error) => {
             console.error(error);
@@ -54,11 +54,11 @@ describe('[EN] Testing searchInline function', () => {
     });
 });
 
-describe('[EN] Testing endInline function', () => {
-    test('lanCode equals to en-us', () => {
+describe('[PT] Testing endInline function', () => {
+    test('lanCode equals to pt-br', () => {
         expect.assertions(1);
 
-        return readAsync('/inlineMessages/en-us/endInline.json').then(file => {
+        return readAsync('/inlineMessages/pt-br/endInline.json').then(file => {
             return expect(endInline(mockLanCode)).resolves.toEqual(file);
         }).catch((error: Error) => {
             console.error(error);
