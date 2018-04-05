@@ -15,6 +15,9 @@ search:
 searching:
   "Pesquisando..."
 
+searchDone:
+  "Pesquisa finalizada."
+
 working:
   "Nossos robôs escrvavos estão trabalhando nisso. Em alguns dias estará pronto."
 

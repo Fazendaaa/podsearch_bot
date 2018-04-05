@@ -87,17 +87,24 @@ talkingSearch.on('text', ({ i18n, replyWithMarkdown, message, scene }) => {
         entity: 'podcast',
         limit: 1
     };
+    let buttons: Array<object> = undefined;
+    let keyboard: any = undefined;
 
     /**
      * Setting up locale language info.
      */
     i18n.locale(language);
 
+    buttons = <Array<object>>arrayLoad(i18n.repository[language].keyboard);
+    keyboard = telegraf.Markup.keyboard(buttons).resize().extra();
+
     replyWithMarkdown(i18n.t('searching')).then(({ message_id, chat }) => {
         search(value, opts, (data: response) => {
             parseResponse(data, userId, message.from.language_code).then((parsed: resultExtended) => {
-                telegramCore.editMessageText(chat.id, message_id, undefined, i18n.t('mask', parsed), parsed.keyboard);
-                scene.leave();
+                telegramCore.editMessageText(chat.id, message_id, undefined, i18n.t('mask', parsed), parsed.keyboard).then(() => {
+                    telegramCore.sendMessage(chat.id, i18n.t('searchDone'), keyboard);
+                    scene.leave();
+                });
             }).catch((error: string) => {
                 console.error(error);
                 replyWithMarkdown(i18n.t('noResult', { value }));
