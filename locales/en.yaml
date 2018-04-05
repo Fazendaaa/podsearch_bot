@@ -12,6 +12,9 @@ error:
 search:
   "Now, send me the podcast name that you want to search for it."
 
+searching:
+  "Searching..."
+
 working:
   "Our slaves robots are currently working on it. In a few days will be done."
 

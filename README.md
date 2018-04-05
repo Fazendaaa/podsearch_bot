@@ -51,16 +51,16 @@ The inline mode works both in the Podsearchbot chat or any other chat:
 ```
 Example:
 ```
-@podsearchbot The Story by The Mission
+@podsearchbot B9
 ```
 <h1 align="center">
-    <img src="https://media.giphy.com/media/3CVtxjnZ9HKGhjeeiD/giphy.gif" width="500" height="550" />
+    <img src="https://gph.is/2JhL0cy" width="650" height="720" />
 </h1>
 
 #### Button
 Just press search button available, it will ask you for podcast name and then does the search.
 <h1 align="center">
-    <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
+    <img src="https://gph.is/2q6kf2P" width="650" height="720" />
 </h1>
 
 #### ```/search```
@@ -70,10 +70,10 @@ Just open it a chat with Podsearchbot and then use it like this:
 ```
 Example:
 ```
-/search The Story by The Mission
+/search The Mission
 ```
 <h1 align="center">
-    <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
+    <img src="https://gph.is/2q5QT4z" width="650" height="720" />
 </h1>
 
 ##### Help

@@ -12,6 +12,9 @@ error:
 search:
   "Agora envie-me o nome do podcast do qual gostaria pesquisar sobre."
 
+searching:
+  "Pesquisando..."
+
 working:
   "Nossos robôs escrvavos estão trabalhando nisso. Em alguns dias estará pronto."
 

@@ -52,16 +52,16 @@ O modo de pesquisa inline funciona na conversa com o Podsearch ou qualquer outra
 ```
 Exemplo:
 ```
-@podsearchbot The Story by The Mission
+@podsearchbot B9
 ```
 <h1 align="center">
-    <img src="https://media.giphy.com/media/3CVtxjnZ9HKGhjeeiD/giphy.gif" width="500" height="550" />
+    <img src="https://gph.is/2JhL0cy" width="650" height="720" />
 </h1>
 
 #### Botões
 Apenas pressione o botão de pesquisa, ele irá lhe pedir o nome do podcast que deseja pesquisar e realizar a pesquisa.
 <h1 align="center">
-    <img src="https://media.giphy.com/media/3CVtxjnZ9HKGhjeeiD/giphy.gif" width="500" height="550" />
+    <img src="https://gph.is/2q6kf2P" width="650" height="720" />
 </h1>
 
 #### ```/pesquise```
@@ -71,10 +71,10 @@ Uma vez no chat com o bot, utilize o seguinte comando como em outros bots:
 ```
 Exemplo:
 ```
-/pesquise The Story by The Mission
+/pesquise The Mission
 ```
 <h1 align="center">
-    <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
+    <img src="https://gph.is/2q5QT4z" width="650" height="720" />
 </h1>
 
 ##### Ajuda
