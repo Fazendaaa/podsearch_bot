@@ -29,10 +29,8 @@ describe('Testing arrayLoad function.', () => {
         }).toThrowError('Wrong argument.');
     });
 
-    test('options with wrong argument.', () => {
-        expect(() => {
-            return arrayLoad([[]]);
-        }).toThrowError();
+    test('options with empty array.', () => {
+        expect(arrayLoad([])).toEqual([]);
     });
 
     test('Parsing right argument.', () => {
@@ -46,6 +44,19 @@ describe('Testing arrayLoad function.', () => {
         ];
 
         expect(arrayLoad(array)).toEqual(['foo', 'bar']);
+    });
+
+    test('Parsing right nested argument.', () => {
+        const array: Array<object> = [
+            [() => {
+                return 'foo';
+            }],
+            () => {
+                return 'bar';
+            }
+        ];
+
+        expect(arrayLoad(array)).toEqual([['foo'], 'bar']);
     });
 });
 

@@ -36,7 +36,15 @@ exports.readAsync = (filename) => new Promise((resolve, reject) => {
 exports.arrayLoad = (options) => {
     if (undefined !== options && 'object' === typeof (options)) {
         return options.map((element) => {
-            return element();
+            if ('function' === typeof (element)) {
+                return element();
+                /**
+                 * Doing a recursive search in case of an nested array.
+                 */
+            }
+            else {
+                return exports.arrayLoad(element);
+            }
         });
     }
     else {

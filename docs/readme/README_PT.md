@@ -44,20 +44,7 @@ Primeiro de tudo, abra uma conversa com o [@podsearchbot](https://telegram.me/po
 ### Aviso
 Por padrão os comandos se encontram por em Inglês mas possuem seu equivalente em Português. 
 ### Pesquisa
-Há duas maneiras de se fazer isso:
-#### ```/pesquise```
-Uma vez no chat com o bot, utilize o seguinte comando como em outros bots:
-```
-/pesquise nome do podcast
-```
-Exemplo:
-```
-/pesquise The Story by The Mission
-```
-<h1 align="center">
-    <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
-</h1>
-
+Há três maneiras de se fazer isso:
 #### Inline
 O modo de pesquisa inline funciona na conversa com o Podsearch ou qualquer outra:
 ```
@@ -69,6 +56,25 @@ Exemplo:
 ```
 <h1 align="center">
     <img src="https://media.giphy.com/media/3CVtxjnZ9HKGhjeeiD/giphy.gif" width="500" height="550" />
+</h1>
+
+#### Botões
+Apenas pressione o botão de pesquisa, ele irá lhe pedir o nome do podcast que deseja pesquisar e realizar a pesquisa.
+<h1 align="center">
+    <img src="https://media.giphy.com/media/3CVtxjnZ9HKGhjeeiD/giphy.gif" width="500" height="550" />
+</h1>
+
+#### ```/pesquise```
+Uma vez no chat com o bot, utilize o seguinte comando como em outros bots:
+```
+/pesquise nome do podcast
+```
+Exemplo:
+```
+/pesquise The Story by The Mission
+```
+<h1 align="center">
+    <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
 </h1>
 
 ##### Ajuda

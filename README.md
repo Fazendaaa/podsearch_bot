@@ -42,19 +42,7 @@ First of all, talk to [@podsearchbot](https://telegram.me/podsearchbot).
 ### Disclaimer
 By default all the commands are in English, but you can see if que same command is available in your language.
 ### Search
-There're two ways of doing that:
-#### ```/search```
-Just open it a chat with Podsearchbot and then use it like this:
-```
-/search podcast name
-```
-Example:
-```
-/search The Story by The Mission
-```
-<h1 align="center">
-    <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
-</h1>
+There're three ways of doing that:
 
 #### Inline mode
 The inline mode works both in the Podsearchbot chat or any other chat:
@@ -67,6 +55,25 @@ Example:
 ```
 <h1 align="center">
     <img src="https://media.giphy.com/media/3CVtxjnZ9HKGhjeeiD/giphy.gif" width="500" height="550" />
+</h1>
+
+#### Button
+Just press search button available, it will ask you for podcast name and then does the search.
+<h1 align="center">
+    <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
+</h1>
+
+#### ```/search```
+Just open it a chat with Podsearchbot and then use it like this:
+```
+/search podcast name
+```
+Example:
+```
+/search The Story by The Mission
+```
+<h1 align="center">
+    <img src="https://media.giphy.com/media/6C6NusTKMkC8UCsM0d/giphy.gif" width="500" height="550" />
 </h1>
 
 ##### Help

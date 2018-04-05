@@ -9,6 +9,12 @@ text: |
 error:
   "There has been an error in the search. Please, check your typing or try again later."
 
+search:
+  "Now, send me the podcast name that you want to search for it."
+
+working:
+  "Our slaves robots are currently working on it. In a few days will be done."
+
 # The '\' after '\n' is just so, this way, the next line doesn't have a little spacing at the starting, and since this
 # string has a notation with colon has to be double-quoted also.
 mask:
@@ -84,4 +90,4 @@ endInlineMessage:
 endInlineDescription:
   "There's no other content to be presented."
 
-keyboard: !!seq [ Help, About ]
+keyboard: !!seq [ [ search ], [ help, about ] ]

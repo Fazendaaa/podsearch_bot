@@ -6,7 +6,14 @@ text: |
   Olá, _${from.first_name}_.
   Eu ainda não tenho suporte a conversas, meu criador ainda não me configurou para tal. Mas sinta-se a vontade para olhar o meu site e ver para quando isso está previsto.
 
-error: Algo aconteceu de errado. Por favor, mais tarde tente novamente.
+error:
+  "Algo aconteceu de errado. Por favor, mais tarde tente novamente."
+
+search:
+  "Agora envie-me o nome do podcast do qual gostaria pesquisar sobre."
+
+working:
+  "Nossos robôs escrvavos estão trabalhando nisso. Em alguns dias estará pronto."
 
 mask:
   "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\
@@ -81,4 +88,4 @@ endInlineMessage:
 endInlineDescription:
   "Não há mais resultados a serem apresentados nessa pesquisa."
 
-keyboard: !!seq [ Ajuda, Sobre ]
+keyboard: !!seq [ [ pesquise ], [ ajuda, sobre ] ]

@@ -35,7 +35,13 @@ import {
  * brentatkins opened my eys to the real issue: https://stackoverflow.com/q/49348607/7092954
  */
 const telegraf = require('telegraf');
+const telegram = require('telegraf/telegram');
+const Markup = telegraf.Markup;
 const telegrafI18n = require('telegraf-i18n');
+const session = require('telegraf/session');
+const stage = require('telegraf/stage');
+const scene = require('telegraf/scenes/base');
+const { leave } = stage;
 
 /**
  * Allows the code to run without passing the environment variables as arguments.
@@ -43,12 +49,79 @@ const telegrafI18n = require('telegraf-i18n');
 config();
 
 /**
- * Start bot and then set options like:
- *  - Default markdown option for message parsing;
+ * Just a little "hack".
+ */
+const telegramCore = new telegram(process.env.BOT_KEY);
+
+/**
+ * Handling podcast search through talking to bot.
+ */
+const talkingSearch = new scene('talkingSearch');
+
+/**
+ * Message asking for the podcast name for search for it.
+ */
+talkingSearch.enter(({ i18n, replyWithMarkdown, message }) => {
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+
+    i18n.locale(language);
+
+    replyWithMarkdown(i18n.t('search'), Markup.forceReply().extra());
+});
+
+/**
+ * Catching the podcast name for search for it.
+ */
+talkingSearch.on('text', ({ i18n, replyWithMarkdown, message, scene }) => {
+    const value: string = message.text;
+    const userId: number = message.from.id;
+    /**
+     * This  option  is  an  option  to  language, since works better -- sincerely still don't know why, maybe something
+     * related to iTunes API -- to return data in user native language.
+     */
+    const country: string = message.from.language_code.split('-')[1] || 'us';
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+    const opts: options = {
+        country: country,
+        media: 'podcast',
+        entity: 'podcast',
+        limit: 1
+    };
+
+    /**
+     * Setting up locale language info.
+     */
+    i18n.locale(language);
+
+    replyWithMarkdown('Searching...').then(({ message_id, chat }) => {
+        search(value, opts, (data: response) => {
+            parseResponse(data, userId, message.from.language_code).then((parsed: resultExtended) => {
+                telegramCore.editMessageText(chat.id, message_id, undefined, i18n.t('mask', parsed), parsed.keyboard);
+                scene.leave();
+            }).catch((error: string) => {
+                console.error(error);
+                replyWithMarkdown(i18n.t('noResult', { value }));
+            });
+        });
+    }).catch((error: Error) => {
+        replyWithMarkdown(i18n.t('error'));
+        console.error(error);
+    });
+});
+
+/**
+ * Creating "conversation" handler.
+ */
+const talkingSearchManager = new stage();
+talkingSearchManager.register(talkingSearch);
+
+/**
+ * Start bot and then setting its options like:
+ *  - Internationalization support;
  *  - Polling;
  *  - Log each bot requisition;
- *  - Internationalization support;
- *  - Bot commands -- with internationalization support.
+ *  - Bot commands -- with internationalization support;
+ *  - Conversation handler.
  */
 const bot = new telegraf(process.env.BOT_KEY);
 const i18n = new telegrafI18n({
@@ -58,11 +131,13 @@ const i18n = new telegrafI18n({
 });
 
 bot.startPolling();
+bot.use(session());
 bot.use(telegraf.log());
 bot.use(i18n.middleware());
+bot.use(talkingSearchManager.middleware());
 
 /**
- * This could leas to a problem someday(?)
+ * This could lead to a problem someday(?)
  */
 const commands = i18n.repository.commands;
 const helpCommand: Array<string> = <Array<string>> arrayLoad(commands.help);
@@ -83,16 +158,13 @@ bot.catch((err) => {
  */
 bot.start(({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
-    let buttons: Array<string> = undefined;
+    let buttons: Array<object> = undefined;
     let keyboard: any = undefined;
 
-    /**
-     * Setting up locale language info.
-     */
     i18n.locale(language);
 
-    buttons = <Array<string>> arrayLoad(i18n.repository[language].keyboard);
-    keyboard = telegraf.Markup.keyboard([buttons]).resize().extra();
+    buttons = <Array<object>> arrayLoad(i18n.repository[language].keyboard);
+    keyboard = telegraf.Markup.keyboard(buttons).resize().extra();
 
     replyWithMarkdown(i18n.t('greetings'), keyboard);
 });
@@ -129,10 +201,6 @@ bot.command(aboutCommand, ({ i18n, replyWithMarkdown, message }) => {
 bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
     const value: string = removeCmd(message.text);
     const userId: number = message.from.id;
-    /**
-     * This  option  is  an  option  to  language, since works better -- sincerely still don't know why, maybe something
-     * related to iTunes API -- to return data in user native language.
-     */
     const country: string = message.from.language_code.split('-')[1] || 'us';
     const language: string = message.from.language_code.split('-')[0] || 'en';
     const opts: options = {
@@ -142,13 +210,15 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
         limit: 1
     };
 
+    i18n.locale(language);
+
     if (value !== '') {
         search(value, opts, (data: response) => {
             parseResponse(data, userId, message.from.language_code).then((parsed: resultExtended) => {
                 replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
             }).catch((error: string) => {
                 console.error(error);
-                replyWithMarkdown(i18n.t('error'));
+                replyWithMarkdown(i18n.t('noResult', {value}));
             });
         });
     } else {
@@ -253,6 +323,39 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
 /**
  * Handling buttons request.
  */
-bot.on('callback_query', (ctx) => {
-    ctx.answerCbQuery('Not working yet.');
+bot.on('callback_query', ({ i18n, answerCbQuery, message }) => {
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+
+    i18n.locale(language);
+
+    answerCbQuery(i18n.t('working'));
+});
+
+/**
+ * Handling help button.
+ */
+bot.hears(helpCommand, ({ i18n, replyWithMarkdown, message }) => {
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+
+    i18n.locale(language);
+
+    replyWithMarkdown(i18n.t('help'));
+});
+
+/**
+ * Handling about button.
+ */
+bot.hears(aboutCommand, ({ i18n, replyWithMarkdown, message }) => {
+    const language: string = message.from.language_code.split('-')[0] || 'en';
+
+    i18n.locale(language);
+
+    replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
+});
+
+/**
+ * Handling search button.
+ */
+bot.hears(searchCommand, ({ scene }) => {
+    scene.enter('talkingSearch');
 });

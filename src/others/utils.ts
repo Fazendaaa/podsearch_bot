@@ -37,10 +37,17 @@ new Promise((resolve: (data: object) => void, reject: (data: Error) => void) => 
 /**
  * Retrieves telegraf-i18n array string.
  */
-export const arrayLoad = (options: Array<object>): Array<string> | Error => {
+export const arrayLoad = (options: Array<object>): Array<string | object> | Error => {
     if (undefined !== options && 'object' === typeof(options)) {
         return options.map((element: Function) => {
-            return element();
+            if ('function' === typeof(element)){
+                return element();
+            /**
+             * Doing a recursive search in case of an nested array.
+             */
+            } else {
+                return arrayLoad(element);
+            }
         });
     } else {
         throw new Error('Wrong argument.');
