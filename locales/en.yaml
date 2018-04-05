@@ -15,6 +15,9 @@ search:
 searching:
   "Searching..."
 
+searchDone:
+  "Search done."
+
 working:
   "Our slaves robots are currently working on it. In a few days will be done."
 
