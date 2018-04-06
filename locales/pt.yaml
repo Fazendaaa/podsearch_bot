@@ -24,6 +24,9 @@ working:
 stream:
   "Clique para ouvir."
 
+listen:
+  "Ouça agora."
+
 mask:
   "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\
   *Gêneros*: _${genres}_\n\
@@ -31,6 +34,11 @@ mask:
   *Último episódio*: _${latest}_\n\
   *RSS*: ${rss}\n\
   *iTunes*: ${itunes}\n"
+
+episode:
+  "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\
+  *Gêneros*: _${genres}_\n\
+  *Episódios*: _${trackCount}_"
 
 noResult: |
   Nenhuma pesquisa foi encontrada para "_${value}_".
@@ -99,4 +107,4 @@ endInlineDescription:
 
 keyboard: !!seq [ [ pesquise ], [ ajuda, sobre ] ]
 
-card: !!seq [ Inscrever-se, Último Episódio ]
+card: !!seq [ Inscrever-se, Ouça ]

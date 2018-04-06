@@ -4,6 +4,7 @@
 'use strict';
 
 import { response } from 'itunes-search';
+import { resultExtended } from '../../src/@types/parse/main';
 import { item } from '../../src/@types/stream/main';
 import {
     lastEpisode,
@@ -29,10 +30,27 @@ describe('Testing linkEpisode function.', () => {
  * internationalization data.
  */
 describe('Testing lastEpisode function.', () => {
+    test('both \"undefined\".', () => {
+        expect.assertions(1);
+
+        return expect(lastEpisode(undefined, undefined)).rejects.toMatch('Wrong argument.');
+    });
+
     test('id is \"undefined\".', () => {
         expect.assertions(1);
 
-        return expect(lastEpisode(undefined)).rejects.toMatch('Something wrong occurred.');
+        return expect(lastEpisode(undefined, undefined)).rejects.toMatch('Wrong argument.');
+    });
+
+    test('lanCode is \"undefined\".', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            return expect(lastEpisode(mockInput.results[0].trackId, undefined)).rejects.toMatch('Wrong argument.');
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+
     });
 
     /**
@@ -42,8 +60,8 @@ describe('Testing lastEpisode function.', () => {
         expect.assertions(1);
 
         return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
-            return readAsync('nerdcast/unsupported/output/lastEpisode.json').then((mockOutput: item) => {
-                return expect(lastEpisode(mockInput.results[0].trackId)).resolves.toEqual(mockOutput.link);
+            return readAsync('nerdcast/unsupported/output/lastEpisode.json').then((mockOutput: resultExtended) => {
+                return expect(lastEpisode(mockInput.results[0].trackId, 'en-us')).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw(error);
             });

@@ -15,14 +15,12 @@ import {
     result
 } from 'itunes-search';
 import * as Parser from 'rss-parser';
+import { resultExtended } from '../@types/parse/main';
 import { item } from '../@types/stream/main';
 const handlerRss = new Parser();
 
 config();
 
-/**
- * Set Google's API key.
- */
 setKey(process.env.GOOGLE_KEY);
 
 /**
@@ -54,33 +52,39 @@ export const linkEpisode = (rss: item): string => {
 /**
  * Fetch the last podcast episode.
  */
-export const lastEpisode = (id: number): Promise<string> =>
-new Promise((resolve: (data: string) => void, reject: (error: string) => void) => {
-    if (undefined !== id && 'number' === typeof(id)) {
-        /**
-         * There's  no  need  of  passing  country or any lang options since only the Podcast's URL is important in this
-         * case.
-         */
-        const options = {
+export const lastEpisode = (id: number, lanCode: string): Promise<resultExtended> =>
+new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
+    let options: object = undefined;
+
+    if (undefined !== id && 'number' === typeof(id) && undefined !== lanCode && 'string' === typeof(lanCode)) {
+        options = {
             id: id,
             media: 'podcast',
             entity: 'podcast',
             explicit: 'No',
+            country: lanCode.split('-')[1],
             limit: 1
         };
 
         lookup(options, (err: Error, data: response) => {
-            handlerRss.parseURL(data.results[0].feedUrl).then((parsed) => {
-                shorten(linkEpisode(parsed.items[0])).then(short => {
-                    resolve(short);
+            if (err) {
+                reject('Something wrong occurred with search.');
+            } else {
+                handlerRss.parseURL(data.results[0].feedUrl).then((parsed) => {
+                    shorten(linkEpisode(parsed.items[0])).then(short => {
+                        resolve({
+                            link: short,
+                            ...data.results[0]
+                        });
+                    }).catch((error) => {
+                        throw(error);
+                    });
                 }).catch((error) => {
-                    throw(error);
+                    reject(error);
                 });
-            }).catch((error) => {
-                reject(error);
-            });
+            }
         });
     } else {
-        reject('Something wrong occurred.');
+        reject('Wrong argument.');
     }
 });

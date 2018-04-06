@@ -18,8 +18,9 @@ const stage_1 = require("./stage/stage");
  * brentatkins opened my eys to the real issue: https://stackoverflow.com/q/49348607/7092954
  */
 const telegraf = require('telegraf');
-const session = require('telegraf/session');
-const Markup = telegraf.Markup;
+const session = telegraf.session;
+const markup = telegraf.Markup;
+const extra = telegraf.Extra;
 const telegrafI18n = require('telegraf-i18n');
 /**
  * Allows the code to run without passing the environment variables as arguments.
@@ -68,7 +69,7 @@ bot.start(({ i18n, replyWithMarkdown, message }) => {
     let keyboard = undefined;
     i18n.locale(language);
     buttons = utils_1.arrayLoad(i18n.repository[language].keyboard);
-    keyboard = telegraf.Markup.keyboard(buttons).resize().extra();
+    keyboard = telegraf.markup.keyboard(buttons).resize().extra();
     replyWithMarkdown(i18n.t('greetings'), keyboard);
 });
 /**
@@ -103,6 +104,7 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
         country: country,
         media: 'podcast',
         entity: 'podcast',
+        explicit: 'No',
         limit: 1
     };
     i18n.locale(language);
@@ -157,7 +159,8 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         country: country,
         limit: offset + pageLimit,
         media: 'podcast',
-        entity: 'podcast'
+        entity: 'podcast',
+        explicit: 'No'
     };
     /**
      * Verify whether or not the user has typed anything to search for.
@@ -232,8 +235,11 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
  * Handling buttons request.
  */
 bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
-    const language = update.callback_query.from.language_code.split('-')[0] || 'en';
+    const lanCode = update.callback_query.from.language_code;
+    const language = lanCode.split('-')[0] || 'en';
     const options = update.callback_query.data.split('/');
+    const chat = update.callback_query.from.id;
+    let keyboard = undefined;
     i18n.locale(language);
     switch (options[0]) {
         case 'subscribe':
@@ -242,9 +248,13 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
         case 'episode':
             switch (options[1]) {
                 case 'last':
-                    stream_1.lastEpisode(parseInt(options[3], 10)).then((link) => {
-                        console.log(link);
-                        answerCbQuery(i18n.t('stream'), true /*, { url: link }*/).catch(error => {
+                    stream_1.lastEpisode(parseInt(options[2], 10), lanCode).then((episode) => {
+                        answerCbQuery(i18n.t('stream'), false).then(() => {
+                            keyboard = extra.markdown().markup((m) => {
+                                return m.inlineKeyboard([{ text: i18n.t('listen'), url: episode.link }]);
+                            });
+                            stage_1.telegramCore.sendMessage(chat, i18n.t('episode', episode), keyboard);
+                        }).catch(error => {
                             throw (error);
                         });
                     }).catch(error => {

@@ -9,9 +9,6 @@ const itunes_search_1 = require("itunes-search");
 const Parser = require("rss-parser");
 const handlerRss = new Parser();
 dotenv_1.config();
-/**
- * Set Google's API key.
- */
 goo_gl_1.setKey(process.env.GOOGLE_KEY);
 /**
  * Since RSS feed has no rule to link which parameter will be the episode link, this function handles that; fetching the
@@ -41,33 +38,36 @@ exports.linkEpisode = (rss) => {
 /**
  * Fetch the last podcast episode.
  */
-exports.lastEpisode = (id) => new Promise((resolve, reject) => {
-    if (undefined !== id && 'number' === typeof (id)) {
-        /**
-         * There's  no  need  of  passing  country or any lang options since only the Podcast's URL is important in this
-         * case.
-         */
-        const options = {
+exports.lastEpisode = (id, lanCode) => new Promise((resolve, reject) => {
+    let options = undefined;
+    if (undefined !== id && 'number' === typeof (id) && undefined !== lanCode && 'string' === typeof (lanCode)) {
+        options = {
             id: id,
             media: 'podcast',
             entity: 'podcast',
             explicit: 'No',
+            country: lanCode.split('-')[1],
             limit: 1
         };
         itunes_search_1.lookup(options, (err, data) => {
-            handlerRss.parseURL(data.results[0].feedUrl).then((parsed) => {
-                goo_gl_1.shorten(exports.linkEpisode(parsed.items[0])).then(short => {
-                    resolve(short);
+            if (err) {
+                reject('Something wrong occurred with search.');
+            }
+            else {
+                handlerRss.parseURL(data.results[0].feedUrl).then((parsed) => {
+                    goo_gl_1.shorten(exports.linkEpisode(parsed.items[0])).then(short => {
+                        resolve(Object.assign({ link: short }, data.results[0]));
+                    }).catch((error) => {
+                        throw (error);
+                    });
                 }).catch((error) => {
-                    throw (error);
+                    reject(error);
                 });
-            }).catch((error) => {
-                reject(error);
-            });
+            }
         });
     }
     else {
-        reject('Something wrong occurred.');
+        reject('Wrong argument.');
     }
 });
 //# sourceMappingURL=stream.js.map

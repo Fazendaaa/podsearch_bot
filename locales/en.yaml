@@ -24,6 +24,9 @@ working:
 stream:
   "Click to listen."
 
+listen:
+  "Listen now."
+
 # The '\' after '\n' is just so, this way, the next line doesn't have a little spacing at the starting, and since this
 # string has a notation with colon has to be double-quoted also.
 mask:
@@ -33,6 +36,11 @@ mask:
   *Latest Episode*: _${latest}_\n\
   *RSS*: ${rss}\n\
   *iTunes*: ${itunes}\n"
+
+episode:
+  "[\u200B](${artworkUrl600})*Name*: _${artistName}_\n\
+  *Genre*: _${genres}_\n\
+  *Episodes*: _${trackCount}_"
 
 noResult: |
   No result was found for "_${value}_".
@@ -101,4 +109,4 @@ endInlineDescription:
 
 keyboard: !!seq [ [ search ], [ help, about ] ]
 
-card: !!seq [ Subscribe, Last Episode ]
+card: !!seq [ Subscribe, Listen ]

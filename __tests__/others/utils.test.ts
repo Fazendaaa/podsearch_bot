@@ -62,7 +62,7 @@ describe('Testing arrayLoad function.', () => {
 
 describe('Testing readAsync function.', () => {
     test('filename \"undefined\".', () => {
-        const filePath: string = join(__dirname, '../../__mocks__/undefined')
+        const filePath: string = join(__dirname, '../../__mocks__/undefined');
         const errorMessage: string = `ENOENT: no such file or directory, open \'${filePath}\'`;
         expect.assertions(1);
 

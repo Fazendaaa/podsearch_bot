@@ -20,7 +20,7 @@ goo_gl_1.setKey(process.env.GOOGLE_KEY);
  */
 const i18n = i18n_node_yaml({
     debug: true,
-    translationFolder: path_1.resolve(__dirname, '../../locales'),
+    translationFolder: path_1.join(__dirname, '../../locales'),
     locales: ['en', 'pt']
 });
 /**
@@ -178,14 +178,13 @@ exports.parse = (data, userId, lanCode) => new Promise((resolve, reject) => {
                      */
                     podcastId = shortened.collectionId || shortened.trackId;
                     /**
-                     * The  "subscribe/userId/podcastID"  will  be  used  for subscribing to episodes notifications upon
-                     * release.
+                     * The "subscribe/podcastID" will be used for subscribing to episodes notifications upon release.
                      */
                     buttons = i18n.api().t('card', {}, lanCode.split('-')[0]);
                     keyboard = Extra.markdown().markup((m) => {
                         return m.inlineKeyboard([
-                            m.callbackButton(buttons[0], `subscribe/${userId}/${podcastId}`),
-                            m.callbackButton(buttons[1], `episode/last/${userId}/${podcastId}`)
+                            m.callbackButton(buttons[0], `subscribe/${podcastId}`),
+                            m.callbackButton(buttons[1], `episode/last/${podcastId}`)
                         ]);
                     });
                     /**

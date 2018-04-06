@@ -42,8 +42,9 @@ import {
  * brentatkins opened my eys to the real issue: https://stackoverflow.com/q/49348607/7092954
  */
 const telegraf = require('telegraf');
-const session = require('telegraf/session');
-const Markup = telegraf.Markup;
+const session = telegraf.session;
+const markup = telegraf.Markup;
+const extra = telegraf.Extra;
 const telegrafI18n = require('telegraf-i18n');
 
 /**
@@ -100,7 +101,7 @@ bot.start(({ i18n, replyWithMarkdown, message }) => {
     i18n.locale(language);
 
     buttons = <Array<object>> arrayLoad(i18n.repository[language].keyboard);
-    keyboard = telegraf.Markup.keyboard(buttons).resize().extra();
+    keyboard = telegraf.markup.keyboard(buttons).resize().extra();
 
     replyWithMarkdown(i18n.t('greetings'), keyboard);
 });
@@ -143,6 +144,7 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
         country: country,
         media: 'podcast',
         entity: 'podcast',
+        explicit: 'No',
         limit: 1
     };
 
@@ -198,7 +200,8 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         country: country,
         limit: offset + pageLimit,
         media: 'podcast',
-        entity: 'podcast'
+        entity: 'podcast',
+        explicit: 'No'
     };
 
     /**
@@ -272,8 +275,11 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
  * Handling buttons request.
  */
 bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
-    const language: string = update.callback_query.from.language_code.split('-')[0] || 'en';
+    const lanCode: string = update.callback_query.from.language_code;
+    const language: string = lanCode.split('-')[0] || 'en';
     const options: Array<string> = update.callback_query.data.split('/');
+    const chat: number = update.callback_query.from.id;
+    let keyboard: any = undefined;
 
     i18n.locale(language);
 
@@ -284,10 +290,14 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
         case 'episode':
             switch (options[1]) {
                 case 'last':
-                    lastEpisode(parseInt(options[3], 10)).then((link: string) => {
-                        console.log(link);
+                    lastEpisode(parseInt(options[2], 10), lanCode).then((episode: resultExtended) => {
+                        answerCbQuery(i18n.t('stream'), false).then(() => {
+                            keyboard = extra.markdown().markup((m: any) => {
+                                return m.inlineKeyboard([{ text: i18n.t('listen'), url: episode.link }]);
+                            });
 
-                        answerCbQuery(i18n.t('stream'), true/*, { url: link }*/).catch(error => {
+                            telegramCore.sendMessage(chat, i18n.t('episode', episode), keyboard);
+                        }).catch(error => {
                             throw(error);
                         });
                     }).catch(error => {

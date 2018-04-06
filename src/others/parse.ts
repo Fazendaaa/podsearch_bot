@@ -15,7 +15,7 @@ import {
     result
 } from 'itunes-search';
 import * as moment from 'moment';
-import { resolve } from 'path';
+import { join } from 'path';
 import { telegramInline } from 'telegraf';
 import { resultExtended } from '../@types/parse/main';
 const Extra = require('telegraf').Extra;
@@ -32,7 +32,7 @@ setKey(process.env.GOOGLE_KEY);
  */
 const i18n = i18n_node_yaml({
     debug: true,
-    translationFolder: resolve(__dirname, '../../locales'),
+    translationFolder: join(__dirname, '../../locales'),
     locales: ['en', 'pt']
 });
 
@@ -203,14 +203,13 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
                      */
                     podcastId = shortened.collectionId || shortened.trackId;
                     /**
-                     * The  "subscribe/userId/podcastID"  will  be  used  for subscribing to episodes notifications upon
-                     * release.
+                     * The "subscribe/podcastID" will be used for subscribing to episodes notifications upon release.
                      */
                     buttons = i18n.api().t('card', {}, lanCode.split('-')[0]);
                     keyboard = Extra.markdown().markup((m: any) => {
                         return m.inlineKeyboard([
-                            m.callbackButton(buttons[0], `subscribe/${userId}/${podcastId}`),
-                            m.callbackButton(buttons[1], `episode/last/${userId}/${podcastId}`)
+                            m.callbackButton(buttons[0], `subscribe/${podcastId}`),
+                            m.callbackButton(buttons[1], `episode/last/${podcastId}`)
                         ]);
                     });
 
