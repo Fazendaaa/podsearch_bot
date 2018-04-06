@@ -10,6 +10,7 @@ const path_1 = require("path");
 const parse_1 = require("./others/parse");
 const stream_1 = require("./others/stream");
 const utils_1 = require("./others/utils");
+const stage_1 = require("./stage/stage");
 /**
  * Why using the "old" pattern instead of the new one?
  * I had a little bit of an issue making the typing for Telegraf package, had to open my own question in Stack Overflow.
@@ -17,89 +18,13 @@ const utils_1 = require("./others/utils");
  * brentatkins opened my eys to the real issue: https://stackoverflow.com/q/49348607/7092954
  */
 const telegraf = require('telegraf');
-const telegram = require('telegraf/telegram');
+const session = require('telegraf/session');
 const Markup = telegraf.Markup;
 const telegrafI18n = require('telegraf-i18n');
-const session = require('telegraf/session');
-const stage = require('telegraf/stage');
-const scene = require('telegraf/scenes/base');
-const { leave } = stage;
 /**
  * Allows the code to run without passing the environment variables as arguments.
  */
 dotenv_1.config();
-/**
- * Just a little "hack".
- */
-const telegramCore = new telegram(process.env.BOT_KEY);
-/**
- * Handling podcast search through talking to bot.
- */
-const talkingSearch = new scene('talkingSearch');
-/**
- * Message asking for the podcast name for search for it.
- */
-talkingSearch.enter(({ i18n, replyWithMarkdown, message }) => {
-    const language = message.from.language_code.split('-')[0] || 'en';
-    i18n.locale(language);
-    replyWithMarkdown(i18n.t('search'), Markup.forceReply().extra());
-});
-/**
- * Catching the podcast name for search for it.
- */
-talkingSearch.on('text', ({ i18n, replyWithMarkdown, message, scene }) => {
-    const value = message.text;
-    const userId = message.from.id;
-    /**
-     * This  option  is  an  option  to  language, since works better -- sincerely still don't know why, maybe something
-     * related to iTunes API -- to return data in user native language.
-     */
-    const country = message.from.language_code.split('-')[1] || 'us';
-    const language = message.from.language_code.split('-')[0] || 'en';
-    const opts = {
-        country: country,
-        media: 'podcast',
-        entity: 'podcast',
-        explicit: 'No',
-        limit: 1
-    };
-    let buttons = undefined;
-    let keyboard = undefined;
-    /**
-     * Setting up locale language info.
-     */
-    i18n.locale(language);
-    buttons = utils_1.arrayLoad(i18n.repository[language].keyboard);
-    keyboard = telegraf.Markup.keyboard(buttons).resize().extra();
-    replyWithMarkdown(i18n.t('searching')).then(({ message_id, chat }) => {
-        itunes_search_1.search(Object.assign({ term: value }, opts), (err, data) => {
-            if (err) {
-                replyWithMarkdown(i18n.t('error'));
-                console.error(err);
-            }
-            else {
-                parse_1.parseResponse(data, userId, message.from.language_code).then((parsed) => {
-                    telegramCore.editMessageText(chat.id, message_id, undefined, i18n.t('mask', parsed), parsed.keyboard)
-                        .then(() => {
-                        telegramCore.sendMessage(chat.id, i18n.t('searchDone'), keyboard);
-                        scene.leave();
-                    });
-                }).catch((error) => {
-                    console.error(error);
-                    replyWithMarkdown(i18n.t('noResult', { value }));
-                });
-            }
-        });
-    }).catch((error) => {
-        replyWithMarkdown(i18n.t('error'));
-        console.error(error);
-    });
-});
-/**
- * Creating "conversation" handler.
- */
-const talkingSearchManager = new stage();
-talkingSearchManager.register(talkingSearch);
 /**
  * Start bot and then setting its options like:
  *  - Internationalization support;
@@ -118,7 +43,7 @@ bot.startPolling();
 bot.use(session());
 bot.use(telegraf.log());
 bot.use(i18n.middleware());
-bot.use(talkingSearchManager.middleware());
+bot.use(stage_1.talkingSearchManager.middleware());
 /**
  * This could lead to a problem someday(?)
  */
