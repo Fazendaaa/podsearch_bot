@@ -244,9 +244,12 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
                 case 'last':
                     stream_1.lastEpisode(parseInt(options[3], 10)).then((link) => {
                         console.log(link);
-                        answerCbQuery('click to stream.', true, { url: link }).catch(error => {
-                            console.error(error);
+                        answerCbQuery(i18n.t('stream'), true /*, { url: link }*/).catch(error => {
+                            throw (error);
                         });
+                    }).catch(error => {
+                        console.error(error);
+                        answerCbQuery(i18n.t('error'), true);
                     });
                     break;
                 default:

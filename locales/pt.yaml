@@ -21,6 +21,9 @@ searchDone:
 working:
   "Nossos robôs escrvavos estão trabalhando nisso. Em alguns dias estará pronto."
 
+stream:
+  "Clique para ouvir."
+
 mask:
   "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\
   *Gêneros*: _${genres}_\n\

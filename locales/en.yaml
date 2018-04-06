@@ -21,6 +21,9 @@ searchDone:
 working:
   "Our slaves robots are currently working on it. In a few days will be done."
 
+stream:
+  "Click to listen."
+
 # The '\' after '\n' is just so, this way, the next line doesn't have a little spacing at the starting, and since this
 # string has a notation with colon has to be double-quoted also.
 mask:
