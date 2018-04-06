@@ -24,8 +24,14 @@ working:
 stream:
   "Clique para ouvir."
 
+subscribe:
+  "Receba notificações"
+
 listen:
   "Ouça agora."
+
+sending:
+  "Enviando-te o último episódio do podcast agora..."
 
 mask:
   "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\

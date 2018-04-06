@@ -6,6 +6,7 @@
 
 import { config } from 'dotenv';
 import {
+    lookup,
     options,
     response,
     result,
@@ -95,15 +96,36 @@ bot.catch((err) => {
  */
 bot.start(({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
-    let buttons: Array<object> = undefined;
+    const argument: string = removeCmd(message.text);
     let keyboard: any = undefined;
+    let keyboardInline: any = undefined;
 
     i18n.locale(language);
 
-    buttons = <Array<object>> arrayLoad(i18n.repository[language].keyboard);
-    keyboard = telegraf.markup.keyboard(buttons).resize().extra();
+    keyboard = markup.keyboard(arrayLoad(i18n.repository[language].keyboard)).resize().extra();
 
     replyWithMarkdown(i18n.t('greetings'), keyboard);
+
+    /**
+     * That would mean starting a bot conversation through a link to listen some podcast.
+     */
+    if ('' !== argument) {
+        replyWithMarkdown(i18n.t('sending')).then(() => {
+            lastEpisode(parseInt(argument, 10), message.from.language_code).then((episode: resultExtended) => {
+                keyboardInline = extra.markdown().markup((m: any) => {
+                    return m.inlineKeyboard([
+                        m.callbackButton(i18n.t('subscribe'), `subscribe/${episode.trackId}`),
+                        { text: i18n.t('listen'), url: episode.link }
+                    ]);
+                });
+
+                replyWithMarkdown(i18n.t('episode', episode), keyboardInline);
+            }).catch(error => {
+                console.error(error);
+                replyWithMarkdown(i18n.t('error'));
+            });
+        });
+    }
 });
 
 /**
@@ -293,10 +315,15 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
                     lastEpisode(parseInt(options[2], 10), lanCode).then((episode: resultExtended) => {
                         answerCbQuery(i18n.t('stream'), false).then(() => {
                             keyboard = extra.markdown().markup((m: any) => {
-                                return m.inlineKeyboard([{ text: i18n.t('listen'), url: episode.link }]);
+                                return m.inlineKeyboard([
+                                    m.callbackButton(i18n.t('subscribe'), `subscribe/${episode.trackId}`),
+                                    { text: i18n.t('listen'), url: episode.link }
+                                ]);
                             });
 
-                            telegramCore.sendMessage(chat, i18n.t('episode', episode), keyboard);
+                            telegramCore.sendMessage(chat, i18n.t('episode', episode), keyboard).catch(error => {
+                                throw (error);
+                            });
                         }).catch(error => {
                             throw(error);
                         });

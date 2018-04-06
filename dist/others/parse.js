@@ -91,6 +91,7 @@ exports.maskResponse = (data) => {
 exports.maskResponseInline = (data) => {
     let returnValue = undefined;
     let preview = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
+    let reply = undefined;
     if (undefined !== data) {
         /**
          * It  takes  the  "lowest"  resolution  image  as  inline  thumbnail  --  the  real  one of the lowest would be
@@ -112,6 +113,8 @@ exports.maskResponseInline = (data) => {
         else {
             data.artworkUrl600 = preview;
         }
+        reply = data.keyboard.reply_markup;
+        reply.inline_keyboard[0][1] = Object.assign({ url: `t.me/${process.env.BOT_NAME}?start=${data.trackId}` }, reply.inline_keyboard[0][1]);
         returnValue = {
             id: `${data.trackId}`,
             title: data.artistName,
@@ -120,7 +123,7 @@ exports.maskResponseInline = (data) => {
                 message_text: i18n.api().t('mask', data, data.lanCode),
                 parse_mode: 'Markdown'
             },
-            reply_markup: data.keyboard.reply_markup,
+            reply_markup: reply,
             description: exports.hasGenres(data.genres),
             thumb_url: preview
         };
@@ -184,7 +187,7 @@ exports.parse = (data, userId, lanCode) => new Promise((resolve, reject) => {
                     keyboard = Extra.markdown().markup((m) => {
                         return m.inlineKeyboard([
                             m.callbackButton(buttons[0], `subscribe/${podcastId}`),
-                            m.callbackButton(buttons[1], `episode/last/${podcastId}`)
+                            { text: buttons[1] }
                         ]);
                     });
                     /**

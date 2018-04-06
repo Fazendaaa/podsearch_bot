@@ -111,6 +111,7 @@ export const maskResponse = (data: resultExtended): resultExtended => {
 export const maskResponseInline = (data: resultExtended): telegramInline => {
     let returnValue: telegramInline = undefined;
     let preview: string = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
+    let reply: any = undefined;
 
     if (undefined !== data) {
         /**
@@ -131,6 +132,9 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
             data.artworkUrl600 = preview;
         }
 
+        reply = data.keyboard.reply_markup;
+        reply.inline_keyboard[0][1] = { url: `t.me/${process.env.BOT_NAME}?start=${data.trackId}`, ...reply.inline_keyboard[0][1] };
+
         returnValue = {
             id: `${data.trackId}`,
             title: data.artistName,
@@ -139,7 +143,7 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
                 message_text: i18n.api().t('mask', data, data.lanCode),
                 parse_mode: 'Markdown'
             },
-            reply_markup: data.keyboard.reply_markup,
+            reply_markup: reply,
             description: hasGenres(<Array<string>> data.genres),
             thumb_url: preview
         };
@@ -209,7 +213,7 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
                     keyboard = Extra.markdown().markup((m: any) => {
                         return m.inlineKeyboard([
                             m.callbackButton(buttons[0], `subscribe/${podcastId}`),
-                            m.callbackButton(buttons[1], `episode/last/${podcastId}`)
+                            { text: buttons[1] }
                         ]);
                     });
 

@@ -39,17 +39,15 @@ exports.linkEpisode = (rss) => {
  * Fetch the last podcast episode.
  */
 exports.lastEpisode = (id, lanCode) => new Promise((resolve, reject) => {
-    let options = undefined;
+    const options = {
+        id: id,
+        media: 'podcast',
+        entity: 'podcast',
+        explicit: 'No',
+        limit: 1
+    };
     if (undefined !== id && 'number' === typeof (id) && undefined !== lanCode && 'string' === typeof (lanCode)) {
-        options = {
-            id: id,
-            media: 'podcast',
-            entity: 'podcast',
-            explicit: 'No',
-            country: lanCode.split('-')[1],
-            limit: 1
-        };
-        itunes_search_1.lookup(options, (err, data) => {
+        itunes_search_1.lookup(Object.assign({ country: lanCode.split('-')[1] }, options), (err, data) => {
             if (err) {
                 reject('Something wrong occurred with search.');
             }

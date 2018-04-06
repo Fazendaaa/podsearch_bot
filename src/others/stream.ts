@@ -54,19 +54,16 @@ export const linkEpisode = (rss: item): string => {
  */
 export const lastEpisode = (id: number, lanCode: string): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
-    let options: object = undefined;
+    const options: object = {
+        id: id,
+        media: 'podcast',
+        entity: 'podcast',
+        explicit: 'No',
+        limit: 1
+    };
 
     if (undefined !== id && 'number' === typeof(id) && undefined !== lanCode && 'string' === typeof(lanCode)) {
-        options = {
-            id: id,
-            media: 'podcast',
-            entity: 'podcast',
-            explicit: 'No',
-            country: lanCode.split('-')[1],
-            limit: 1
-        };
-
-        lookup(options, (err: Error, data: response) => {
+        lookup({ country: lanCode.split('-')[1], ...options}, (err: Error, data: response) => {
             if (err) {
                 reject('Something wrong occurred with search.');
             } else {
