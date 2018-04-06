@@ -177,6 +177,7 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
     let latest: string = undefined;
     let keyboard: any = undefined;
     let podcastId: number = undefined;
+    let buttons: Array<string> = undefined;
 
     if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== userId &&
         undefined !== lanCode && 'string' === typeof (lanCode)) {
@@ -205,10 +206,11 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
                      * The  "subscribe/userId/podcastID"  will  be  used  for subscribing to episodes notifications upon
                      * release.
                      */
+                    buttons = i18n.api().t('card', {}, lanCode.split('-')[0]);
                     keyboard = Extra.markdown().markup((m: any) => {
                         return m.inlineKeyboard([
-                            m.callbackButton('Subscribe', `subscribe/${userId}/${podcastId}`),
-                            m.callbackButton('Last episode', `episode/last/${userId}/${podcastId}`)
+                            m.callbackButton(buttons[0], `subscribe/${userId}/${podcastId}`),
+                            m.callbackButton(buttons[1], `episode/last/${userId}/${podcastId}`)
                         ]);
                     });
 

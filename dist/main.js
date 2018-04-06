@@ -318,6 +318,7 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
             switch (options[1]) {
                 case 'last':
                     stream_1.lastEpisode(parseInt(options[3], 10)).then((link) => {
+                        console.log(link);
                         answerCbQuery('click to stream.', true, { url: link }).catch(error => {
                             console.error(error);
                         });

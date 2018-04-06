@@ -14,6 +14,31 @@ dotenv_1.config();
  */
 goo_gl_1.setKey(process.env.GOOGLE_KEY);
 /**
+ * Since RSS feed has no rule to link which parameter will be the episode link, this function handles that; fetching the
+ * last episode URL.
+ */
+exports.linkEpisode = (rss) => {
+    let link = undefined;
+    if (undefined !== rss && 'object' === typeof (rss)) {
+        /**
+         * Even  with  guid  property,  some  cases -- particularly in Soundcloud --, are populated with tags that won't
+         * return  the  proper  stream link. Just lookup to see whether or not an http -- or https -- link is available,
+         * that  would  be  faster  than requesting a search through any other API to find the episode link through that
+         * tags.
+         */
+        if (true === rss.hasOwnProperty('guid') && rss.guid.includes('http')) {
+            link = rss.guid;
+        }
+        else if (true === rss.hasOwnProperty('link')) {
+            link = rss.link;
+        }
+        return link;
+    }
+    else {
+        throw (new Error('Wrong argument.'));
+    }
+};
+/**
  * Fetch the last podcast episode.
  */
 exports.lastEpisode = (id) => new Promise((resolve, reject) => {
@@ -31,8 +56,10 @@ exports.lastEpisode = (id) => new Promise((resolve, reject) => {
         };
         itunes_search_1.lookup(options, (err, data) => {
             handlerRss.parseURL(data.results[0].feedUrl).then((parsed) => {
-                goo_gl_1.shorten(parsed.items[0].guid).then(short => {
+                goo_gl_1.shorten(exports.linkEpisode(parsed.items[0])).then(short => {
                     resolve(short);
+                }).catch((error) => {
+                    throw (error);
                 });
             }).catch((error) => {
                 reject(error);

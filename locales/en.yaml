@@ -97,3 +97,5 @@ endInlineDescription:
   "There's no other content to be presented."
 
 keyboard: !!seq [ [ search ], [ help, about ] ]
+
+card: !!seq [ Subscribe, Last Episode ]
