@@ -19,6 +19,9 @@ import {
     parseResponseInline
 } from './others/parse';
 import {
+    lastEpisode
+} from './others/stream';
+import {
     arrayLoad,
     endInline,
     errorInline,
@@ -85,6 +88,7 @@ talkingSearch.on('text', ({ i18n, replyWithMarkdown, message, scene }) => {
         country: country,
         media: 'podcast',
         entity: 'podcast',
+        explicit: 'No',
         limit: 1
     };
     let buttons: Array<object> = undefined;
@@ -99,16 +103,22 @@ talkingSearch.on('text', ({ i18n, replyWithMarkdown, message, scene }) => {
     keyboard = telegraf.Markup.keyboard(buttons).resize().extra();
 
     replyWithMarkdown(i18n.t('searching')).then(({ message_id, chat }) => {
-        search(value, opts, (data: response) => {
-            parseResponse(data, userId, message.from.language_code).then((parsed: resultExtended) => {
-                telegramCore.editMessageText(chat.id, message_id, undefined, i18n.t('mask', parsed), parsed.keyboard).then(() => {
-                    telegramCore.sendMessage(chat.id, i18n.t('searchDone'), keyboard);
-                    scene.leave();
+        search({ term: value, ...opts }, (err: Error, data: response) => {
+            if (err) {
+                replyWithMarkdown(i18n.t('error'));
+                console.error(err);
+            } else {
+                parseResponse(data, userId, message.from.language_code).then((parsed: resultExtended) => {
+                    telegramCore.editMessageText(chat.id, message_id, undefined, i18n.t('mask', parsed), parsed.keyboard)
+                    .then(() => {
+                        telegramCore.sendMessage(chat.id, i18n.t('searchDone'), keyboard);
+                        scene.leave();
+                    });
+                }).catch((error: string) => {
+                    console.error(error);
+                    replyWithMarkdown(i18n.t('noResult', { value }));
                 });
-            }).catch((error: string) => {
-                console.error(error);
-                replyWithMarkdown(i18n.t('noResult', { value }));
-            });
+            }
         });
     }).catch((error: Error) => {
         replyWithMarkdown(i18n.t('error'));
@@ -220,13 +230,18 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
     i18n.locale(language);
 
     if (value !== '') {
-        search(value, opts, (data: response) => {
-            parseResponse(data, userId, message.from.language_code).then((parsed: resultExtended) => {
-                replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
-            }).catch((error: string) => {
-                console.error(error);
-                replyWithMarkdown(i18n.t('noResult', {value}));
-            });
+        search({ term: value, ...opts }, (err: Error, data: response) => {
+            if (err) {
+                replyWithMarkdown(i18n.t('error'));
+                console.error(err);
+            } else {
+                parseResponse(data, userId, message.from.language_code).then((parsed: resultExtended) => {
+                    replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
+                }).catch((error: string) => {
+                    console.error(error);
+                    replyWithMarkdown(i18n.t('noResult', { value }));
+                });
+            }
         });
     } else {
         replyWithMarkdown(i18n.t('wrongInputCmd')).then(() => {
@@ -271,48 +286,55 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
      * Verify whether or not the user has typed anything to search for.
      */
     if (value !== '') {
-        search(value, opts, (data: response) => {
-            if (0 < data.resultCount) {
-                /**
-                 * "Pseudo-pagination",  since this API doesn't allow it true pagination. And this is a lot of overwork,
-                 * because each scroll down the bot will search all the already presented results again and again. Kind
-                 * of to read the next page of a book you would need to read all the pages that you already read so that
-                 * you can continue.
-                 */
-                data.results = data.results.slice(offset, offset + pageLimit);
+        search({ term: value, ...opts }, (err: Error, data: response) => {
+            if (err) {
+                console.error(err);
+                errorInline(lanCode).then((inline: telegramInline) => {
+                    answerInlineQuery([inline]);
+                });
+            } else {
+                if (0 < data.resultCount) {
+                    /**
+                     * "Pseudo-pagination",  since  this  API  doesn't  allow  it  true pagination. And this is a lot of
+                     * overwork,  because  each  scroll down the bot will search all the already presented results again
+                     * and again.  Kind of to read the next page of a book you would need to read all the pages that you
+                     * already read so that you can continue.
+                     */
+                    data.results = data.results.slice(offset, offset + pageLimit);
 
-                /**
-                 * Checking  the  offset to be equals to zero so that mean that the bot hasn't shown the user only fewer
-                 * podcast options, or even none, in the search.
-                 */
-                if (0 < data.results.length) {
-                    parseResponseInline(data, userId, lanCode).then((results: Array<telegramInline>) => {
-                        answerInlineQuery(results, { next_offset: offset + pageLimit });
-                    }).catch((error: Error) => {
-                        console.error(error);
-                        errorInline(lanCode).then((inline: telegramInline) => {
-                            answerInlineQuery([inline]);
+                    /**
+                     * Checking  the  offset  to  be equals to zero so that mean that the bot hasn't shown the user only
+                     * fewer podcast options, or even none, in the search.
+                     */
+                    if (0 < data.results.length) {
+                        parseResponseInline(data, userId, lanCode).then((results: Array<telegramInline>) => {
+                            answerInlineQuery(results, { next_offset: offset + pageLimit });
+                        }).catch((error: Error) => {
+                            console.error(error);
+                            errorInline(lanCode).then((inline: telegramInline) => {
+                                answerInlineQuery([inline]);
+                            });
                         });
-                    });
+                    /**
+                     * If there's nothing else to be presented at the user, this would mean an end of search.
+                     */
+                    } else {
+                        endInline(lanCode).then((inline: telegramInline) => {
+                            answerInlineQuery([inline]);
+                        }).catch((error: Error) => {
+                            console.error(error);
+                        });
+                    }
                 /**
-                 * If there's nothing else to be presented at the user, this would mean an end of search.
+                 * In case that the user search anything that isn't available in iTunes store or mistyping.
                  */
                 } else {
-                    endInline(lanCode).then((inline: telegramInline) => {
+                    notFoundInline(value, lanCode).then((inline: telegramInline) => {
                         answerInlineQuery([inline]);
                     }).catch((error: Error) => {
                         console.error(error);
                     });
                 }
-            /**
-             * In case that the user search anything that isn't available in iTunes store or mistyping.
-             */
-            } else {
-                notFoundInline(value, lanCode).then((inline: telegramInline) => {
-                    answerInlineQuery([inline]);
-                }).catch((error: Error) => {
-                    console.error(error);
-                });
             }
         });
     /**
@@ -332,10 +354,30 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
  */
 bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
     const language: string = update.callback_query.from.language_code.split('-')[0] || 'en';
+    const options: Array<string> = update.callback_query.data.split('/');
 
     i18n.locale(language);
 
-    answerCbQuery(i18n.t('working'), true);
+    switch (options[0]) {
+        case 'subscribe':
+            answerCbQuery(i18n.t('working'), true);
+            break;
+        case 'episode':
+            switch (options[1]) {
+                case 'last':
+                    lastEpisode(parseInt(options[3], 10)).then((link: string) => {
+                        answerCbQuery('click to stream.', true, { url: link }).catch(error => {
+                            console.error(error);
+                        });
+                    });
+                    break;
+                default:
+                    answerCbQuery('default', true);
+            }
+            break;
+        default:
+            answerCbQuery('default', true);
+    }
 });
 
 /**

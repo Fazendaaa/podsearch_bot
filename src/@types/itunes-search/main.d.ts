@@ -2,7 +2,11 @@
  * Since this package has no typings for TS, this is an unofficial.
  */
 declare module 'itunes-search' {
+    /**
+     * the 'attribute' option doesn't work quite as well for podcast, gives an API issue.
+     */
     export type options = {
+        term?: string;
         country?: string;
         attribute?: string;
         entity?: string;
@@ -10,6 +14,7 @@ declare module 'itunes-search' {
         limit?: number;
         media?: string;
         lang?: string;
+        id?: number;
     };
 
     export type result = {
@@ -62,5 +67,7 @@ declare module 'itunes-search' {
         results: Array<result>;
     };
 
-    export function search(query: string, opts: options, callback: (response: response) => void): void;
+    export function search(opts: options, callback: (err: Error, response: response) => void): void;
+
+    export function lookup(opts: options, callback: (err: Error, response: response) => void): void;
 }

@@ -20,9 +20,6 @@ import { telegramInline } from 'telegraf';
 import { resultExtended } from '../@types/parse/main';
 const Extra = require('telegraf').Extra;
 
-/**
- * Allows the code to run without passing the environment variables as arguments.
- */
 config();
 
 /**
@@ -209,7 +206,10 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
                      * release.
                      */
                     keyboard = Extra.markdown().markup((m: any) => {
-                        return m.inlineKeyboard([m.callbackButton('Subscribe', `subscribe/${userId}/${podcastId}`) ]);
+                        return m.inlineKeyboard([
+                            m.callbackButton('Subscribe', `subscribe/${userId}/${podcastId}`),
+                            m.callbackButton('Last episode', `episode/last/${userId}/${podcastId}`)
+                        ]);
                     });
 
                     /**

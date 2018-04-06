@@ -10,9 +10,6 @@ const i18n_node_yaml = require("i18n-node-yaml");
 const moment = require("moment");
 const path_1 = require("path");
 const Extra = require('telegraf').Extra;
-/**
- * Allows the code to run without passing the environment variables as arguments.
- */
 dotenv_1.config();
 /**
  * Set Google's API key.
@@ -184,7 +181,10 @@ exports.parse = (data, userId, lanCode) => new Promise((resolve, reject) => {
                      * release.
                      */
                     keyboard = Extra.markdown().markup((m) => {
-                        return m.inlineKeyboard([m.callbackButton('Subscribe', `subscribe/${userId}/${podcastId}`)]);
+                        return m.inlineKeyboard([
+                            m.callbackButton('Subscribe', `subscribe/${userId}/${podcastId}`),
+                            m.callbackButton('Last episode', `episode/last/${userId}/${podcastId}`)
+                        ]);
                     });
                     /**
                      * Striping the country option from lanCode.
