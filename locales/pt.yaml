@@ -64,8 +64,11 @@ wrongInputCmd:
   Exemplo:\n\
   /pesquise _nerdcast_\n"
 
+wrongInputButton:
+  "Or através do botão:"
+
 wrongInputInline:
-  "Ou você pode experimentar a pesquisa inline:"
+  "Ou até mesmo a pesquisa inline:"
 
 help:
   "Esse bot realiza pesquisas de podcasts na loja da iTunes. Você pode realizar uma pesquisa através do comando o do modo inline. Veja em:\n\

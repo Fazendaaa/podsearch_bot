@@ -66,14 +66,18 @@ wrongInputCmd:
   Example:\n\
   /search _The Story by The Mission_\n"
 
+wrongInputButton:
+  "Or you can try the button mode:"
+
 wrongInputInline:
-  "Or you can try the inline mode:"
+  "Or even the inline mode:"
 
 help:
   "This bot searches in iTunes store about podcasts. You can do a search through the search command or the inline mode. Try it with:\n\
   /search\n\
   More in:\n\
   /about"
+
 about:
   "Wanna see more:\n\
   🤖 [Podsearch](https://fazendaaa.github.io/podsearch_bot/) — See how this bot works.\n\

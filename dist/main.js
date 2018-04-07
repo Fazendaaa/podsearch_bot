@@ -142,12 +142,23 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
                 });
             }
         });
+        /**
+         * In case that the user hasn't send any podcast to be searched for, show him how to do searches.
+         */
     }
     else {
         replyWithMarkdown(i18n.t('wrongInputCmd')).then(() => {
-            replyWithVideo({ source: path_1.resolve(__dirname, '../gif/search_cmd.mp4') }).then(() => {
-                replyWithMarkdown(i18n.t('wrongInputInline')).then(() => {
-                    replyWithVideo({ source: path_1.resolve(__dirname, '../gif/search_inline.mp4') }).catch((error) => {
+            replyWithVideo({ source: path_1.resolve(__dirname, '../gif/searchCmd.mp4') }).then(() => {
+                replyWithMarkdown(i18n.t('wrongInputButton')).then(() => {
+                    replyWithVideo({ source: path_1.resolve(__dirname, '../gif/searchButton.mp4') }).then(() => {
+                        replyWithMarkdown(i18n.t('wrongInputInline')).then(() => {
+                            replyWithVideo({ source: path_1.resolve(__dirname, '../gif/searchInline.mp4') }).catch((error) => {
+                                throw error;
+                            });
+                        }).catch((error) => {
+                            throw error;
+                        });
+                    }).catch((error) => {
                         throw error;
                     });
                 }).catch((error) => {
