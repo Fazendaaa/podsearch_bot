@@ -18,7 +18,7 @@ import * as moment from 'moment';
 import { join } from 'path';
 import { telegramInline } from 'telegraf';
 import { resultExtended } from '../@types/parse/main';
-const Extra = require('telegraf').Extra;
+const extra = require('telegraf').Extra;
 
 config();
 
@@ -100,7 +100,9 @@ export const maskResponse = (data: resultExtended): resultExtended => {
         itunes: data.itunes,
         rss: data.rss,
         latest: data.latest,
-        keyboard: data.keyboard
+        keyboard: data.keyboard,
+        trackId: data.trackId,
+        collectionId: data.collectionId
     } : undefined;
 };
 
@@ -171,7 +173,7 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
 /**
  * Parsing data.
  */
-export const parse = (data: response, userId: number, lanCode: string, maskFunction: Function): Promise<Array<resultExtended | telegramInline>> =>
+export const parse = (data: response, lanCode: string, maskFunction: Function): Promise<Array<resultExtended | telegramInline>> =>
 new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, reject: (error: string) => void) => {
     let filtered: Array<result> = undefined;
     let latest: string = undefined;
@@ -179,8 +181,8 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
     let podcastId: number = undefined;
     let buttons: Array<string> = undefined;
 
-    if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== userId &&
-        undefined !== lanCode && 'string' === typeof (lanCode)) {
+    if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== lanCode &&
+        'string' === typeof (lanCode)) {
         /**
          * Some  data  info  comes  incomplete,  this  could  mean  an error later on the process; that's why it must be
          * filtered right here, to avoid it.
@@ -206,7 +208,7 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
                      * The "subscribe/podcastID" will be used for subscribing to episodes notifications upon release.
                      */
                     buttons = i18n.api().t('card', {}, lanCode.split('-')[0]);
-                    keyboard = Extra.markdown().markup((m: any) => {
+                    keyboard = extra.markdown().markup((m: any) => {
                         return m.inlineKeyboard([
                             m.callbackButton(buttons[0], `subscribe/${podcastId}`),
                             { text: buttons[1], url: `t.me/${process.env.BOT_NAME}?start=${podcastId}` }
@@ -235,13 +237,12 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
 
 /**
  * This function takes the search from itunes's API then parse it to the format that will be presented as message to the
- * user.  Only  takes  it  the  first  searched  response  because  it  is  a chat with the bot, maybe later when wit.ai
- * integration is implemented, the user can give some feedback and polishing more the search.
+ * user. Only takes it the first searched response because it is a command.
  */
-export const parseResponse = (data: response, userId: number, lanCode: string): Promise<resultExtended> =>
+export const parseResponse = (data: response, lanCode: string, position: number=0): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
-    parse(data, userId, lanCode, maskResponse).then((results: Array<resultExtended>) => {
-        resolve(results[0]);
+    parse(data, lanCode, maskResponse).then((results: Array<resultExtended>) => {
+        resolve(results[position]);
     }).catch((error: string) => {
         reject(error);
     });
@@ -250,9 +251,9 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
 /**
  * Parse it the data for the inline mode of search.
  */
-export const parseResponseInline = (data: response, userId: number, lanCode: string): Promise<Array<telegramInline>> =>
+export const parseResponseInline = (data: response, lanCode: string): Promise<Array<telegramInline>> =>
 new Promise((resolve: (data: Array<telegramInline>) => void, reject: (error: string) => void) => {
-    parse(data, userId, lanCode, maskResponseInline).then((parsed: Array<telegramInline>) => {
+    parse(data, lanCode, maskResponseInline).then((parsed: Array<telegramInline>) => {
         resolve(parsed);
     }).catch((error: string) => {
         reject(error);

@@ -20,6 +20,9 @@ search:
 searching:
   "Searching..."
 
+searchResult:
+  "Is this the one that you were looking for?"
+
 searchDone:
   "Search done."
 
@@ -128,3 +131,5 @@ endInlineDescription:
 keyboard: !!seq [ [ search ], [ help, about ] ]
 
 card: !!seq [ Subscribe, Listen ]
+
+confirm: !!seq [ Yes, No ]

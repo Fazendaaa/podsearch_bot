@@ -20,6 +20,9 @@ search:
 searching:
   "Pesquisando..."
 
+searchResult:
+  "Era esse que estavas procurando?"
+
 searchDone:
   "Pesquisa finalizada."
 
@@ -125,3 +128,5 @@ endInlineDescription:
 keyboard: !!seq [ [ pesquise ], [ ajuda, sobre ] ]
 
 card: !!seq [ Inscrever-se, Ouça ]
+
+confirm: !!seq [ Sim, Não ]

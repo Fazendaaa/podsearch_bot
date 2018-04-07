@@ -1,6 +1,3 @@
-/**
- * "Stream" the podcast through Telegram built-in browser.
- */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = require("dotenv");
@@ -10,9 +7,6 @@ const itunes_search_1 = require("itunes-search");
 const path_1 = require("path");
 const Parser = require("rss-parser");
 const extra = require('telegraf').Extra;
-/**
- * RSS fetcher.
- */
 const handlerRss = new Parser();
 dotenv_1.config();
 goo_gl_1.setKey(process.env.GOOGLE_KEY);
@@ -21,19 +15,9 @@ const i18n = i18n_node_yaml({
     translationFolder: path_1.join(__dirname, '../../locales'),
     locales: ['en', 'pt']
 });
-/**
- * Since RSS feed has no rule to link which parameter will be the episode link, this function handles that; fetching the
- * last episode URL.
- */
 exports.linkEpisode = (rss) => {
     let link = undefined;
     if (undefined !== rss && 'object' === typeof (rss)) {
-        /**
-         * Even  with  guid  property,  some  cases -- particularly in Soundcloud --, are populated with tags that won't
-         * return  the  proper  stream link. Just lookup to see whether or not an http -- or https -- link is available,
-         * that  would  be  faster  than requesting a search through any other API to find the episode link through that
-         * tags.
-         */
         if (true === rss.hasOwnProperty('guid') && rss.guid.includes('http')) {
             link = rss.guid;
         }
@@ -46,9 +30,6 @@ exports.linkEpisode = (rss) => {
         throw (new Error('Wrong argument.'));
     }
 };
-/**
- * Fetch the last podcast episode.
- */
 exports.lastEpisode = (id, lanCode) => new Promise((resolve, reject) => {
     const options = {
         id: id,
@@ -71,9 +52,6 @@ exports.lastEpisode = (id, lanCode) => new Promise((resolve, reject) => {
             else {
                 handlerRss.parseURL(data.results[0].feedUrl).then((parsed) => {
                     link = exports.linkEpisode(parsed.items[0]);
-                    /**
-                     * Verifies if the link is one of the know objects value then parse it.
-                     */
                     if (undefined !== link) {
                         goo_gl_1.shorten(link).then((short) => {
                             keyboard = extra.markdown().markup((m) => {
@@ -86,9 +64,6 @@ exports.lastEpisode = (id, lanCode) => new Promise((resolve, reject) => {
                         }).catch((error) => {
                             throw (error);
                         });
-                        /**
-                         * If not, the user will be notified and asked to report it to improve linkEpisode.
-                         */
                     }
                     else {
                         keyboard = extra.markdown().markup((m) => {

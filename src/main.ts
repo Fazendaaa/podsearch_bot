@@ -31,10 +31,7 @@ import {
     removeCmd,
     searchInline
 } from './others/utils';
-import {
-    talkingSearchManager,
-    telegramCore
-} from './stage/stage';
+import { talkingSearchManager } from './stage/stage';
 
 /**
  * Why using the "old" pattern instead of the new one?
@@ -42,11 +39,11 @@ import {
  * Thankfully I had a lot of help. You can see more at: https://stackoverflow.com/q/49348607/7092954
  * brentatkins opened my eys to the real issue: https://stackoverflow.com/q/49348607/7092954
  */
+const telegrafI18n = require('telegraf-i18n');
 const telegraf = require('telegraf');
 const session = telegraf.session;
 const markup = telegraf.Markup;
 const extra = telegraf.Extra;
-const telegrafI18n = require('telegraf-i18n');
 
 /**
  * Allows the code to run without passing the environment variables as arguments.
@@ -154,7 +151,6 @@ bot.command(aboutCommand, ({ i18n, replyWithMarkdown, message }) => {
  */
 bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
     const value: string = removeCmd(message.text);
-    const userId: number = message.from.id;
     const country: string = message.from.language_code.split('-')[1] || 'us';
     const language: string = message.from.language_code.split('-')[0] || 'en';
     const opts: options = {
@@ -173,7 +169,7 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
                 replyWithMarkdown(i18n.t('error'));
                 console.error(err);
             } else {
-                parseResponse(data, userId, message.from.language_code).then((parsed: resultExtended) => {
+                parseResponse(data, message.from.language_code).then((parsed: resultExtended) => {
                     replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
                 }).catch((error: string) => {
                     console.error(error);
@@ -219,7 +215,6 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
  */
 bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
     const value: string = messageToString(inlineQuery.query);
-    const userId: number = inlineQuery.from.id;
     const lanCode: string = inlineQuery.from.language_code;
     const pageLimit: number = 20;
     const offset: number = parseInt(inlineQuery.offset, 10) || 0;
@@ -257,7 +252,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                      * fewer podcast options, or even none, in the search.
                      */
                     if (0 < data.results.length) {
-                        parseResponseInline(data, userId, lanCode).then((results: Array<telegramInline>) => {
+                        parseResponseInline(data, lanCode).then((results: Array<telegramInline>) => {
                             answerInlineQuery(results, { next_offset: offset + pageLimit });
                         }).catch((error: Error) => {
                             console.error(error);
@@ -302,7 +297,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
 /**
  * Handling buttons request.
  */
-bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
+bot.on('callback_query', ({ i18n, answerCbQuery, update, scene, replyWithMarkdown }) => {
     const lanCode: string = update.callback_query.from.language_code;
     const language: string = lanCode.split('-')[0] || 'en';
     const options: Array<string> = update.callback_query.data.split('/');
@@ -329,7 +324,7 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
                             ]);
                         });
 
-                        telegramCore.sendMessage(user, i18n.t('sending'), keyboard);
+                        replyWithMarkdown(user, i18n.t('sending'), keyboard);
                     });
                     break;
                 /**
@@ -341,6 +336,20 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
                 default:
                     answerCbQuery('default', true);
             }
+            break;
+        /**
+         * Result was not what user was looking for.
+         */
+        case 'again':
+            answerCbQuery('again', false);
+            scene.reenter();
+            break;
+        /**
+         * User found the result it was looking for.
+         */
+        case 'finished':
+            answerCbQuery('finished', false);
+            scene.leave();
             break;
         default:
             answerCbQuery('default', true);

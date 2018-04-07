@@ -1,7 +1,3 @@
-/**
- * Handling  functions  that  does  parsing  and  checking  of  data. More about the non official typings for goo.gl and
- * itunes-search can be found at: ./src/@typings/
- */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = require("dotenv");
@@ -9,24 +5,14 @@ const goo_gl_1 = require("goo.gl");
 const i18n_node_yaml = require("i18n-node-yaml");
 const moment = require("moment");
 const path_1 = require("path");
-const Extra = require('telegraf').Extra;
+const extra = require('telegraf').Extra;
 dotenv_1.config();
-/**
- * Set Google's API key.
- */
 goo_gl_1.setKey(process.env.GOOGLE_KEY);
-/**
- * Configure internationalization options.
- */
 const i18n = i18n_node_yaml({
     debug: true,
     translationFolder: path_1.join(__dirname, '../../locales'),
     locales: ['en', 'pt']
 });
-/**
- * Just concatenate genres.
- * This will be only used locally, but there's need to exported to be tested later.
- */
 exports.hasGenres = (genres) => {
     let returnValue = undefined;
     if (undefined !== genres) {
@@ -41,17 +27,10 @@ exports.hasGenres = (genres) => {
     }
     return returnValue;
 };
-/**
- * Verify whether or not an iTunes response has all of the needed data to the bot.
- */
 exports.hasItAll = (data) => {
     let returnValue = false;
     if (undefined !== data &&
-        undefined !== data.releaseDate && (
-    /**
-     * Why not both? Because only one is needed to an inline preview.
-     */
-    undefined !== data.artworkUrl60 ||
+        undefined !== data.releaseDate && (undefined !== data.artworkUrl60 ||
         undefined !== data.artworkUrl100) &&
         undefined !== data.artworkUrl600 &&
         undefined !== data.artistName &&
@@ -64,38 +43,25 @@ exports.hasItAll = (data) => {
     }
     return returnValue;
 };
-/**
- * This function returns the formated data that will be sent to the user.
- * This will be only used locally, but there's need to exported to be tested later.
- */
 exports.maskResponse = (data) => {
     return (undefined !== data) ? {
         artworkUrl600: data.artworkUrl600,
         releaseDate: data.releaseDate,
         artistName: data.artistName,
-        /**
-         * Just remember the good old days of C lang with its casting.
-         */
         genres: exports.hasGenres(data.genres),
         trackCount: data.trackCount,
         itunes: data.itunes,
         rss: data.rss,
         latest: data.latest,
-        keyboard: data.keyboard
+        keyboard: data.keyboard,
+        trackId: data.trackId,
+        collectionId: data.collectionId
     } : undefined;
 };
-/**
- * Returns the formated data that will be showed to the user.
- * This will be only used locally, but there's need to exported to be tested later.
- */
 exports.maskResponseInline = (data) => {
     let returnValue = undefined;
     let preview = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
     if (undefined !== data) {
-        /**
-         * It  takes  the  "lowest"  resolution  image  as  inline  thumbnail  --  the  real  one of the lowest would be
-         * artworkUrl30 however, this one has a really low resolution, so the minimum expected has to be artworkUrl60.
-         */
         if (undefined !== data.artworkUrl60) {
             preview = data.artworkUrl60;
         }
@@ -104,10 +70,6 @@ exports.maskResponseInline = (data) => {
         }
         else if (undefined !== data.artworkUrl600) {
             preview = data.artworkUrl600;
-            /**
-             * If  this  else is being called id because artworkUrl600 is not available, in that case, one must be set to be
-             * presented to the user at message.
-             */
         }
         else {
             data.artworkUrl600 = preview;
@@ -127,9 +89,6 @@ exports.maskResponseInline = (data) => {
     }
     return returnValue;
 };
-/**
- * This function takes an result a then returns it with the shortened links about it.
- */
 exports.shortenLinks = (data) => new Promise((resolve, reject) => {
     if (undefined !== data) {
         goo_gl_1.shorten(data.feedUrl).then((rss) => {
@@ -146,50 +105,27 @@ exports.shortenLinks = (data) => new Promise((resolve, reject) => {
         reject('Wrong argument.');
     }
 });
-/**
- * Parsing data.
- */
-exports.parse = (data, userId, lanCode, maskFunction) => new Promise((resolve, reject) => {
+exports.parse = (data, lanCode, maskFunction) => new Promise((resolve, reject) => {
     let filtered = undefined;
     let latest = undefined;
     let keyboard = undefined;
     let podcastId = undefined;
     let buttons = undefined;
-    if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== userId &&
-        undefined !== lanCode && 'string' === typeof (lanCode)) {
-        /**
-         * Some  data  info  comes  incomplete,  this  could  mean  an error later on the process; that's why it must be
-         * filtered right here, to avoid it.
-         */
+    if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== lanCode &&
+        'string' === typeof (lanCode)) {
         filtered = data.results.filter(exports.hasItAll);
         if (0 < filtered.length) {
             Promise.all(filtered.map((element) => {
                 return exports.shortenLinks(element).then((shortened) => {
-                    /**
-                     * There  is  no need to check whether or not releaseDate exists because the caller function already
-                     * verified  this.  That  being said, if releaseDate is undefined, moment will return the current OS
-                     * date.
-                     */
                     latest = moment(shortened.releaseDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
-                    /**
-                     * Why worry about the collectionId and trackId? Because the in the case, I know that probably won't
-                     * happen ever -- but, "just in case" --, if any of it don't happen to be available, that would mean
-                     * a simple "double check".
-                     */
                     podcastId = shortened.collectionId || shortened.trackId;
-                    /**
-                     * The "subscribe/podcastID" will be used for subscribing to episodes notifications upon release.
-                     */
                     buttons = i18n.api().t('card', {}, lanCode.split('-')[0]);
-                    keyboard = Extra.markdown().markup((m) => {
+                    keyboard = extra.markdown().markup((m) => {
                         return m.inlineKeyboard([
                             m.callbackButton(buttons[0], `subscribe/${podcastId}`),
                             { text: buttons[1], url: `t.me/${process.env.BOT_NAME}?start=${podcastId}` }
                         ]);
                     });
-                    /**
-                     * Striping the country option from lanCode.
-                     */
                     return maskFunction(Object.assign({}, shortened, { latest, keyboard, lanCode: lanCode.split('-')[0] }));
                 }).catch((error) => {
                     throw error;
@@ -208,23 +144,15 @@ exports.parse = (data, userId, lanCode, maskFunction) => new Promise((resolve, r
         reject('Empty results.');
     }
 });
-/**
- * This function takes the search from itunes's API then parse it to the format that will be presented as message to the
- * user.  Only  takes  it  the  first  searched  response  because  it  is  a chat with the bot, maybe later when wit.ai
- * integration is implemented, the user can give some feedback and polishing more the search.
- */
-exports.parseResponse = (data, userId, lanCode) => new Promise((resolve, reject) => {
-    exports.parse(data, userId, lanCode, exports.maskResponse).then((results) => {
-        resolve(results[0]);
+exports.parseResponse = (data, lanCode, position = 0) => new Promise((resolve, reject) => {
+    exports.parse(data, lanCode, exports.maskResponse).then((results) => {
+        resolve(results[position]);
     }).catch((error) => {
         reject(error);
     });
 });
-/**
- * Parse it the data for the inline mode of search.
- */
-exports.parseResponseInline = (data, userId, lanCode) => new Promise((resolve, reject) => {
-    exports.parse(data, userId, lanCode, exports.maskResponseInline).then((parsed) => {
+exports.parseResponseInline = (data, lanCode) => new Promise((resolve, reject) => {
+    exports.parse(data, lanCode, exports.maskResponseInline).then((parsed) => {
         resolve(parsed);
     }).catch((error) => {
         reject(error);
