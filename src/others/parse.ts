@@ -111,7 +111,6 @@ export const maskResponse = (data: resultExtended): resultExtended => {
 export const maskResponseInline = (data: resultExtended): telegramInline => {
     let returnValue: telegramInline = undefined;
     let preview: string = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
-    let reply: any = undefined;
 
     if (undefined !== data) {
         /**
@@ -132,9 +131,6 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
             data.artworkUrl600 = preview;
         }
 
-        reply = data.keyboard.reply_markup;
-        reply.inline_keyboard[0][1] = { url: `t.me/${process.env.BOT_NAME}?start=${data.trackId}`, ...reply.inline_keyboard[0][1] };
-
         returnValue = {
             id: `${data.trackId}`,
             title: data.artistName,
@@ -143,7 +139,7 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
                 message_text: i18n.api().t('mask', data, data.lanCode),
                 parse_mode: 'Markdown'
             },
-            reply_markup: reply,
+            reply_markup: data.keyboard.reply_markup,
             description: hasGenres(<Array<string>> data.genres),
             thumb_url: preview
         };
@@ -175,8 +171,8 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
 /**
  * Parsing data.
  */
-export const parse = (data: response, userId: number, lanCode: string): Promise<Array<resultExtended>> =>
-new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: string) => void) => {
+export const parse = (data: response, userId: number, lanCode: string, maskFunction: Function): Promise<Array<resultExtended | telegramInline>> =>
+new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, reject: (error: string) => void) => {
     let filtered: Array<result> = undefined;
     let latest: string = undefined;
     let keyboard: any = undefined;
@@ -213,14 +209,14 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
                     keyboard = Extra.markdown().markup((m: any) => {
                         return m.inlineKeyboard([
                             m.callbackButton(buttons[0], `subscribe/${podcastId}`),
-                            { text: buttons[1] }
+                            { text: buttons[1], url: `t.me/${process.env.BOT_NAME}?start=${podcastId}` }
                         ]);
                     });
 
                     /**
                      * Striping the country option from lanCode.
                      */
-                    return { ...shortened, latest, keyboard, lanCode: lanCode.split('-')[0] };
+                    return maskFunction({ ...shortened, latest, keyboard, lanCode: lanCode.split('-')[0] });
                 }).catch((error: string) => {
                     throw error;
                 });
@@ -244,8 +240,8 @@ new Promise((resolve: (data: Array<resultExtended>) => void, reject: (error: str
  */
 export const parseResponse = (data: response, userId: number, lanCode: string): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
-    parse(data, userId, lanCode).then((results: Array<resultExtended>) => {
-        resolve(maskResponse(results[0]));
+    parse(data, userId, lanCode, maskResponse).then((results: Array<resultExtended>) => {
+        resolve(results[0]);
     }).catch((error: string) => {
         reject(error);
     });
@@ -256,14 +252,8 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
  */
 export const parseResponseInline = (data: response, userId: number, lanCode: string): Promise<Array<telegramInline>> =>
 new Promise((resolve: (data: Array<telegramInline>) => void, reject: (error: string) => void) => {
-    parse(data, userId, lanCode).then((results: Array<resultExtended>) => {
-        Promise.all(results.map((element: resultExtended) => {
-            return maskResponseInline(element);
-        })).then((parsed: Array<telegramInline>) => {
-            resolve(parsed);
-        }).catch((error: string) => {
-            throw(error);
-        });
+    parse(data, userId, lanCode, maskResponseInline).then((parsed: Array<telegramInline>) => {
+        resolve(parsed);
     }).catch((error: string) => {
         reject(error);
     });

@@ -91,7 +91,6 @@ exports.maskResponse = (data) => {
 exports.maskResponseInline = (data) => {
     let returnValue = undefined;
     let preview = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
-    let reply = undefined;
     if (undefined !== data) {
         /**
          * It  takes  the  "lowest"  resolution  image  as  inline  thumbnail  --  the  real  one of the lowest would be
@@ -113,8 +112,6 @@ exports.maskResponseInline = (data) => {
         else {
             data.artworkUrl600 = preview;
         }
-        reply = data.keyboard.reply_markup;
-        reply.inline_keyboard[0][1] = Object.assign({ url: `t.me/${process.env.BOT_NAME}?start=${data.trackId}` }, reply.inline_keyboard[0][1]);
         returnValue = {
             id: `${data.trackId}`,
             title: data.artistName,
@@ -123,7 +120,7 @@ exports.maskResponseInline = (data) => {
                 message_text: i18n.api().t('mask', data, data.lanCode),
                 parse_mode: 'Markdown'
             },
-            reply_markup: reply,
+            reply_markup: data.keyboard.reply_markup,
             description: exports.hasGenres(data.genres),
             thumb_url: preview
         };
@@ -152,7 +149,7 @@ exports.shortenLinks = (data) => new Promise((resolve, reject) => {
 /**
  * Parsing data.
  */
-exports.parse = (data, userId, lanCode) => new Promise((resolve, reject) => {
+exports.parse = (data, userId, lanCode, maskFunction) => new Promise((resolve, reject) => {
     let filtered = undefined;
     let latest = undefined;
     let keyboard = undefined;
@@ -187,13 +184,13 @@ exports.parse = (data, userId, lanCode) => new Promise((resolve, reject) => {
                     keyboard = Extra.markdown().markup((m) => {
                         return m.inlineKeyboard([
                             m.callbackButton(buttons[0], `subscribe/${podcastId}`),
-                            { text: buttons[1] }
+                            { text: buttons[1], url: `t.me/${process.env.BOT_NAME}?start=${podcastId}` }
                         ]);
                     });
                     /**
                      * Striping the country option from lanCode.
                      */
-                    return Object.assign({}, shortened, { latest, keyboard, lanCode: lanCode.split('-')[0] });
+                    return maskFunction(Object.assign({}, shortened, { latest, keyboard, lanCode: lanCode.split('-')[0] }));
                 }).catch((error) => {
                     throw error;
                 });
@@ -217,8 +214,8 @@ exports.parse = (data, userId, lanCode) => new Promise((resolve, reject) => {
  * integration is implemented, the user can give some feedback and polishing more the search.
  */
 exports.parseResponse = (data, userId, lanCode) => new Promise((resolve, reject) => {
-    exports.parse(data, userId, lanCode).then((results) => {
-        resolve(exports.maskResponse(results[0]));
+    exports.parse(data, userId, lanCode, exports.maskResponse).then((results) => {
+        resolve(results[0]);
     }).catch((error) => {
         reject(error);
     });
@@ -227,14 +224,8 @@ exports.parseResponse = (data, userId, lanCode) => new Promise((resolve, reject)
  * Parse it the data for the inline mode of search.
  */
 exports.parseResponseInline = (data, userId, lanCode) => new Promise((resolve, reject) => {
-    exports.parse(data, userId, lanCode).then((results) => {
-        Promise.all(results.map((element) => {
-            return exports.maskResponseInline(element);
-        })).then((parsed) => {
-            resolve(parsed);
-        }).catch((error) => {
-            throw (error);
-        });
+    exports.parse(data, userId, lanCode, exports.maskResponseInline).then((parsed) => {
+        resolve(parsed);
     }).catch((error) => {
         reject(error);
     });

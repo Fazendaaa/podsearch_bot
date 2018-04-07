@@ -304,7 +304,6 @@ describe('Testing shortenLinks function.', () => {
         expect(shortenLinks(undefined)).rejects.toMatch('Wrong argument.');
     });
 
-
     test('Shorten all nerdcast links.', () => {
         expect.assertions(1);
 

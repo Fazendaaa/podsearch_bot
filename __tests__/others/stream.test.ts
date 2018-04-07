@@ -15,7 +15,7 @@ import { readAsync } from '../../src/others/utils';
 jest.setTimeout(60000);
 
 /**
- * Lorem ipsum.
+ * RSS item has different kind of podcast link. Verifies all kind available.
  */
 describe('Testing linkEpisode function.', () => {
     test('item \"undefined\".', () => {

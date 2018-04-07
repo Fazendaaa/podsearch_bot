@@ -67,28 +67,28 @@ bot.start(({ i18n, replyWithMarkdown, message }) => {
     const language = message.from.language_code.split('-')[0] || 'en';
     const argument = utils_1.removeCmd(message.text);
     let keyboard = undefined;
-    let keyboardInline = undefined;
     i18n.locale(language);
-    keyboard = markup.keyboard(utils_1.arrayLoad(i18n.repository[language].keyboard)).resize().extra();
-    replyWithMarkdown(i18n.t('greetings'), keyboard);
-    /**
-     * That would mean starting a bot conversation through a link to listen some podcast.
-     */
-    if ('' !== argument) {
-        replyWithMarkdown(i18n.t('sending')).then(() => {
-            stream_1.lastEpisode(parseInt(argument, 10), message.from.language_code).then((episode) => {
-                keyboardInline = extra.markdown().markup((m) => {
-                    return m.inlineKeyboard([
-                        m.callbackButton(i18n.t('subscribe'), `subscribe/${episode.trackId}`),
-                        { text: i18n.t('listen'), url: episode.link }
-                    ]);
+    if ('private' === message.chat.type) {
+        keyboard = markup.keyboard(utils_1.arrayLoad(i18n.repository[language].keyboard)).resize().extra();
+        replyWithMarkdown(i18n.t('greetingsPrivate'), keyboard);
+        /**
+         * That would mean starting a bot conversation through a link to listen some podcast.
+         */
+        if ('' !== argument) {
+            replyWithMarkdown(i18n.t('sending')).then(() => {
+                stream_1.lastEpisode(parseInt(argument, 10), message.from.language_code).then((episode) => {
+                    replyWithMarkdown(i18n.t('episode', episode), episode.keyboard);
+                }).catch(error => {
+                    replyWithMarkdown(i18n.t('error'));
+                    throw (error);
                 });
-                replyWithMarkdown(i18n.t('episode', episode), keyboardInline);
             }).catch(error => {
                 console.error(error);
-                replyWithMarkdown(i18n.t('error'));
             });
-        });
+        }
+    }
+    else {
+        replyWithMarkdown(i18n.t('greetingsGroup'));
     }
 });
 /**
@@ -257,7 +257,7 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
     const lanCode = update.callback_query.from.language_code;
     const language = lanCode.split('-')[0] || 'en';
     const options = update.callback_query.data.split('/');
-    const chat = update.callback_query.from.id;
+    const user = update.callback_query.from.id;
     let keyboard = undefined;
     i18n.locale(language);
     switch (options[0]) {
@@ -266,25 +266,25 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
             break;
         case 'episode':
             switch (options[1]) {
+                /**
+                 * Sends the user a message with the podcast episode link attached to.
+                 */
                 case 'last':
-                    stream_1.lastEpisode(parseInt(options[2], 10), lanCode).then((episode) => {
-                        answerCbQuery(i18n.t('stream'), false).then(() => {
-                            keyboard = extra.markdown().markup((m) => {
-                                return m.inlineKeyboard([
-                                    m.callbackButton(i18n.t('subscribe'), `subscribe/${episode.trackId}`),
-                                    { text: i18n.t('listen'), url: episode.link }
-                                ]);
-                            });
-                            stage_1.telegramCore.sendMessage(chat, i18n.t('episode', episode), keyboard).catch(error => {
-                                throw (error);
-                            });
-                        }).catch(error => {
-                            throw (error);
+                    answerCbQuery(i18n.t('sending'), false).then(() => {
+                        keyboard = extra.markdown().markup((m) => {
+                            return m.inlineKeyboard([
+                                m.callbackButton(i18n.api().t('subscribe', {}, language), `subscribe/${options[2]}`),
+                                { text: i18n.api().t('listen', {}, language), url: `t.me/${process.env.BOT_NAME}?start=${options[2]}` }
+                            ]);
                         });
-                    }).catch(error => {
-                        console.error(error);
-                        answerCbQuery(i18n.t('error'), true);
+                        stage_1.telegramCore.sendMessage(user, i18n.t('sending'), keyboard);
                     });
+                    break;
+                /**
+                 * With the podcast is in a not know pattern, let the user know about it.
+                 */
+                case 'notAvailable':
+                    answerCbQuery(i18n.t('notAvailable', { id: options[2] }), true);
                     break;
                 default:
                     answerCbQuery('default', true);

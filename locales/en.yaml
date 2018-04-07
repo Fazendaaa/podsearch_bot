@@ -1,10 +1,15 @@
-greetings: |
-  We welcome you to *Podsearch*, your podcast search bot!
-  Thanks for choosing this service, _${from.first_name}_ :3
+greetingsPrivate:
+  "I welcome you to *Podsearch*, your podcast search bot!\n\
+  Thanks for choosing me, _${from.first_name}_ :3"
 
-text: |
-  Hey, _${from.first_name}_.
-  Right now I don't work on text only, my creator haven't implemented yet this feature. But feel free to check it out my page to see when this feature is coming.
+greetingsGroup:
+  "I welcome all of you to *Podsearch*, your podcast search bot!\n\
+  Thanks for choosing me :3\n\
+  In groups I just work for inline searches, To lean more, talk to me in @podsearchbot."
+
+text:
+  "Hey, _${from.first_name}_.\n\
+  Right now I don't work on text only, my creator haven't implemented yet this feature. But feel free to check it out my page to see when this feature is coming."
 
 error:
   "There has been an error in the search. Please, check your typing or try again later."
@@ -32,6 +37,9 @@ listen:
 
 sending:
   "Sending you now the last podcast episode..."
+
+notAvailable:
+  "This podcast is in a pattern that I don't recognize. Help me improve, send this number ${id} to @Farmy."
 
 # The '\' after '\n' is just so, this way, the next line doesn't have a little spacing at the starting, and since this
 # string has a notation with colon has to be double-quoted also.
