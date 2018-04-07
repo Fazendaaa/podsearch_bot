@@ -44,6 +44,12 @@ sending:
 notAvailable:
   "This podcast is in a pattern that I don't recognize. Help me improve, send this number ${id} to @Farmy."
 
+again:
+  "Searching more podcasts..."
+
+finished:
+  "Thank you."
+
 # The '\' after '\n' is just so, this way, the next line doesn't have a little spacing at the starting, and since this
 # string has a notation with colon has to be double-quoted also.
 mask:

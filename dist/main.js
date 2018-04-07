@@ -213,11 +213,11 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update, scene, replyWithMarkdow
             }
             break;
         case 'again':
-            answerCbQuery('again', false);
+            answerCbQuery(i18n.t('again'), false);
             scene.reenter();
             break;
         case 'finished':
-            answerCbQuery('finished', false);
+            answerCbQuery(i18n.t('finished'), false);
             scene.leave();
             break;
         default:

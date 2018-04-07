@@ -44,6 +44,12 @@ sending:
 notAvailable:
   "Não reconheço esse podcast ainda. Ajude-me a melhorar, envie esse ${id} para @Farmy."
 
+again:
+  "Pesquisando mais podcasts..."
+
+finished:
+  "Obrigado."
+
 mask:
   "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\
   *Gêneros*: _${genres}_\n\
