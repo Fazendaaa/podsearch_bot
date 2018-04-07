@@ -99,13 +99,13 @@ bot.start(({ i18n, replyWithMarkdown, message }) => {
     i18n.locale(language);
 
     if ('private' === message.chat.type) {
-        keyboard = markup.keyboard(arrayLoad(i18n.repository[language].keyboard)).resize().extra();
-        replyWithMarkdown(i18n.t('greetingsPrivate'), keyboard);
-
+        if ('' === argument) {
+            keyboard = markup.keyboard(arrayLoad(i18n.repository[language].keyboard)).resize().extra();
+            replyWithMarkdown(i18n.t('greetingsPrivate'), keyboard);
         /**
          * That would mean starting a bot conversation through a link to listen some podcast.
          */
-        if ('' !== argument) {
+        } else {
             replyWithMarkdown(i18n.t('sending')).then(() => {
                 lastEpisode(parseInt(argument, 10), message.from.language_code).then((episode: resultExtended) => {
                     replyWithMarkdown(i18n.t('episode', episode), episode.keyboard);
@@ -298,11 +298,8 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
  * Handling buttons request.
  */
 bot.on('callback_query', ({ i18n, answerCbQuery, update, scene, replyWithMarkdown }) => {
-    const lanCode: string = update.callback_query.from.language_code;
-    const language: string = lanCode.split('-')[0] || 'en';
+    const language: string = update.callback_query.from.language_code.split('-')[0] || 'en';
     const options: Array<string> = update.callback_query.data.split('/');
-    const user: number = update.callback_query.from.id;
-    let keyboard: any = undefined;
 
     i18n.locale(language);
 
@@ -316,16 +313,7 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update, scene, replyWithMarkdow
                  * Sends the user a message with the podcast episode link attached to.
                  */
                 case 'last':
-                    answerCbQuery(i18n.t('sending'), false).then(() => {
-                        keyboard = extra.markdown().markup((m: any) => {
-                            return m.inlineKeyboard([
-                                m.callbackButton(i18n.api().t('subscribe', {}, language), `subscribe/${options[2]}`),
-                                { text: i18n.api().t('listen', {}, language), url: `t.me/${process.env.BOT_NAME}?start=${options[2]}` }
-                            ]);
-                        });
-
-                        replyWithMarkdown(user, i18n.t('sending'), keyboard);
-                    });
+                    answerCbQuery(i18n.t('sending'), false);
                     break;
                 /**
                  * With the podcast is in a not know pattern, let the user know about it.

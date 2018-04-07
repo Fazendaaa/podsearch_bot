@@ -113,7 +113,8 @@ Como esse README estará sendo atualizado com as mudanças importantes, não pre
 * Escrever um sistema de notificação para que usuário saiba quando saiu um novo episódio do podcast que ele ouve -- e fazer de tal maneira que leve em consideração a posição no globo que ele se encontra;
 * Adicionar recomendações de podcasts baseado no que ouve, ideia do [_lowhigh_](https://www.reddit.com/r/TelegramBots/comments/875tsz/podsearchbot/dwao2qj/) no feedback que me deu no Reddit;
 * Integração com o [wit.ia](https://wit.ai/);
-* Mudar o encurtardor de URL já que o Goo.gl será desativado.
+* Mudar o encurtardor de URL já que o Goo.gl será desativado;
+* Adicionar integração com o REDIS(?)
 # Autores
 * Apenas [eu](https://github.com/Fazendaaa) até agora.
 

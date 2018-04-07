@@ -37,9 +37,11 @@ bot.start(({ i18n, replyWithMarkdown, message }) => {
     let keyboard = undefined;
     i18n.locale(language);
     if ('private' === message.chat.type) {
-        keyboard = markup.keyboard(utils_1.arrayLoad(i18n.repository[language].keyboard)).resize().extra();
-        replyWithMarkdown(i18n.t('greetingsPrivate'), keyboard);
-        if ('' !== argument) {
+        if ('' === argument) {
+            keyboard = markup.keyboard(utils_1.arrayLoad(i18n.repository[language].keyboard)).resize().extra();
+            replyWithMarkdown(i18n.t('greetingsPrivate'), keyboard);
+        }
+        else {
             replyWithMarkdown(i18n.t('sending')).then(() => {
                 stream_1.lastEpisode(parseInt(argument, 10), message.from.language_code).then((episode) => {
                     replyWithMarkdown(i18n.t('episode', episode), episode.keyboard);
@@ -182,11 +184,8 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
     }
 });
 bot.on('callback_query', ({ i18n, answerCbQuery, update, scene, replyWithMarkdown }) => {
-    const lanCode = update.callback_query.from.language_code;
-    const language = lanCode.split('-')[0] || 'en';
+    const language = update.callback_query.from.language_code.split('-')[0] || 'en';
     const options = update.callback_query.data.split('/');
-    const user = update.callback_query.from.id;
-    let keyboard = undefined;
     i18n.locale(language);
     switch (options[0]) {
         case 'subscribe':
@@ -195,15 +194,7 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update, scene, replyWithMarkdow
         case 'episode':
             switch (options[1]) {
                 case 'last':
-                    answerCbQuery(i18n.t('sending'), false).then(() => {
-                        keyboard = extra.markdown().markup((m) => {
-                            return m.inlineKeyboard([
-                                m.callbackButton(i18n.api().t('subscribe', {}, language), `subscribe/${options[2]}`),
-                                { text: i18n.api().t('listen', {}, language), url: `t.me/${process.env.BOT_NAME}?start=${options[2]}` }
-                            ]);
-                        });
-                        replyWithMarkdown(user, i18n.t('sending'), keyboard);
-                    });
+                    answerCbQuery(i18n.t('sending'), false);
                     break;
                 case 'notAvailable':
                     answerCbQuery(i18n.t('notAvailable', { id: options[2] }), true);
