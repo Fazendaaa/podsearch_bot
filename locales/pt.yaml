@@ -1,10 +1,15 @@
-greetings: |
-  Bem vindo ao *Podsearch*, o seu bot de pesquisas de podcasts!
-  Obrigado por utilizar este bot, _${from.first_name}_ :3
+greetingsPrivate:
+  "Bem vindo ao *Podsearch*, o seu bot de pesquisas de podcasts!\n\
+  Obrigado por me escolher, _${from.first_name}_ :3"
 
-text: |
-  Olá, _${from.first_name}_.
-  Eu ainda não tenho suporte a conversas, meu criador ainda não me configurou para tal. Mas sinta-se a vontade para olhar o meu site e ver para quando isso está previsto.
+greetingsGroup:
+  "Sejam todos bem vindo ao *Podsearch*, o seu bot de pesquisas de podcasts!\n\
+  Obrigado por me escolher :3\n\
+  Em grupos eu funciono apenas em searches inline. Para saber mais, converse comimgo em @podsearchbot."
+
+text:
+  "Olá, _${from.first_name}_.\n\
+  Eu ainda não tenho suporte a conversas, meu criador ainda não me configurou para tal. Mas sinta-se a vontade para olhar o meu site e ver para quando isso está previsto."
 
 error:
   "Algo aconteceu de errado. Por favor, mais tarde tente novamente."
@@ -15,11 +20,35 @@ search:
 searching:
   "Pesquisando..."
 
+searchResult:
+  "Era esse que estavas procurando?"
+
 searchDone:
   "Pesquisa finalizada."
 
 working:
   "Nossos robôs escrvavos estão trabalhando nisso. Em alguns dias estará pronto."
+
+stream:
+  "Clique para ouvir."
+
+subscribe:
+  "Receba notificações"
+
+listen:
+  "Ouça agora."
+
+sending:
+  "Enviando-te o último episódio do podcast agora..."
+
+notAvailable:
+  "Não reconheço esse podcast ainda. Ajude-me a melhorar, envie esse ${id} para @Farmy."
+
+again:
+  "Pesquisando mais podcasts..."
+
+finished:
+  "Obrigado."
 
 mask:
   "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\
@@ -28,6 +57,11 @@ mask:
   *Último episódio*: _${latest}_\n\
   *RSS*: ${rss}\n\
   *iTunes*: ${itunes}\n"
+
+episode:
+  "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\
+  *Gêneros*: _${genres}_\n\
+  *Episódios*: _${trackCount}_"
 
 noResult: |
   Nenhuma pesquisa foi encontrada para "_${value}_".
@@ -39,8 +73,11 @@ wrongInputCmd:
   Exemplo:\n\
   /pesquise _nerdcast_\n"
 
+wrongInputButton:
+  "Or através do botão:"
+
 wrongInputInline:
-  "Ou você pode experimentar a pesquisa inline:"
+  "Ou até mesmo a pesquisa inline:"
 
 help:
   "Esse bot realiza pesquisas de podcasts na loja da iTunes. Você pode realizar uma pesquisa através do comando o do modo inline. Veja em:\n\
@@ -95,3 +132,7 @@ endInlineDescription:
   "Não há mais resultados a serem apresentados nessa pesquisa."
 
 keyboard: !!seq [ [ pesquise ], [ ajuda, sobre ] ]
+
+card: !!seq [ Inscrever-se, Ouça ]
+
+confirm: !!seq [ Sim, Não ]

@@ -1,5 +1,5 @@
 {
-    "artworkUrl600": "http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg",
+    "artworkUrl600": "https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg",
     "releaseDate": "2016-07-11T07:05:00Z",
     "artistName": "Nerdcast",
     "genres": "Comédia | Podcasts",
@@ -13,12 +13,18 @@
             "inline_keyboard": [
                 [
                     {
-                        "text": "Subscribe",
-                        "callback_data": "subscribe/0/1103141552",
+                        "text": "Inscrever-se",
+                        "callback_data": "subscribe/1103141552",
                         "hide": false
+                    },
+                    {
+                        "text": "Ouça",
+                        "url": "t.me/farmtestbot?start=1103141552"
                     }
                 ]
             ]
         }
-    }
+    },
+    "trackId": 1103141552,
+    "collectionId": 1103141552
 }

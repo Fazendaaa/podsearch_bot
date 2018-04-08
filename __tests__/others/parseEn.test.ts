@@ -23,7 +23,6 @@ import { readAsync } from '../../src/others/utils';
 
 jest.setTimeout(60000);
 
-const mockUserId: number = 0;
 const mockLanCode: string = 'en-us';
 
 describe('[EN] Testing parseResponse function', () => {
@@ -32,7 +31,7 @@ describe('[EN] Testing parseResponse function', () => {
 
         return readAsync('nerdcast/en-us/input/searchCommand.json').then((mockInput: response) => {
             return readAsync('nerdcast/en-us/output/parseResponse.json').then((mockOutput: result) => {
-                return expect(parseResponse(mockInput, mockUserId, mockLanCode)).resolves.toEqual(mockOutput);
+                return expect(parseResponse(mockInput, mockLanCode)).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw error;
             });
@@ -48,7 +47,7 @@ describe('[EN] Testing parseResponseInline function', () => {
 
         return readAsync('nerdcast/en-us/input/searchInline.json').then((mockInput: response) => {
             return readAsync('nerdcast/en-us/output/parseResponseInline.json').then((mockOutput: Array<telegramInline>) => {
-                return expect(parseResponseInline(mockInput, mockUserId, mockLanCode)).resolves.toEqual(mockOutput);
+                return expect(parseResponseInline(mockInput, mockLanCode)).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw error;
             });

@@ -98,6 +98,7 @@ There's also a [Travis CI](http://travis-ci.org/) integration.
 * [i18n-yaml](https://github.com/martinheidegger/i18n-node-yaml) - Since Telegraf-i18n only handles Telegraf context, there's a need to parse other kinds of context;
 * [dotenv](https://github.com/motdotla/dotenv) - Library that imports environment variables;
 * [goo.gl](https://github.com/kaimallea/node-googl) - Library that handles it the Google shorten API requests;
+* [remove-accents](https://github.com/tyxla/remove-accents) - Some international content has accents and this library removes it -- makes de search more easy to perform given that even if the podcast name has accents not necessary it will be marked as having those in the iTunes store;
 * [itunes-search](https://github.com/connor/itunes-node) - One of many libraries that does the fetching from iTunes API, but this one is the only one that does it right.
 # Contributing
 Please, I'm not a native/fluent english speaker, so whether you see a variable name wrote the wrong way or even some comment where I've wrote something with the wrong "past perfect way of life" or something like that, please let me know it. Not always is just about the code, but rather making it more clear to other people to learn from it.
@@ -111,7 +112,8 @@ Since I will be keeping this README up to date with any major change and I don't
 * Writing a notification system, so that upon a new episode release the user will be notified -- making it available this notification at user timezone;
 * Adding podcasts recommendations thanks to [_lowhigh_](https://www.reddit.com/r/TelegramBots/comments/875tsz/podsearchbot/dwao2qj/) feedback on Reddit;
 * Integration with [wit.ia](https://wit.ai/);
-* Change URL shortener since Goo.gl will be shut down.
+* Change URL shortener since Goo.gl will be shut down;
+* Adding REDIS integration(?)
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
 

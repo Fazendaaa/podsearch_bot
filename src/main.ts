@@ -6,6 +6,7 @@
 
 import { config } from 'dotenv';
 import {
+    lookup,
     options,
     response,
     result,
@@ -19,6 +20,9 @@ import {
     parseResponseInline
 } from './others/parse';
 import {
+    lastEpisode
+} from './others/stream';
+import {
     arrayLoad,
     endInline,
     errorInline,
@@ -27,6 +31,7 @@ import {
     removeCmd,
     searchInline
 } from './others/utils';
+import { talkingSearchManager } from './stage/stage';
 
 /**
  * Why using the "old" pattern instead of the new one?
@@ -34,93 +39,16 @@ import {
  * Thankfully I had a lot of help. You can see more at: https://stackoverflow.com/q/49348607/7092954
  * brentatkins opened my eys to the real issue: https://stackoverflow.com/q/49348607/7092954
  */
-const telegraf = require('telegraf');
-const telegram = require('telegraf/telegram');
-const Markup = telegraf.Markup;
 const telegrafI18n = require('telegraf-i18n');
-const session = require('telegraf/session');
-const stage = require('telegraf/stage');
-const scene = require('telegraf/scenes/base');
-const { leave } = stage;
+const telegraf = require('telegraf');
+const session = telegraf.session;
+const markup = telegraf.Markup;
+const extra = telegraf.Extra;
 
 /**
  * Allows the code to run without passing the environment variables as arguments.
  */
 config();
-
-/**
- * Just a little "hack".
- */
-const telegramCore = new telegram(process.env.BOT_KEY);
-
-/**
- * Handling podcast search through talking to bot.
- */
-const talkingSearch = new scene('talkingSearch');
-
-/**
- * Message asking for the podcast name for search for it.
- */
-talkingSearch.enter(({ i18n, replyWithMarkdown, message }) => {
-    const language: string = message.from.language_code.split('-')[0] || 'en';
-
-    i18n.locale(language);
-
-    replyWithMarkdown(i18n.t('search'), Markup.forceReply().extra());
-});
-
-/**
- * Catching the podcast name for search for it.
- */
-talkingSearch.on('text', ({ i18n, replyWithMarkdown, message, scene }) => {
-    const value: string = message.text;
-    const userId: number = message.from.id;
-    /**
-     * This  option  is  an  option  to  language, since works better -- sincerely still don't know why, maybe something
-     * related to iTunes API -- to return data in user native language.
-     */
-    const country: string = message.from.language_code.split('-')[1] || 'us';
-    const language: string = message.from.language_code.split('-')[0] || 'en';
-    const opts: options = {
-        country: country,
-        media: 'podcast',
-        entity: 'podcast',
-        limit: 1
-    };
-    let buttons: Array<object> = undefined;
-    let keyboard: any = undefined;
-
-    /**
-     * Setting up locale language info.
-     */
-    i18n.locale(language);
-
-    buttons = <Array<object>>arrayLoad(i18n.repository[language].keyboard);
-    keyboard = telegraf.Markup.keyboard(buttons).resize().extra();
-
-    replyWithMarkdown(i18n.t('searching')).then(({ message_id, chat }) => {
-        search(value, opts, (data: response) => {
-            parseResponse(data, userId, message.from.language_code).then((parsed: resultExtended) => {
-                telegramCore.editMessageText(chat.id, message_id, undefined, i18n.t('mask', parsed), parsed.keyboard).then(() => {
-                    telegramCore.sendMessage(chat.id, i18n.t('searchDone'), keyboard);
-                    scene.leave();
-                });
-            }).catch((error: string) => {
-                console.error(error);
-                replyWithMarkdown(i18n.t('noResult', { value }));
-            });
-        });
-    }).catch((error: Error) => {
-        replyWithMarkdown(i18n.t('error'));
-        console.error(error);
-    });
-});
-
-/**
- * Creating "conversation" handler.
- */
-const talkingSearchManager = new stage();
-talkingSearchManager.register(talkingSearch);
 
 /**
  * Start bot and then setting its options like:
@@ -165,15 +93,33 @@ bot.catch((err) => {
  */
 bot.start(({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
-    let buttons: Array<object> = undefined;
+    const argument: string = removeCmd(message.text);
     let keyboard: any = undefined;
 
     i18n.locale(language);
 
-    buttons = <Array<object>> arrayLoad(i18n.repository[language].keyboard);
-    keyboard = telegraf.Markup.keyboard(buttons).resize().extra();
-
-    replyWithMarkdown(i18n.t('greetings'), keyboard);
+    if ('private' === message.chat.type) {
+        if ('' === argument) {
+            keyboard = markup.keyboard(arrayLoad(i18n.repository[language].keyboard)).resize().extra();
+            replyWithMarkdown(i18n.t('greetingsPrivate'), keyboard);
+        /**
+         * That would mean starting a bot conversation through a link to listen some podcast.
+         */
+        } else {
+            replyWithMarkdown(i18n.t('sending')).then(() => {
+                lastEpisode(parseInt(argument, 10), message.from.language_code).then((episode: resultExtended) => {
+                    replyWithMarkdown(i18n.t('episode', episode), episode.keyboard);
+                }).catch(error => {
+                    replyWithMarkdown(i18n.t('error'));
+                    throw (error);
+                });
+            }).catch(error => {
+                console.error(error);
+            });
+        }
+    } else {
+        replyWithMarkdown(i18n.t('greetingsGroup'));
+    }
 });
 
 /**
@@ -183,7 +129,6 @@ bot.command(helpCommand, ({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
 
     i18n.locale(language);
-
     replyWithMarkdown(i18n.t('help'));
 });
 
@@ -194,7 +139,6 @@ bot.command(aboutCommand, ({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
 
     i18n.locale(language);
-
     replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
 });
 
@@ -207,32 +151,48 @@ bot.command(aboutCommand, ({ i18n, replyWithMarkdown, message }) => {
  */
 bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
     const value: string = removeCmd(message.text);
-    const userId: number = message.from.id;
     const country: string = message.from.language_code.split('-')[1] || 'us';
     const language: string = message.from.language_code.split('-')[0] || 'en';
     const opts: options = {
         country: country,
         media: 'podcast',
         entity: 'podcast',
+        explicit: 'No',
         limit: 1
     };
 
     i18n.locale(language);
 
     if (value !== '') {
-        search(value, opts, (data: response) => {
-            parseResponse(data, userId, message.from.language_code).then((parsed: resultExtended) => {
-                replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
-            }).catch((error: string) => {
-                console.error(error);
-                replyWithMarkdown(i18n.t('noResult', {value}));
-            });
+        search({ term: value, ...opts }, (err: Error, data: response) => {
+            if (err) {
+                replyWithMarkdown(i18n.t('error'));
+                console.error(err);
+            } else {
+                parseResponse(data, message.from.language_code).then((parsed: resultExtended) => {
+                    replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
+                }).catch((error: string) => {
+                    console.error(error);
+                    replyWithMarkdown(i18n.t('noResult', { value }));
+                });
+            }
         });
+    /**
+     * In case that the user hasn't send any podcast to be searched for, show him how to do searches.
+     */
     } else {
         replyWithMarkdown(i18n.t('wrongInputCmd')).then(() => {
-            replyWithVideo({ source: resolve(__dirname, '../gif/search_cmd.mp4') }).then(() => {
-                replyWithMarkdown(i18n.t('wrongInputInline')).then(() => {
-                    replyWithVideo({ source: resolve(__dirname, '../gif/search_inline.mp4') }).catch((error: Error) => {
+            replyWithVideo({ source: resolve(__dirname, '../gif/searchCmd.mp4') }).then(() => {
+                replyWithMarkdown(i18n.t('wrongInputButton')).then(() => {
+                    replyWithVideo({ source: resolve(__dirname, '../gif/searchButton.mp4') }).then(() => {
+                        replyWithMarkdown(i18n.t('wrongInputInline')).then(() => {
+                            replyWithVideo({ source: resolve(__dirname, '../gif/searchInline.mp4') }).catch((error: Error) => {
+                                throw error;
+                            });
+                        }).catch((error: Error) => {
+                            throw error;
+                        });
+                    }).catch((error: Error) => {
                         throw error;
                     });
                 }).catch((error: Error) => {
@@ -255,7 +215,6 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
  */
 bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
     const value: string = messageToString(inlineQuery.query);
-    const userId: number = inlineQuery.from.id;
     const lanCode: string = inlineQuery.from.language_code;
     const pageLimit: number = 20;
     const offset: number = parseInt(inlineQuery.offset, 10) || 0;
@@ -264,55 +223,63 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         country: country,
         limit: offset + pageLimit,
         media: 'podcast',
-        entity: 'podcast'
+        entity: 'podcast',
+        explicit: 'No'
     };
 
     /**
      * Verify whether or not the user has typed anything to search for.
      */
     if (value !== '') {
-        search(value, opts, (data: response) => {
-            if (0 < data.resultCount) {
-                /**
-                 * "Pseudo-pagination",  since this API doesn't allow it true pagination. And this is a lot of overwork,
-                 * because each scroll down the bot will search all the already presented results again and again. Kind
-                 * of to read the next page of a book you would need to read all the pages that you already read so that
-                 * you can continue.
-                 */
-                data.results = data.results.slice(offset, offset + pageLimit);
+        search({ term: value, ...opts }, (err: Error, data: response) => {
+            if (err) {
+                console.error(err);
+                errorInline(lanCode).then((inline: telegramInline) => {
+                    answerInlineQuery([inline]);
+                });
+            } else {
+                if (0 < data.resultCount) {
+                    /**
+                     * "Pseudo-pagination",  since  this  API  doesn't  allow  it  true pagination. And this is a lot of
+                     * overwork,  because  each  scroll down the bot will search all the already presented results again
+                     * and again.  Kind of to read the next page of a book you would need to read all the pages that you
+                     * already read so that you can continue.
+                     */
+                    data.results = data.results.slice(offset, offset + pageLimit);
 
-                /**
-                 * Checking  the  offset to be equals to zero so that mean that the bot hasn't shown the user only fewer
-                 * podcast options, or even none, in the search.
-                 */
-                if (0 < data.results.length) {
-                    parseResponseInline(data, userId, lanCode).then((results: Array<telegramInline>) => {
-                        answerInlineQuery(results, { next_offset: offset + pageLimit });
-                    }).catch((error: Error) => {
-                        console.error(error);
-                        errorInline(lanCode).then((inline: telegramInline) => {
-                            answerInlineQuery([inline]);
+                    /**
+                     * Checking  the  offset  to  be equals to zero so that mean that the bot hasn't shown the user only
+                     * fewer podcast options, or even none, in the search.
+                     */
+                    if (0 < data.results.length) {
+                        parseResponseInline(data, lanCode).then((results: Array<telegramInline>) => {
+                            answerInlineQuery(results, { next_offset: offset + pageLimit });
+                        }).catch((error: Error) => {
+                            console.error(error);
+                            errorInline(lanCode).then((inline: telegramInline) => {
+                                answerInlineQuery([inline]);
+                            });
                         });
-                    });
+                    /**
+                     * If there's nothing else to be presented at the user, this would mean an end of search.
+                     */
+                    } else {
+                        endInline(lanCode).then((inline: telegramInline) => {
+                            answerInlineQuery([inline]);
+                        }).catch((error: Error) => {
+                            console.error(error);
+                        });
+                    }
                 /**
-                 * If there's nothing else to be presented at the user, this would mean an end of search.
+                 * In case that the user search anything that isn't available in iTunes store or mistyping.
                  */
                 } else {
-                    endInline(lanCode).then((inline: telegramInline) => {
+                    notFoundInline(value, lanCode).then((inline: telegramInline) => {
                         answerInlineQuery([inline]);
                     }).catch((error: Error) => {
                         console.error(error);
                     });
                 }
-            /**
-             * In case that the user search anything that isn't available in iTunes store or mistyping.
-             */
-            } else {
-                notFoundInline(value, lanCode).then((inline: telegramInline) => {
-                    answerInlineQuery([inline]);
-                }).catch((error: Error) => {
-                    console.error(error);
-                });
             }
         });
     /**
@@ -330,12 +297,51 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
 /**
  * Handling buttons request.
  */
-bot.on('callback_query', ({ i18n, answerCbQuery, update }) => {
+bot.on('callback_query', ({ i18n, answerCbQuery, update, scene, replyWithMarkdown }) => {
     const language: string = update.callback_query.from.language_code.split('-')[0] || 'en';
+    const options: Array<string> = update.callback_query.data.split('/');
 
     i18n.locale(language);
 
-    answerCbQuery(i18n.t('working'), true);
+    switch (options[0]) {
+        case 'subscribe':
+            answerCbQuery(i18n.t('working'), true);
+            break;
+        case 'episode':
+            switch (options[1]) {
+                /**
+                 * Sends the user a message with the podcast episode link attached to.
+                 */
+                case 'last':
+                    answerCbQuery(i18n.t('sending'), false);
+                    break;
+                /**
+                 * With the podcast is in a not know pattern, let the user know about it.
+                 */
+                case 'notAvailable':
+                    answerCbQuery(i18n.t('notAvailable', { id: options[2] }), true);
+                    break;
+                default:
+                    answerCbQuery('default', true);
+            }
+            break;
+        /**
+         * Result was not what user was looking for.
+         */
+        case 'again':
+            answerCbQuery(i18n.t('again'), false);
+            scene.reenter();
+            break;
+        /**
+         * User found the result it was looking for.
+         */
+        case 'finished':
+            answerCbQuery(i18n.t('finished'), false);
+            scene.leave();
+            break;
+        default:
+            answerCbQuery('default', true);
+    }
 });
 
 /**
@@ -345,7 +351,6 @@ bot.hears(helpCommand, ({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
 
     i18n.locale(language);
-
     replyWithMarkdown(i18n.t('help'));
 });
 
@@ -356,7 +361,6 @@ bot.hears(aboutCommand, ({ i18n, replyWithMarkdown, message }) => {
     const language: string = message.from.language_code.split('-')[0] || 'en';
 
     i18n.locale(language);
-
     replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
 });
 

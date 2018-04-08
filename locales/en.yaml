@@ -1,10 +1,15 @@
-greetings: |
-  We welcome you to *Podsearch*, your podcast search bot!
-  Thanks for choosing this service, _${from.first_name}_ :3
+greetingsPrivate:
+  "I welcome you to *Podsearch*, your podcast search bot!\n\
+  Thanks for choosing me, _${from.first_name}_ :3"
 
-text: |
-  Hey, _${from.first_name}_.
-  Right now I don't work on text only, my creator haven't implemented yet this feature. But feel free to check it out my page to see when this feature is coming.
+greetingsGroup:
+  "I welcome all of you to *Podsearch*, your podcast search bot!\n\
+  Thanks for choosing me :3\n\
+  In groups I just work for inline searches, To lean more, talk to me in @podsearchbot."
+
+text:
+  "Hey, _${from.first_name}_.\n\
+  Right now I don't work on text only, my creator haven't implemented yet this feature. But feel free to check it out my page to see when this feature is coming."
 
 error:
   "There has been an error in the search. Please, check your typing or try again later."
@@ -15,11 +20,35 @@ search:
 searching:
   "Searching..."
 
+searchResult:
+  "Is this the one that you were looking for?"
+
 searchDone:
   "Search done."
 
 working:
   "Our slaves robots are currently working on it. In a few days will be done."
+
+stream:
+  "Click to listen."
+
+subscribe:
+  "Subscribe"
+
+listen:
+  "Listen now"
+
+sending:
+  "Sending you now the last podcast episode..."
+
+notAvailable:
+  "This podcast is in a pattern that I don't recognize. Help me improve, send this number ${id} to @Farmy."
+
+again:
+  "Searching more podcasts..."
+
+finished:
+  "Thank you."
 
 # The '\' after '\n' is just so, this way, the next line doesn't have a little spacing at the starting, and since this
 # string has a notation with colon has to be double-quoted also.
@@ -31,6 +60,11 @@ mask:
   *RSS*: ${rss}\n\
   *iTunes*: ${itunes}\n"
 
+episode:
+  "[\u200B](${artworkUrl600})*Name*: _${artistName}_\n\
+  *Genre*: _${genres}_\n\
+  *Episodes*: _${trackCount}_"
+
 noResult: |
   No result was found for "_${value}_".
   This could mean a wrong typing or right now the search service is in maintenance. Please, try it again later.
@@ -41,14 +75,18 @@ wrongInputCmd:
   Example:\n\
   /search _The Story by The Mission_\n"
 
+wrongInputButton:
+  "Or you can try the button mode:"
+
 wrongInputInline:
-  "Or you can try the inline mode:"
+  "Or even the inline mode:"
 
 help:
   "This bot searches in iTunes store about podcasts. You can do a search through the search command or the inline mode. Try it with:\n\
   /search\n\
   More in:\n\
   /about"
+
 about:
   "Wanna see more:\n\
   🤖 [Podsearch](https://fazendaaa.github.io/podsearch_bot/) — See how this bot works.\n\
@@ -97,3 +135,7 @@ endInlineDescription:
   "There's no other content to be presented."
 
 keyboard: !!seq [ [ search ], [ help, about ] ]
+
+card: !!seq [ Subscribe, Listen ]
+
+confirm: !!seq [ Yes, No ]

@@ -6,6 +6,7 @@
 import { readFile } from 'fs';
 import * as i18n_node_yaml from 'i18n-node-yaml';
 import { join } from 'path';
+import { remove } from 'remove-accents';
 import { telegramInline } from 'telegraf';
 
 /**
@@ -66,7 +67,7 @@ export const removeCmd = (cmd: string): string => {
  */
 export const messageToString = (message: string): string => {
     return (undefined !== message && 'string' === typeof message) ?
-        Buffer.from(message, 'ascii').toString('ascii').replace(/(?:=\(|:0|:o|: o|: 0)/, ': o') :
+        Buffer.from(remove(message), 'ascii').toString('ascii').replace(/(?:=\(|:0|:o|: o|: 0)/, ': o') :
         undefined;
 };
 

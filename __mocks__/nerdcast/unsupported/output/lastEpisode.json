@@ -1,4 +1,22 @@
 {
+    "keyboard": {
+        "parse_mode": "Markdown",
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/1103141552",
+                        "hide": false
+                    },
+                    {
+                        "text": "Listen now",
+                        "url": "https://goo.gl/yTNnvc"
+                    }
+                ]
+            ]
+        }
+    },
     "wrapperType": "track",
     "kind": "podcast",
     "collectionId": 1103141552,
@@ -36,7 +54,5 @@
     "genres": [
         "Comedy",
         "Podcasts"
-    ],
-    "itunes": "https://goo.gl/kwHu7z",
-    "rss": "https://goo.gl/bECbi2"
+    ]
 }

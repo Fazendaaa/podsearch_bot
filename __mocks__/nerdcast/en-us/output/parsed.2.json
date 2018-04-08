@@ -12,8 +12,8 @@
         "collectionViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id1103141552?mt=2&uo=4",
         "feedUrl": "http://feeds.soundcloud.com/users/soundcloud:users:219177314/sounds.rss",
         "trackViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id1103141552?mt=2&uo=4",
-        "artworkUrl30": "http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/30x30bb.jpg",
-        "artworkUrl60": "http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/60x60bb.jpg",
+        "artworkUrl30": "https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/30x30bb.jpg",
+        "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/60x60bb.jpg",
         "collectionPrice": 0,
         "trackPrice": 0,
         "trackRentalPrice": 0,
@@ -28,7 +28,7 @@
         "currency": "USD",
         "primaryGenreName": "Comedy",
         "contentAdvisoryRating": "Clean",
-        "artworkUrl600": "http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg",
+        "artworkUrl600": "https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg",
         "genreIds": [
             "1303",
             "26"
@@ -47,8 +47,12 @@
                     [
                         {
                             "text": "Subscribe",
-                            "callback_data": "subscribe/0/1103141552",
+                            "callback_data": "subscribe/1103141552",
                             "hide": false
+                        },
+                        {
+                            "text": "Listen",
+                            "url": "t.me/farmtestbot?start=1103141552"
                         }
                     ]
                 ]
