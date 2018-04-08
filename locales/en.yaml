@@ -63,7 +63,7 @@ mask:
 episode:
   "[\u200B](${artworkUrl600})*Name*: _${artistName}_\n\
   *Genre*: _${genres}_\n\
-  *Episodes*: _${trackCount}_"
+  *#Episode*: _${trackCount}_"
 
 noResult: |
   No result was found for "_${value}_".
