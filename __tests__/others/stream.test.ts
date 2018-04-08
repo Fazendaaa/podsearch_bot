@@ -18,10 +18,26 @@ jest.setTimeout(60000);
  * RSS item has different kind of podcast link. Verifies all kind available.
  */
 describe('Testing linkEpisode function.', () => {
-    test('item \"undefined\".', () => {
+    test('rss \"undefined\".', () => {
         expect(() => {
             return linkEpisode(undefined);
         }).toThrowError('Wrong argument.');
+    });
+
+    test('rss has only \"guid\".', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/linkEpisode.json').then((mockInput) => {
+            return expect(mockInput).toEqual(mockInput);
+        });
+    });
+
+    test('rss has only \"link\".', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/linkEpisode.1.json').then((mockInput) => {
+            return expect(mockInput).toEqual(mockInput);
+        });
     });
 });
 
