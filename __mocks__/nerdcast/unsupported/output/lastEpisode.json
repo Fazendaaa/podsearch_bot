@@ -1,41 +1,58 @@
 {
-    "link": "https://goo.gl/MV4Ltf",
+    "keyboard": {
+        "parse_mode": "Markdown",
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Subscribe",
+                        "callback_data": "subscribe/1103141552",
+                        "hide": false
+                    },
+                    {
+                        "text": "Listen now",
+                        "url": "https://goo.gl/yTNnvc"
+                    }
+                ]
+            ]
+        }
+    },
     "wrapperType": "track",
     "kind": "podcast",
-    "collectionId": 381816509,
-    "trackId": 381816509,
-    "artistName": "Jovem Nerd",
-    "collectionName": "NerdCast",
-    "trackName": "NerdCast",
-    "collectionCensoredName": "NerdCast",
-    "trackCensoredName": "NerdCast",
-    "collectionViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id381816509?mt=2&uo=4",
-    "feedUrl": "https://jovemnerd.com.br/feed-nerdcast/",
-    "trackViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id381816509?mt=2&uo=4",
-    "artworkUrl30": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/30x30bb.jpg",
-    "artworkUrl60": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/60x60bb.jpg",
-    "artworkUrl100": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/100x100bb.jpg",
+    "collectionId": 1103141552,
+    "trackId": 1103141552,
+    "artistName": "Nerdcast",
+    "collectionName": "Nerdcast",
+    "trackName": "Nerdcast",
+    "collectionCensoredName": "Nerdcast",
+    "trackCensoredName": "Nerdcast",
+    "collectionViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id1103141552?mt=2&uo=4",
+    "feedUrl": "http://feeds.soundcloud.com/users/soundcloud:users:219177314/sounds.rss",
+    "trackViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id1103141552?mt=2&uo=4",
+    "artworkUrl30": "https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/30x30bb.jpg",
+    "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/60x60bb.jpg",
+    "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/100x100bb.jpg",
     "collectionPrice": 0,
     "trackPrice": 0,
     "trackRentalPrice": 0,
     "collectionHdPrice": 0,
     "trackHdPrice": 0,
     "trackHdRentalPrice": 0,
-    "releaseDate": "2018-03-30T10:22:00Z",
+    "releaseDate": "2016-07-11T07:05:00Z",
     "collectionExplicitness": "cleaned",
     "trackExplicitness": "cleaned",
-    "trackCount": 300,
+    "trackCount": 2,
     "country": "USA",
     "currency": "USD",
-    "primaryGenreName": "Society & Culture",
+    "primaryGenreName": "Comedy",
     "contentAdvisoryRating": "Clean",
-    "artworkUrl600": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/600x600bb.jpg",
+    "artworkUrl600": "https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg",
     "genreIds": [
-        "1324",
+        "1303",
         "26"
     ],
     "genres": [
-        "Society & Culture",
+        "Comedy",
         "Podcasts"
     ]
 }

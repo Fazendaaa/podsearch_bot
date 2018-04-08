@@ -32,6 +32,7 @@ import {
     searchInline
 } from './others/utils';
 import { talkingSearchManager } from './stage/stage';
+import { writeFile } from 'fs';
 
 /**
  * Why using the "old" pattern instead of the new one?
@@ -108,6 +109,13 @@ bot.start(({ i18n, replyWithMarkdown, message }) => {
         } else {
             replyWithMarkdown(i18n.t('sending')).then(() => {
                 lastEpisode(parseInt(argument, 10), message.from.language_code).then((episode: resultExtended) => {
+                    writeFile('lastEpisode.json', JSON.stringify(episode), err => {
+                        if (err) {
+                            console.error(err);
+                        } else {
+                            console.log('Wrote.');
+                        }
+                    });
                     replyWithMarkdown(i18n.t('episode', episode), episode.keyboard);
                 }).catch(error => {
                     replyWithMarkdown(i18n.t('error'));
@@ -169,7 +177,21 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
                 replyWithMarkdown(i18n.t('error'));
                 console.error(err);
             } else {
+                writeFile('searchCommand.json', JSON.stringify(data), err => {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        console.log('Wrote.');
+                    }
+                });
                 parseResponse(data, message.from.language_code).then((parsed: resultExtended) => {
+                    writeFile('parseResponse.json', JSON.stringify(parsed), err => {
+                        if (err) {
+                            console.error(err);
+                        } else {
+                            console.log('Wrote.');
+                        }
+                    });
                     replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
                 }).catch((error: string) => {
                     console.error(error);
@@ -238,6 +260,13 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                     answerInlineQuery([inline]);
                 });
             } else {
+                writeFile('searchInline.json', JSON.stringify(data), err => {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        console.log('Wrote.');
+                    }
+                });
                 if (0 < data.resultCount) {
                     /**
                      * "Pseudo-pagination",  since  this  API  doesn't  allow  it  true pagination. And this is a lot of
@@ -253,6 +282,13 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                      */
                     if (0 < data.results.length) {
                         parseResponseInline(data, lanCode).then((results: Array<telegramInline>) => {
+                            writeFile('parseResponseInline.json', JSON.stringify(results), err => {
+                                if (err) {
+                                    console.error(err);
+                                } else {
+                                    console.log('Wrote.');
+                                }
+                            });
                             answerInlineQuery(results, { next_offset: offset + pageLimit });
                         }).catch((error: Error) => {
                             console.error(error);

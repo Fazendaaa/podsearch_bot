@@ -7,6 +7,7 @@ const parse_1 = require("./others/parse");
 const stream_1 = require("./others/stream");
 const utils_1 = require("./others/utils");
 const stage_1 = require("./stage/stage");
+const fs_1 = require("fs");
 const telegrafI18n = require('telegraf-i18n');
 const telegraf = require('telegraf');
 const session = telegraf.session;
@@ -44,6 +45,14 @@ bot.start(({ i18n, replyWithMarkdown, message }) => {
         else {
             replyWithMarkdown(i18n.t('sending')).then(() => {
                 stream_1.lastEpisode(parseInt(argument, 10), message.from.language_code).then((episode) => {
+                    fs_1.writeFile('lastEpisode.json', JSON.stringify(episode), err => {
+                        if (err) {
+                            console.error(err);
+                        }
+                        else {
+                            console.log('Wrote.');
+                        }
+                    });
                     replyWithMarkdown(i18n.t('episode', episode), episode.keyboard);
                 }).catch(error => {
                     replyWithMarkdown(i18n.t('error'));
@@ -87,7 +96,23 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
                 console.error(err);
             }
             else {
+                fs_1.writeFile('searchCommand.json', JSON.stringify(data), err => {
+                    if (err) {
+                        console.error(err);
+                    }
+                    else {
+                        console.log('Wrote.');
+                    }
+                });
                 parse_1.parseResponse(data, message.from.language_code).then((parsed) => {
+                    fs_1.writeFile('parseResponse.json', JSON.stringify(parsed), err => {
+                        if (err) {
+                            console.error(err);
+                        }
+                        else {
+                            console.log('Wrote.');
+                        }
+                    });
                     replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
                 }).catch((error) => {
                     console.error(error);
@@ -145,10 +170,26 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                 });
             }
             else {
+                fs_1.writeFile('searchInline.json', JSON.stringify(data), err => {
+                    if (err) {
+                        console.error(err);
+                    }
+                    else {
+                        console.log('Wrote.');
+                    }
+                });
                 if (0 < data.resultCount) {
                     data.results = data.results.slice(offset, offset + pageLimit);
                     if (0 < data.results.length) {
                         parse_1.parseResponseInline(data, lanCode).then((results) => {
+                            fs_1.writeFile('parseResponseInline.json', JSON.stringify(results), err => {
+                                if (err) {
+                                    console.error(err);
+                                }
+                                else {
+                                    console.log('Wrote.');
+                                }
+                            });
                             answerInlineQuery(results, { next_offset: offset + pageLimit });
                         }).catch((error) => {
                             console.error(error);

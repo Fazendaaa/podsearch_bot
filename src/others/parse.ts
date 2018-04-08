@@ -19,6 +19,7 @@ import { join } from 'path';
 import { telegramInline } from 'telegraf';
 import { resultExtended } from '../@types/parse/main';
 const extra = require('telegraf').Extra;
+import { writeFile } from 'fs';
 
 config();
 
@@ -158,6 +159,13 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
     if (undefined !== data) {
         shorten(data.feedUrl).then((rss: string) => {
             shorten(data.collectionViewUrl).then((itunes: string) => {
+                // writeFile('shorted.json', JSON.stringify({ ...data, itunes, rss }), err => {
+                //     if (err) {
+                //         console.error(err);
+                //     } else {
+                //         console.log('Wrote.');
+                //     }
+                // });
                 resolve({ ...data, itunes, rss });
             }).catch((error: string) => {
                 reject('Has no iTunes link available.');
@@ -182,7 +190,7 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
     let buttons: Array<string> = undefined;
 
     if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== lanCode &&
-        'string' === typeof (lanCode)) {
+        'string' === typeof (lanCode) && undefined !== maskFunction && 'function' === typeof(maskFunction)) {
         /**
          * Some  data  info  comes  incomplete,  this  could  mean  an error later on the process; that's why it must be
          * filtered right here, to avoid it.
@@ -218,6 +226,14 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
                     /**
                      * Striping the country option from lanCode.
                      */
+                    // writeFile('parse.json', JSON.stringify({ ...shortened, latest, keyboard, lanCode: lanCode.split('-')[0] }), err => {
+                    //     if (err) {
+                    //         console.error(err);
+                    //     } else {
+                    //         console.log('Wrote.');
+                    //     }
+                    // });
+
                     return maskFunction({ ...shortened, latest, keyboard, lanCode: lanCode.split('-')[0] });
                 }).catch((error: string) => {
                     throw error;

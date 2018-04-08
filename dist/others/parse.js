@@ -112,7 +112,7 @@ exports.parse = (data, lanCode, maskFunction) => new Promise((resolve, reject) =
     let podcastId = undefined;
     let buttons = undefined;
     if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== lanCode &&
-        'string' === typeof (lanCode)) {
+        'string' === typeof (lanCode) && undefined !== maskFunction && 'function' === typeof (maskFunction)) {
         filtered = data.results.filter(exports.hasItAll);
         if (0 < filtered.length) {
             Promise.all(filtered.map((element) => {
