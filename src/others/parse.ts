@@ -239,7 +239,7 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
  * This function takes the search from itunes's API then parse it to the format that will be presented as message to the
  * user. Only takes it the first searched response because it is a command.
  */
-export const parseResponse = (data: response, lanCode: string, position: number=0): Promise<resultExtended> =>
+export const parseResponse = (data: response, lanCode: string, position: number = 0): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
     parse(data, lanCode, maskResponse).then((results: Array<resultExtended>) => {
         resolve(results[position]);

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = require("dotenv");
 const itunes_search_1 = require("itunes-search");
 const path_1 = require("path");
+const subscription_1 = require("./database/subscription");
 const parse_1 = require("./others/parse");
 const stream_1 = require("./others/stream");
 const utils_1 = require("./others/utils");
@@ -24,6 +25,7 @@ bot.use(session());
 bot.use(telegraf.log());
 bot.use(i18n.middleware());
 bot.use(stage_1.talkingSearchManager.middleware());
+const subscription = new subscription_1.Subscription();
 const commands = i18n.repository.commands;
 const helpCommand = utils_1.arrayLoad(commands.help);
 const aboutCommand = utils_1.arrayLoad(commands.about);
@@ -189,7 +191,30 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update, scene, replyWithMarkdow
     i18n.locale(language);
     switch (options[0]) {
         case 'subscribe':
-            answerCbQuery(i18n.t('working'), true);
+            subscription.add(0, 0).then((result) => {
+                if ('added' === result) {
+                    answerCbQuery(i18n.t('working'), true);
+                }
+                else if ('already subscribed' === result) {
+                    answerCbQuery(i18n.t('working'), true);
+                }
+                else {
+                    answerCbQuery(i18n.t('working'), true);
+                }
+            });
+            break;
+        case 'unsubscribe':
+            subscription.remove(0, 0).then((result) => {
+                if ('added' === result) {
+                    answerCbQuery(i18n.t('working'), true);
+                }
+                else if ('already subscribed' === result) {
+                    answerCbQuery(i18n.t('working'), true);
+                }
+                else {
+                    answerCbQuery(i18n.t('working'), true);
+                }
+            });
             break;
         case 'episode':
             switch (options[1]) {

@@ -50,6 +50,15 @@ again:
 finished:
   "Thank you."
 
+addedSubscription:
+  "Subscription completed. Now when a new episode is released, you will be notified."
+
+alreadySubscribed:
+  "You are already subscribed to it. To remove, talk to me in private."
+
+notAddedSubsciption:
+  "An error occured. Please, try it again later or talk to my creator to report this."
+
 # The '\' after '\n' is just so, this way, the next line doesn't have a little spacing at the starting, and since this
 # string has a notation with colon has to be double-quoted also.
 mask:
@@ -63,7 +72,7 @@ mask:
 episode:
   "[\u200B](${artworkUrl600})*Name*: _${artistName}_\n\
   *Genre*: _${genres}_\n\
-  *Episodes*: _${trackCount}_"
+  *#Episode*: _${trackCount}_"
 
 noResult: |
   No result was found for "_${value}_".
