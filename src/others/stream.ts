@@ -15,6 +15,7 @@ import {
     response,
     result
 } from 'itunes-search';
+import * as moment from 'moment';
 import { join } from 'path';
 import * as Parser from 'rss-parser';
 import { resultExtended } from '../@types/parse/main';
@@ -43,7 +44,7 @@ const i18n = i18n_node_yaml({
 export const linkEpisode = (rss: item): string => {
     let link: string = undefined;
 
-    if (undefined !== rss && 'object' === typeof (rss)) {
+    if (undefined !== rss && 'object' === typeof(rss)) {
         /**
          * Even  with  guid  property,  some  cases -- particularly in Soundcloud --, are populated with tags that won't
          * return  the  proper  stream link. Just lookup to see whether or not an http -- or https -- link is available,
@@ -54,6 +55,12 @@ export const linkEpisode = (rss: item): string => {
             link = rss.guid;
         } else if (true === rss.hasOwnProperty('link')) {
             link = rss.link;
+        /**
+         * Since the shorten function will "short" anything that is a string, the best way is to pass an undefined so,
+         * that way, won't be shortened at all.
+         */
+        } else {
+            link = undefined;
         }
 
         return link;
@@ -61,6 +68,25 @@ export const linkEpisode = (rss: item): string => {
         throw(new Error('Wrong argument.'));
     }
 };
+
+/**
+ * Fetch the episode name.
+ */
+export const nameEpisode = (rss: item, language: string): string => {
+    let name: string = undefined;
+
+    if (undefined !== rss && 'object' === typeof(rss) && undefined !== language && 'string' === typeof(language)) {
+        if (true === rss.hasOwnProperty('title')) {
+            name = rss.title;
+        } else {
+            name = i18n.api().t('noName', {}, language);
+        }
+
+        return name;
+    } else {
+        throw (new Error('Wrong argument.'));
+    }
+}
 
 /**
  * Fetch the last podcast episode.
@@ -78,6 +104,8 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
     let link: string = undefined;
     let country: string = undefined;
     let language: string = undefined;
+    let name: string = undefined;
+    let latest: string = undefined;
 
     if (undefined !== id && 'number' === typeof(id) && undefined !== lanCode && 'string' === typeof(lanCode)) {
         language = lanCode.split('-')[0];
@@ -89,6 +117,8 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
             } else {
                 handlerRss.parseURL(data.results[0].feedUrl).then((parsed) => {
                     link = linkEpisode(parsed.items[0]);
+                    name = nameEpisode(parsed.items[0], language);
+                    latest = moment(parsed.items[0].pubDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
 
                     /**
                      * Verifies if the link is one of the know objects value then parse it.
@@ -103,6 +133,8 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
                             });
 
                             resolve({
+                                name,
+                                latest,
                                 keyboard,
                                 ...data.results[0]
                             });
