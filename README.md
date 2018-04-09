@@ -83,6 +83,10 @@ If you have any other questions about it just use it the help command:
 ```
 # How does it work?
 You can build yourself a bot just like this one, just follow the procedures listed in [BUILDING.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/building/BUILDING.md).
+## Want know more?
+If you want to understand the "whys" of I did what I did, you can read ALL THE CODE... Just joking, I've wrote some of the pros and cons of my approach on the macro vision of the code. If you want to know more, read:
+* [DATABASE.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/database/DATABASE.MD) -- How the data is stored, for subscription and "classes" of users;
+* [RECOMMENDATION.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/recommendation/RECOMMENDATION.md) -- How it's handle the discovery option of new podcasts.
 # Deployment
 This bot is up and running at [Heroku](http://heroku.com/) through the Github integration, that means that each new push to the ```master``` branch means that is the code serving the bot. You can see more about how does it run at the server by looking at the [Procfile](https://github.com/Fazendaaa/podsearch_bot/blob/master/Procfile). You can also deploy yourself this bot into Heroku through:
 
@@ -90,6 +94,7 @@ This bot is up and running at [Heroku](http://heroku.com/) through the Github in
 
 There's also a [Travis CI](http://travis-ci.org/) integration.
 # Build with
+* [App.json](https://www.npmjs.com/package/app.json) - Deploy config to Heroku through deploy button;
 * [Wallaby.j](http://wallabyjs.com/) - Live [Visual Studio Code](https://code.visualstudio.com/) test runner plug-in;
 * [Jest](https://facebook.github.io/jest/) - Test runner;
 * [Telegraf.js](http://telegraf.js.org/) - Library that handles it the Telegram connection;

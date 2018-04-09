@@ -15,6 +15,7 @@ import {
 import { resolve } from 'path';
 import { telegramInline } from 'telegraf';
 import { resultExtended } from './@types/parse/main';
+import { Subscription } from './database/subscription';
 import {
     parseResponse,
     parseResponseInline
@@ -70,6 +71,11 @@ bot.use(session());
 bot.use(telegraf.log());
 bot.use(i18n.middleware());
 bot.use(talkingSearchManager.middleware());
+
+/**
+ * Subscription database.
+ */
+const subscription = new Subscription();
 
 /**
  * This could lead to a problem someday(?)
@@ -305,7 +311,26 @@ bot.on('callback_query', ({ i18n, answerCbQuery, update, scene, replyWithMarkdow
 
     switch (options[0]) {
         case 'subscribe':
-            answerCbQuery(i18n.t('working'), true);
+            subscription.add(0, 0).then((result: string) => {
+                if ('added' === result) {
+                    answerCbQuery(i18n.t('working'), true);
+                } else if ('already subscribed' === result) {
+                    answerCbQuery(i18n.t('working'), true);
+                } else {
+                    answerCbQuery(i18n.t('working'), true);
+                }
+            });
+            break;
+        case 'unsubscribe':
+            subscription.remove(0, 0).then((result: string) => {
+                if ('added' === result) {
+                    answerCbQuery(i18n.t('working'), true);
+                } else if ('already subscribed' === result) {
+                    answerCbQuery(i18n.t('working'), true);
+                } else {
+                    answerCbQuery(i18n.t('working'), true);
+                }
+            });
             break;
         case 'episode':
             switch (options[1]) {

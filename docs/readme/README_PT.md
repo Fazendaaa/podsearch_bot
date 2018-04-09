@@ -84,6 +84,10 @@ Caso precise de ajuda ou algo do tipo, use o comando:
 ```
 # Como funciona?
 Você pode construir um bot igual a esse daqui, basta seguir os procedimentos listados em [BUILDING_PT.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/building/BUILDING_PT.md).
+## Quer saber mais?
+Se você quer entender os "porquês" do que é feito no código, você pode ler TODO O CÓDIGO... Brincadeiras a parte, eu escrevi alguns dos prós e contras da minha abordagem em uma macro visão do projeto. Se você quiser saber mais, leia:
+* [DATABASE_PT.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/database/DATABASE_PT.MD) -- Como os dados são armazenados, seja para as notificações e os tipos de usuários;
+* [RECOMMENDATION_PT.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/recommendation/RECOMMENDATION_PT.md) -- Como o sistema de recomendação de podcasts funciona.
 # Deployment
 Esse bot está rodando no [Heroku](http://heroku.com/) através de integração direta do Github, isso significa que cada nova push para a branch ```master``` representa o código que está atualmente servindo de diretriz por bot. Você pode verificar mais como o bot está rodando através do arquivo [Procfile](https://github.com/Fazendaaa/podsearch_bot/blob/master/Procfile). Você também pode enviar uma cópia direta desse código para o Heroku através do seguinte botão:
 
@@ -91,6 +95,7 @@ Esse bot está rodando no [Heroku](http://heroku.com/) através de integração 
 
 Há também um integração com [Travis CI](http://travis-ci.org/).
 # Construído com
+* [App.json](https://www.npmjs.com/package/app.json) - Configurações para disponibilizar esse projeto através do botão do Heroku;
 * [Wallaby.j](http://wallabyjs.com/) - Plug-in de rodar testes para o [Visual Studio Code](https://code.visualstudio.com/);
 * [Jest](https://facebook.github.io/jest/) - Roda os testes;
 * [Telegraf.js](http://telegraf.js.org/) - Biblioteca responsável para realizar integração com o Telegram;

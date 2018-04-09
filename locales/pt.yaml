@@ -50,6 +50,15 @@ again:
 finished:
   "Obrigado."
 
+addedSubscription:
+  "Notificação adicionada. Agora toda vez que um novo episódio for lançado, você será notificado."
+
+alreadySubscribed:
+  "Você já está na lista de notificações para este podcast. Caso deseje sair, fale comigo no chat."
+
+notAddedSubsciption:
+  "Um erro ocorreu para adicioná-lo. Por favor, tente novamente mais tarde ou avise meu criador sobre."
+
 mask:
   "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\
   *Gêneros*: _${genres}_\n\
