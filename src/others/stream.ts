@@ -118,7 +118,7 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
                 handlerRss.parseURL(data.results[0].feedUrl).then((parsed) => {
                     link = linkEpisode(parsed.items[0]);
                     name = nameEpisode(parsed.items[0], language);
-                    latest = moment(parsed.items[0].pubDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
+                    latest = moment(parsed.items[0].pubDate).locale(country).format('Do MMMM YYYY, h:mm a');
 
                     /**
                      * Verifies if the link is one of the know objects value then parse it.

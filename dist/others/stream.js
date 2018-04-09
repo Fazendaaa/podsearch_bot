@@ -74,7 +74,7 @@ exports.lastEpisode = (id, lanCode) => new Promise((resolve, reject) => {
                 handlerRss.parseURL(data.results[0].feedUrl).then((parsed) => {
                     link = exports.linkEpisode(parsed.items[0]);
                     name = exports.nameEpisode(parsed.items[0], language);
-                    latest = moment(parsed.items[0].pubDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
+                    latest = moment(parsed.items[0].pubDate).locale(country).format('Do MMMM YYYY, h:mm a');
                     if (undefined !== link) {
                         goo_gl_1.shorten(link).then((short) => {
                             keyboard = extra.markdown().markup((m) => {
