@@ -44,6 +44,9 @@ sending:
 notAvailable:
   "This podcast is in a pattern that I don't recognize. Help me improve, send this number ${id} to @Farmy."
 
+noName:
+  "No last episode name available. Please, report this to my creator."
+
 again:
   "Searching more podcasts..."
 
@@ -71,6 +74,8 @@ mask:
 
 episode:
   "[\u200B](${artworkUrl600})*Name*: _${artistName}_\n\
+  *Last episode name*: _${name}_\n\
+  *Release date*: _${latest}_\n\
   *Genre*: _${genres}_\n\
   *#Episode*: _${trackCount}_"
 

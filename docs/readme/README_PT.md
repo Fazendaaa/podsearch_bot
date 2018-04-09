@@ -55,13 +55,13 @@ Exemplo:
 @podsearchbot B9
 ```
 <h1 align="center">
-    <img src="https://media.giphy.com/media/vgxcHXpZQ7LZwfIteU/giphy.gif" width="669" height="834" />
+    <img src="https://media.giphy.com/media/vgxcHXpZQ7LZwfIteU/giphy.gif" width="420" height="500" />
 </h1>
 
 #### Botões
 Apenas pressione o botão de pesquisa, ele irá lhe pedir o nome do podcast que deseja pesquisar e realizar a pesquisa.
 <h1 align="center">
-    <img src="https://media.giphy.com/media/2vrGBus7SfOmHis7EY/giphy.gif" width="669" height="834" />
+    <img src="https://media.giphy.com/media/2vrGBus7SfOmHis7EY/giphy.gif" width="420" height="500" />
 </h1>
 
 #### ```/pesquise```
@@ -74,7 +74,7 @@ Exemplo:
 /pesquise The Mission
 ```
 <h1 align="center">
-    <img src="https://media.giphy.com/media/QP79gMlzdwAzlnQPp6/giphy.gif" width="669" height="834" />
+    <img src="https://media.giphy.com/media/QP79gMlzdwAzlnQPp6/giphy.gif" width="420" height="500" />
 </h1>
 
 ##### Ajuda

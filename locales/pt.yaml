@@ -44,6 +44,9 @@ sending:
 notAvailable:
   "Não reconheço esse podcast ainda. Ajude-me a melhorar, envie esse ${id} para @Farmy."
 
+noName:
+  "Sem o nome do último episódio presente. Por favor, avise o meu criador."
+
 again:
   "Pesquisando mais podcasts..."
 
@@ -69,6 +72,8 @@ mask:
 
 episode:
   "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\
+  *Nome do último episódio*: _${name}_\n\
+  *Data de lançamento*: _${latest}_\n\
   *Gêneros*: _${genres}_\n\
   *Número do episódio*: _${trackCount}_"
 

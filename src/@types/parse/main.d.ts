@@ -54,4 +54,5 @@ export type resultExtended = {
     lanCode?: string;
     keyboard?: any;
     link?: string;
+    name?: string;
 };
