@@ -17,12 +17,12 @@ Quando se utiliza um sistema no qual não se paga por ele e anúncios são mostr
 
 <h1 align="center">
     <br>
-    <img src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/PT/ads.png" alt="sistema de anunciantes"/>
+    <img "https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/PT/ads.png" alt="sistema pago"/>
 	<br>
 	<br>
 </h1>
 
-> "Ou você paga ou você é o produto."
+> "Você paga ou você é o produto."
 
 ## E qual é o problema?
 Eu quero que o sistema trabalhe pensando no usuário, mostrando apenas recomendações que outros usuários com gostos similares estão ouvindo. Isso apenas melhorará o sistema em si.
