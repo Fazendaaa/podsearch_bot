@@ -18,7 +18,7 @@ Quando se utiliza um sistema no qual não se paga por ele e anúncios são mostr
 
 <h1 align="center">
     <br>
-    <img src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/PT/ads.png" alt="sistema pago"/>
+    <img src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/dev/img/docs/support/PT/advertising.png" alt="sistema de propagandas"/>
 	<br>
 	<br>
 </h1>

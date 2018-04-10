@@ -18,7 +18,7 @@ When using a system that you are not paying for and sells adds for you, the syst
 
 <h1 align="center">
     <br>
-    <img src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/EN/ads.png" alt="ads system"/>
+    <img src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/dev/img/docs/support/EN/advertising.png" alt="ads system"/>
 	<br>
 	<br>
 </h1>
