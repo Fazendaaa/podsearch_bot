@@ -15,9 +15,10 @@ Deixe-me explicar isso melhor...
 # Viés
 Quando se utiliza um sistema no qual não se paga por ele e anúncios são mostrados para ti, o sistema procura te mostrar aquelas propagandas que mais pagaram para estar lá. Em sua, o sistema trabalha para mostrar aqueles que pagaram para estar lá.
 
+
 <h1 align="center">
     <br>
-    <img "https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/PT/ads.png" alt="sistema pago"/>
+    <img src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/PT/ads.png" alt="sistema pago"/>
 	<br>
 	<br>
 </h1>

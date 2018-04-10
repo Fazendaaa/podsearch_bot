@@ -15,9 +15,10 @@ Let me explain better...
 # Bias
 When using a system that you are not paying for and sells adds for you, the system itself is looking to show to you the adds of those whom paid more for it. In a nutshell, the system is working to support the system and those who want to show their adds in it.
 
+
 <h1 align="center">
     <br>
-    <img "https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/EN/ads.png" alt="ads system"/>
+    <img src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/EN/ads.png" alt="ads system"/>
 	<br>
 	<br>
 </h1>
