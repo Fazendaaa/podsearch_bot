@@ -94,7 +94,6 @@ export const nameEpisode = (rss: item, language: string): string => {
 export const lastEpisode = (id: number, lanCode: string): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
     const options: object = {
-        id: id,
         media: 'podcast',
         entity: 'podcast',
         explicit: 'No',
@@ -111,7 +110,7 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
         language = lanCode.split('-')[0];
         country = lanCode.split('-')[1];
 
-        lookup({ country, ...options}, (err: Error, data: response) => {
+        lookup({ id, country, ...options}, (err: Error, data: response) => {
             if (err || 0 === data.resultCount) {
                 reject('Something wrong occurred with search.');
             } else {

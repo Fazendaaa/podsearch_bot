@@ -51,7 +51,6 @@ exports.nameEpisode = (rss, language) => {
 };
 exports.lastEpisode = (id, lanCode) => new Promise((resolve, reject) => {
     const options = {
-        id: id,
         media: 'podcast',
         entity: 'podcast',
         explicit: 'No',
@@ -66,7 +65,7 @@ exports.lastEpisode = (id, lanCode) => new Promise((resolve, reject) => {
     if (undefined !== id && 'number' === typeof (id) && undefined !== lanCode && 'string' === typeof (lanCode)) {
         language = lanCode.split('-')[0];
         country = lanCode.split('-')[1];
-        itunes_search_1.lookup(Object.assign({ country }, options), (err, data) => {
+        itunes_search_1.lookup(Object.assign({ id, country }, options), (err, data) => {
             if (err || 0 === data.resultCount) {
                 reject('Something wrong occurred with search.');
             }

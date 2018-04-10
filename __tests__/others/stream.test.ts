@@ -132,7 +132,7 @@ describe('Testing lastEpisode function.', () => {
     });
 
     test('id is \"undefined\".', () => {
-        return expect(lastEpisode(undefined, mockLanguage)).rejects.toMatch('Wrong argument.');
+        return expect(lastEpisode(undefined, mockLanCode)).rejects.toMatch('Wrong argument.');
     });
 
     test('lanCode is \"undefined\".', () => {
@@ -140,6 +140,16 @@ describe('Testing lastEpisode function.', () => {
 
         return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
             return expect(lastEpisode(mockInput.results[0].trackId, undefined)).rejects.toMatch('Wrong argument.');
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
+    test('Wrong id.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            return expect(lastEpisode(0, mockLanCode)).rejects.toMatch('Something wrong occurred with search.');
         }).catch((error: Error) => {
             console.error(error);
         });
