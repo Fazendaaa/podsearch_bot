@@ -17,7 +17,7 @@ Quando se utiliza um sistema no qual não se paga por ele e anúncios são mostr
 
 <h1 align="center">
     <br>
-    <img width="260" src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/PT/ads.png" alt="sistema de anunciantes"/>
+    <img src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/PT/ads.png" alt="sistema de anunciantes"/>
 	<br>
 	<br>
 </h1>
@@ -34,7 +34,7 @@ Como eu não tenho nenhuma podcast, eu não tenho que te vender nada, ficar most
 
 <h1 align="center">
     <br>
-    <img width="260" src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/docs/support/PT/donation.png" alt="sistema de doações"/>
+    <img src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/PT/donation.png" alt="sistema de doações"/>
 	<br>
 	<br>
 </h1>

@@ -17,7 +17,7 @@ When using a system that you are not paying for and sells adds for you, the syst
 
 <h1 align="center">
     <br>
-    <img width="260" src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/EN/ads.png" alt="ads system"/>
+    <img src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/EN/ads.png" alt="ads system"/>
 	<br>
 	<br>
 </h1>
@@ -34,7 +34,7 @@ Since I don't produce any podcast content, I don't have to sell to you anything.
 
 <h1 align="center">
     <br>
-    <img width="260" src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/docs/support/EN/donation.png" alt="donation system"/>
+    <img src="https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/docs/support/EN/donation.png" alt="donation system"/>
 	<br>
 	<br>
 </h1>
