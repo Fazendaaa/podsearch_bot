@@ -118,7 +118,10 @@ Since I will be keeping this README up to date with any major change and I don't
 * Adding podcasts recommendations thanks to [_lowhigh_](https://www.reddit.com/r/TelegramBots/comments/875tsz/podsearchbot/dwao2qj/) feedback on Reddit;
 * Integration with [wit.ia](https://wit.ai/);
 * Change URL shortener since Goo.gl will be shut down;
-* Adding REDIS integration(?)
+* Add statistics about the podcasts -- like a trending.
+## Maybe
+* Adding REDIS integration;
+* Spotify and Soundclound account integration -- if possible to integrate and add new podcasts to your player already of podcasts.
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
 
@@ -129,6 +132,8 @@ Consider buy me a coffee:
 Or even becoming a patron:
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/Fazenda/overview)
+
+You can understand more why I choose to accept donations and not sells adds in [SUPPORT.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/support/SUPPORT.md).
 
 # License
 Like many Open-Source Software (OSS) the MIT license is used, more about it in [LICENSE](https://github.com/Fazendaaa/podsearch_bot/blob/master/LICENSE).

@@ -119,7 +119,10 @@ Como esse README estará sendo atualizado com as mudanças importantes, não pre
 * Adicionar recomendações de podcasts baseado no que ouve, ideia do [_lowhigh_](https://www.reddit.com/r/TelegramBots/comments/875tsz/podsearchbot/dwao2qj/) no feedback que me deu no Reddit;
 * Integração com o [wit.ia](https://wit.ai/);
 * Mudar o encurtardor de URL já que o Goo.gl será desativado;
-* Adicionar integração com o REDIS(?)
+* Adicionar estatísticas sobre os podcasts -- como um ranking.
+## Em análise
+* Adicionar integração com o REDIS;
+* Integração com Spotify e Soundclound -- se for possível, facilitar acesso a podcasts através dos programas que boa parte das pessoas já utilizam.
 # Autores
 * Apenas [eu](https://github.com/Fazendaaa) até agora.
 
@@ -130,6 +133,11 @@ Considere me comprar um café:
 Ou até mesmo se tornar um padrinho:
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/Fazenda/overview)
+
+Estou analisando a possibilidade de se colocar [PicPay](https://www.picpay.com/site/) e [Padrim](https://www.padrim.com.br/) -- já que são opções muito utilizadas no Brasil.
+
+Você pode ler mais sobre as minhas escolhas de aceitar doações e de não vender propagandas no bot em [SUPPORT_PT.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/support/SUPPORT_PT.md).
+
 # Licença
 Assim como muitos projetos de código livre, a licença MIT é utilizada aqui. Mais sobre em [LICENSE](https://github.com/Fazendaaa/podsearch_bot/blob/master/LICENSE).
 # Reconhecimentos
