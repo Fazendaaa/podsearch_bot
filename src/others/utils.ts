@@ -41,7 +41,7 @@ new Promise((resolve: (data: object) => void, reject: (data: Error) => void) => 
 export const arrayLoad = (options: Array<object>): Array<string | object> | Error => {
     if (undefined !== options && 'object' === typeof(options)) {
         return options.map((element: Function) => {
-            if ('function' === typeof(element)){
+            if ('function' === typeof(element)) {
                 return element();
             /**
              * Doing a recursive search in case of an nested array.

@@ -6,7 +6,7 @@
 jest.setTimeout(60000);
 
 describe('User testing mocked.', () => {
-    test('Nothing yet.', () => {
+    test.skip('Nothing yet.', () => {
         expect(true).toEqual(true);
     });
 });

@@ -51,7 +51,6 @@ exports.nameEpisode = (rss, language) => {
 };
 exports.lastEpisode = (id, lanCode) => new Promise((resolve, reject) => {
     const options = {
-        id: id,
         media: 'podcast',
         entity: 'podcast',
         explicit: 'No',
@@ -66,7 +65,7 @@ exports.lastEpisode = (id, lanCode) => new Promise((resolve, reject) => {
     if (undefined !== id && 'number' === typeof (id) && undefined !== lanCode && 'string' === typeof (lanCode)) {
         language = lanCode.split('-')[0];
         country = lanCode.split('-')[1];
-        itunes_search_1.lookup(Object.assign({ country }, options), (err, data) => {
+        itunes_search_1.lookup(Object.assign({ id, country }, options), (err, data) => {
             if (err || 0 === data.resultCount) {
                 reject('Something wrong occurred with search.');
             }
@@ -74,7 +73,7 @@ exports.lastEpisode = (id, lanCode) => new Promise((resolve, reject) => {
                 handlerRss.parseURL(data.results[0].feedUrl).then((parsed) => {
                     link = exports.linkEpisode(parsed.items[0]);
                     name = exports.nameEpisode(parsed.items[0], language);
-                    latest = moment(parsed.items[0].pubDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
+                    latest = moment(parsed.items[0].pubDate).locale(country).format('Do MMMM YYYY, h:mm a');
                     if (undefined !== link) {
                         goo_gl_1.shorten(link).then((short) => {
                             keyboard = extra.markdown().markup((m) => {

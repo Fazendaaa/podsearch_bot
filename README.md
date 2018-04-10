@@ -85,7 +85,7 @@ If you have any other questions about it just use it the help command:
 You can build yourself a bot just like this one, just follow the procedures listed in [BUILDING.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/building/BUILDING.md).
 ## Want know more?
 If you want to understand the "whys" of I did what I did, you can read ALL THE CODE... Just joking, I've wrote some of the pros and cons of my approach on the macro vision of the code. If you want to know more, read:
-* [DATABASE.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/database/DATABASE.MD) -- How the data is stored, for subscription and "classes" of users;
+* [DATABASE.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/database/DATABASE.md) -- How the data is stored, for subscription and "classes" of users;
 * [RECOMMENDATION.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/recommendation/RECOMMENDATION.md) -- How it's handle the discovery option of new podcasts.
 # Deployment
 This bot is up and running at [Heroku](http://heroku.com/) through the Github integration, that means that each new push to the ```master``` branch means that is the code serving the bot. You can see more about how does it run at the server by looking at the [Procfile](https://github.com/Fazendaaa/podsearch_bot/blob/master/Procfile). You can also deploy yourself this bot into Heroku through:
@@ -118,7 +118,10 @@ Since I will be keeping this README up to date with any major change and I don't
 * Adding podcasts recommendations thanks to [_lowhigh_](https://www.reddit.com/r/TelegramBots/comments/875tsz/podsearchbot/dwao2qj/) feedback on Reddit;
 * Integration with [wit.ia](https://wit.ai/);
 * Change URL shortener since Goo.gl will be shut down;
-* Adding REDIS integration(?)
+* Add statistics about the podcasts -- like a trending.
+## Maybe
+* Adding REDIS integration;
+* Spotify and Soundclound account integration -- if possible to integrate and add new podcasts to your player already of podcasts.
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
 
@@ -129,6 +132,8 @@ Consider buy me a coffee:
 Or even becoming a patron:
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/Fazenda/overview)
+
+You can understand more why I choose to accept donations and not sells adds in [SUPPORT.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/support/SUPPORT.md).
 
 # License
 Like many Open-Source Software (OSS) the MIT license is used, more about it in [LICENSE](https://github.com/Fazendaaa/podsearch_bot/blob/master/LICENSE).

@@ -94,7 +94,6 @@ export const nameEpisode = (rss: item, language: string): string => {
 export const lastEpisode = (id: number, lanCode: string): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
     const options: object = {
-        id: id,
         media: 'podcast',
         entity: 'podcast',
         explicit: 'No',
@@ -111,14 +110,14 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
         language = lanCode.split('-')[0];
         country = lanCode.split('-')[1];
 
-        lookup({ country, ...options}, (err: Error, data: response) => {
+        lookup({ id, country, ...options}, (err: Error, data: response) => {
             if (err || 0 === data.resultCount) {
                 reject('Something wrong occurred with search.');
             } else {
                 handlerRss.parseURL(data.results[0].feedUrl).then((parsed) => {
                     link = linkEpisode(parsed.items[0]);
                     name = nameEpisode(parsed.items[0], language);
-                    latest = moment(parsed.items[0].pubDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
+                    latest = moment(parsed.items[0].pubDate).locale(country).format('Do MMMM YYYY, h:mm a');
 
                     /**
                      * Verifies if the link is one of the know objects value then parse it.
