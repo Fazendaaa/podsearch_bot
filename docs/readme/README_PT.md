@@ -122,7 +122,8 @@ Como esse README estará sendo atualizado com as mudanças importantes, não pre
 * Adicionar estatísticas sobre os podcasts -- como um ranking.
 ## Em análise
 * Adicionar integração com o REDIS;
-* Integração com Spotify e Soundclound -- se for possível, facilitar acesso a podcasts através dos programas que boa parte das pessoas já utilizam.
+* Integração com Spotify e Soundclound -- se for possível, facilitar acesso a podcasts através dos programas que boa parte das pessoas já utilizam;
+* Criar um GraphQL como uma "cache" para as requisições -- usar racing Promises para rodar melhor.
 # Autores
 * Apenas [eu](https://github.com/Fazendaaa) até agora.
 

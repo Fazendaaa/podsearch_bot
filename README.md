@@ -121,7 +121,8 @@ Since I will be keeping this README up to date with any major change and I don't
 * Add statistics about the podcasts -- like a trending.
 ## Maybe
 * Adding REDIS integration;
-* Spotify and Soundclound account integration -- if possible to integrate and add new podcasts to your player already of podcasts.
+* Spotify and Soundclound account integration -- if possible to integrate and add new podcasts to your player already of podcasts;
+* Create a GraphQL as a "cache" to requests -- use Promise racing to perform it better.
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
 
