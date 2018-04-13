@@ -122,7 +122,8 @@ Since I will be keeping this README up to date with any major change and I don't
 ## Maybe
 * Adding REDIS integration;
 * Spotify and Soundclound account integration -- if possible to integrate and add new podcasts to your player already of podcasts;
-* Create a GraphQL as a "cache" to requests -- use Promise racing to perform it better.
+* Create a GraphQL as a "cache" to requests -- use Promise racing to perform it better;
+* Improve recommendation system through "listening" the podcast content -- like this [post](https://medium.com/behavioral-signals-ai/using-ai-to-understand-the-way-a-movie-looks-and-sounds-fe931d487171) says about movies.
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
 
