@@ -152,7 +152,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         itunes_search_1.search(Object.assign({ term: value }, opts), (err, data) => {
             if (err) {
                 console.error(err);
-                utils_1.errorInline(lanCode).then((inline) => {
+                utils_1.errorInline(lanCode, i18nNode.api).then((inline) => {
                     answerInlineQuery([inline]);
                 });
             }
@@ -164,13 +164,13 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                             answerInlineQuery(results, { next_offset: offset + pageLimit });
                         }).catch((error) => {
                             console.error(error);
-                            utils_1.errorInline(lanCode).then((inline) => {
+                            utils_1.errorInline(lanCode, i18nNode.api).then((inline) => {
                                 answerInlineQuery([inline]);
                             });
                         });
                     }
                     else {
-                        utils_1.endInline(lanCode).then((inline) => {
+                        utils_1.endInline(lanCode, i18nNode.api).then((inline) => {
                             answerInlineQuery([inline]);
                         }).catch((error) => {
                             console.error(error);
@@ -178,7 +178,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                     }
                 }
                 else {
-                    utils_1.notFoundInline(value, lanCode).then((inline) => {
+                    utils_1.notFoundInline(value, lanCode, i18nNode.api).then((inline) => {
                         answerInlineQuery([inline]);
                     }).catch((error) => {
                         console.error(error);
@@ -188,7 +188,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         });
     }
     else {
-        utils_1.searchInline(lanCode).then((inline) => {
+        utils_1.searchInline(lanCode, i18nNode.api).then((inline) => {
             answerInlineQuery([inline]);
         }).catch((error) => {
             console.error(error);

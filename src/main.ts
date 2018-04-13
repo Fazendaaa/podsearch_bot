@@ -265,7 +265,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         search({ term: value, ...opts }, (err: Error, data: response) => {
             if (err) {
                 console.error(err);
-                errorInline(lanCode).then((inline: telegramInline) => {
+                errorInline(lanCode, i18nNode.api).then((inline: telegramInline) => {
                     answerInlineQuery([inline]);
                 });
             } else {
@@ -287,7 +287,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                             answerInlineQuery(results, { next_offset: offset + pageLimit });
                         }).catch((error: Error) => {
                             console.error(error);
-                            errorInline(lanCode).then((inline: telegramInline) => {
+                            errorInline(lanCode, i18nNode.api).then((inline: telegramInline) => {
                                 answerInlineQuery([inline]);
                             });
                         });
@@ -295,7 +295,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                      * If there's nothing else to be presented at the user, this would mean an end of search.
                      */
                     } else {
-                        endInline(lanCode).then((inline: telegramInline) => {
+                        endInline(lanCode, i18nNode.api).then((inline: telegramInline) => {
                             answerInlineQuery([inline]);
                         }).catch((error: Error) => {
                             console.error(error);
@@ -305,7 +305,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                  * In case that the user search anything that isn't available in iTunes store or mistyping.
                  */
                 } else {
-                    notFoundInline(value, lanCode).then((inline: telegramInline) => {
+                    notFoundInline(value, lanCode, i18nNode.api).then((inline: telegramInline) => {
                         answerInlineQuery([inline]);
                     }).catch((error: Error) => {
                         console.error(error);
@@ -317,7 +317,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
      * Incentive the user to search for a podcast.
      */
     } else {
-        searchInline(lanCode).then((inline: telegramInline) => {
+        searchInline(lanCode, i18nNode.api).then((inline: telegramInline) => {
             answerInlineQuery([inline]);
         }).catch((error: Error) => {
             console.error(error);
