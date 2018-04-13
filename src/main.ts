@@ -6,13 +6,19 @@
 
 import { config } from 'dotenv';
 import {
+    setKey,
+    shorten
+} from 'goo.gl';
+import * as i18n_node_yaml from 'i18n-node-yaml';
+import {
     lookup,
     options,
     response,
     result,
     search
 } from 'itunes-search';
-import { resolve } from 'path';
+import { join } from 'path';
+import * as Parser from 'rss-parser';
 import { telegramInline } from 'telegraf';
 import { resultExtended } from './@types/parse/main';
 import { Subscription } from './database/subscription';
@@ -52,6 +58,20 @@ const extra = telegraf.Extra;
 config();
 
 /**
+ * Set Google's API key.
+ */
+setKey(process.env.GOOGLE_KEY);
+
+/**
+ * Configure internationalization options.
+ */
+const i18nNode = i18n_node_yaml({
+    debug: true,
+    translationFolder: join(__dirname, '../locales'),
+    locales: ['en', 'pt']
+});
+
+/**
  * Start bot and then setting its options like:
  *  - Internationalization support;
  *  - Polling;
@@ -63,7 +83,7 @@ const bot = new telegraf(process.env.BOT_KEY);
 const i18n = new telegrafI18n({
     defaultLanguage: 'en',
     allowMissing: true,
-    directory: resolve(__dirname, '../locales')
+    directory: join(__dirname, '../locales')
 });
 
 bot.startPolling();
@@ -76,6 +96,11 @@ bot.use(talkingSearchManager.middleware());
  * Subscription database.
  */
 const subscription = new Subscription();
+
+/**
+ * RSS fetcher.
+ */
+const handlerRss = new Parser();
 
 /**
  * This could lead to a problem someday(?)
@@ -113,7 +138,7 @@ bot.start(({ i18n, replyWithMarkdown, message }) => {
          */
         } else {
             replyWithMarkdown(i18n.t('sending')).then(() => {
-                lastEpisode(parseInt(argument, 10), message.from.language_code).then((episode: resultExtended) => {
+                lastEpisode(parseInt(argument, 10), message.from.language_code, i18nNode.api, shorten, handlerRss).then((episode: resultExtended) => {
                     replyWithMarkdown(i18n.t('episode', episode), episode.keyboard);
                 }).catch(error => {
                     replyWithMarkdown(i18n.t('error'));
@@ -175,7 +200,7 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
                 replyWithMarkdown(i18n.t('error'));
                 console.error(err);
             } else {
-                parseResponse(data, message.from.language_code).then((parsed: resultExtended) => {
+                parseResponse(data, message.from.language_code, shorten, i18nNode.api).then((parsed: resultExtended) => {
                     replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
                 }).catch((error: string) => {
                     console.error(error);
@@ -188,11 +213,11 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
      */
     } else {
         replyWithMarkdown(i18n.t('wrongInputCmd')).then(() => {
-            replyWithVideo({ source: resolve(__dirname, '../gif/searchCmd.mp4') }).then(() => {
+            replyWithVideo({ source: join(__dirname, '../gif/searchCmd.mp4') }).then(() => {
                 replyWithMarkdown(i18n.t('wrongInputButton')).then(() => {
-                    replyWithVideo({ source: resolve(__dirname, '../gif/searchButton.mp4') }).then(() => {
+                    replyWithVideo({ source: join(__dirname, '../gif/searchButton.mp4') }).then(() => {
                         replyWithMarkdown(i18n.t('wrongInputInline')).then(() => {
-                            replyWithVideo({ source: resolve(__dirname, '../gif/searchInline.mp4') }).catch((error: Error) => {
+                            replyWithVideo({ source: join(__dirname, '../gif/searchInline.mp4') }).catch((error: Error) => {
                                 throw error;
                             });
                         }).catch((error: Error) => {
@@ -240,7 +265,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
         search({ term: value, ...opts }, (err: Error, data: response) => {
             if (err) {
                 console.error(err);
-                errorInline(lanCode).then((inline: telegramInline) => {
+                errorInline(lanCode, i18nNode.api).then((inline: telegramInline) => {
                     answerInlineQuery([inline]);
                 });
             } else {
@@ -258,11 +283,11 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                      * fewer podcast options, or even none, in the search.
                      */
                     if (0 < data.results.length) {
-                        parseResponseInline(data, lanCode).then((results: Array<telegramInline>) => {
+                        parseResponseInline(data, lanCode, shorten, i18nNode.api).then((results: Array<telegramInline>) => {
                             answerInlineQuery(results, { next_offset: offset + pageLimit });
                         }).catch((error: Error) => {
                             console.error(error);
-                            errorInline(lanCode).then((inline: telegramInline) => {
+                            errorInline(lanCode, i18nNode.api).then((inline: telegramInline) => {
                                 answerInlineQuery([inline]);
                             });
                         });
@@ -270,7 +295,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                      * If there's nothing else to be presented at the user, this would mean an end of search.
                      */
                     } else {
-                        endInline(lanCode).then((inline: telegramInline) => {
+                        endInline(lanCode, i18nNode.api).then((inline: telegramInline) => {
                             answerInlineQuery([inline]);
                         }).catch((error: Error) => {
                             console.error(error);
@@ -280,7 +305,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                  * In case that the user search anything that isn't available in iTunes store or mistyping.
                  */
                 } else {
-                    notFoundInline(value, lanCode).then((inline: telegramInline) => {
+                    notFoundInline(value, lanCode, i18nNode.api).then((inline: telegramInline) => {
                         answerInlineQuery([inline]);
                     }).catch((error: Error) => {
                         console.error(error);
@@ -292,7 +317,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
      * Incentive the user to search for a podcast.
      */
     } else {
-        searchInline(lanCode).then((inline: telegramInline) => {
+        searchInline(lanCode, i18nNode.api).then((inline: telegramInline) => {
             answerInlineQuery([inline]);
         }).catch((error: Error) => {
             console.error(error);

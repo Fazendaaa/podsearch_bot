@@ -3,6 +3,7 @@
  */
 'use strict';
 
+import * as i18n_node_yaml from 'i18n-node-yaml';
 import { join } from 'path';
 import { telegramInline } from 'telegraf';
 import {
@@ -21,6 +22,18 @@ jest.setTimeout(60000);
 const mockUserId: number = 0;
 const mockLanCode: string = 'en-us';
 const unsupportedLanCode: string = 'nothing';
+let i18nNode = undefined;
+
+beforeAll(async (done) => {
+    i18nNode = await i18n_node_yaml({
+        debug: true,
+        translationFolder: join(__dirname, '../../locales'),
+        locales: ['en', 'pt']
+    });
+
+    await i18nNode.ready.then();
+    done();
+});
 
 describe('Testing arrayLoad function.', () => {
     test('options \"undefined\".', () => {
@@ -127,19 +140,19 @@ describe('Testing notFoundInline function.', () => {
     test('both equals to undefined.', () => {
         expect.assertions(1);
 
-        return expect(notFoundInline(undefined, undefined)).rejects.toBeUndefined();
+        return expect(notFoundInline(undefined, undefined, i18nNode.api)).rejects.toBeUndefined();
     });
 
     test('lanCode equals to undefined.', () => {
         expect.assertions(1);
 
-        return expect(notFoundInline('mistyped', undefined)).rejects.toBeUndefined();
+        return expect(notFoundInline('mistyped', undefined, i18nNode.api)).rejects.toBeUndefined();
     });
 
     test('value equals to undefined.', () => {
         expect.assertions(1);
 
-        return expect(notFoundInline(undefined, 'en-us')).rejects.toBeUndefined();
+        return expect(notFoundInline(undefined, 'en-us', i18nNode.api)).rejects.toBeUndefined();
     });
 
     /**
@@ -149,7 +162,7 @@ describe('Testing notFoundInline function.', () => {
         expect.assertions(1);
 
         return readAsync('/inlineMessages/en-us/notFoundInline.json').then(file => {
-            return expect(notFoundInline('mistyped', unsupportedLanCode)).resolves.toEqual(file);
+            return expect(notFoundInline('mistyped', unsupportedLanCode, i18nNode.api)).resolves.toEqual(file);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -160,14 +173,14 @@ describe('Testing errorInline function.', () => {
     test('lanCode equals to undefined.', () => {
         expect.assertions(1);
 
-        return expect(errorInline(undefined)).rejects.toBeUndefined();
+        return expect(errorInline(undefined, i18nNode.api)).rejects.toBeUndefined();
     });
 
     test('Unsupported lanCode.', () => {
         expect.assertions(1);
 
         return readAsync('/inlineMessages/en-us/errorInline.json').then(file => {
-            return expect(errorInline(unsupportedLanCode)).resolves.toEqual(file);
+            return expect(errorInline(unsupportedLanCode, i18nNode.api)).resolves.toEqual(file);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -178,14 +191,14 @@ describe('Testing searchInline function.', () => {
     test('lanCode equals to undefined.', () => {
         expect.assertions(1);
 
-        return expect(searchInline(undefined)).rejects.toBeUndefined();
+        return expect(searchInline(undefined, i18nNode.api)).rejects.toBeUndefined();
     });
 
     test('Unsupported lanCode.', () => {
         expect.assertions(1);
 
         return readAsync('/inlineMessages/en-us/searchInline.json').then(file => {
-            return expect(searchInline(unsupportedLanCode)).resolves.toEqual(file);
+            return expect(searchInline(unsupportedLanCode, i18nNode.api)).resolves.toEqual(file);
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -196,14 +209,14 @@ describe('Testing endInline function.', () => {
     test('lanCode equals to undefined.', () => {
         expect.assertions(1);
 
-        return expect(endInline(undefined)).rejects.toBeUndefined();
+        return expect(endInline(undefined, i18nNode.api)).rejects.toBeUndefined();
     });
 
     test('Unsupported lanCode.', () => {
         expect.assertions(1);
 
         return readAsync('/inlineMessages/en-us/endInline.json').then(file => {
-            return expect(endInline(unsupportedLanCode)).resolves.toEqual(file);
+            return expect(endInline(unsupportedLanCode, i18nNode.api)).resolves.toEqual(file);
         }).catch((error: Error) => {
             console.error(error);
         });

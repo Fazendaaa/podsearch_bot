@@ -31,4 +31,14 @@ module.exports = {
         'node'
     ],
     collectCoverage: true,
+    useStderr: true,
+    forceExit: true,
+    coverageReporters: [
+        "json",
+        "lcov",
+        "text"
+    ],
+    expand: true,
+    logHeapUsage: true,
+    bail: true
 };

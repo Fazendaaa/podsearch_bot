@@ -122,7 +122,9 @@ Como esse README estará sendo atualizado com as mudanças importantes, não pre
 * Adicionar estatísticas sobre os podcasts -- como um ranking.
 ## Em análise
 * Adicionar integração com o REDIS;
-* Integração com Spotify e Soundclound -- se for possível, facilitar acesso a podcasts através dos programas que boa parte das pessoas já utilizam.
+* Integração com Spotify e Soundclound -- se for possível, facilitar acesso a podcasts através dos programas que boa parte das pessoas já utilizam;
+* Criar um GraphQL como uma "cache" para as requisições -- usar racing Promises para rodar melhor;
+* Fazer com que o sistema de recomendações melhore após "ouvir" as podcasts -- assim como essa [reportagem](https://medium.com/behavioral-signals-ai/using-ai-to-understand-the-way-a-movie-looks-and-sounds-fe931d487171) diz sobre filmes.
 # Autores
 * Apenas [eu](https://github.com/Fazendaaa) até agora.
 

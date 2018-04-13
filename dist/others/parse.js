@@ -1,18 +1,7 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv_1 = require("dotenv");
-const goo_gl_1 = require("goo.gl");
-const i18n_node_yaml = require("i18n-node-yaml");
 const moment = require("moment");
-const path_1 = require("path");
 const extra = require('telegraf').Extra;
-dotenv_1.config();
-goo_gl_1.setKey(process.env.GOOGLE_KEY);
-const i18n = i18n_node_yaml({
-    debug: true,
-    translationFolder: path_1.join(__dirname, '../../locales'),
-    locales: ['en', 'pt']
-});
 exports.hasGenres = (genres) => {
     let returnValue = undefined;
     if (undefined !== genres) {
@@ -58,7 +47,7 @@ exports.maskResponse = (data) => {
         collectionId: data.collectionId
     } : undefined;
 };
-exports.maskResponseInline = (data) => {
+exports.maskResponseInline = (data, i18n) => {
     let returnValue = undefined;
     let preview = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
     if (undefined !== data) {
@@ -79,7 +68,7 @@ exports.maskResponseInline = (data) => {
             title: data.artistName,
             type: 'article',
             input_message_content: {
-                message_text: i18n.api().t('mask', data, data.lanCode),
+                message_text: i18n().t('mask', data, data.lanCode),
                 parse_mode: 'Markdown'
             },
             reply_markup: data.keyboard.reply_markup,
@@ -89,10 +78,10 @@ exports.maskResponseInline = (data) => {
     }
     return returnValue;
 };
-exports.shortenLinks = (data) => new Promise((resolve, reject) => {
+exports.shortenLinks = (data, shorten) => new Promise((resolve, reject) => {
     if (undefined !== data) {
-        goo_gl_1.shorten(data.feedUrl).then((rss) => {
-            goo_gl_1.shorten(data.collectionViewUrl).then((itunes) => {
+        shorten(data.feedUrl).then((rss) => {
+            shorten(data.collectionViewUrl).then((itunes) => {
                 resolve(Object.assign({}, data, { itunes, rss }));
             }).catch((error) => {
                 reject('Has no iTunes link available.');
@@ -105,28 +94,29 @@ exports.shortenLinks = (data) => new Promise((resolve, reject) => {
         reject('Wrong argument.');
     }
 });
-exports.parse = (data, lanCode, maskFunction) => new Promise((resolve, reject) => {
+exports.parse = (data, lanCode, maskFunction, shorten, i18n) => new Promise((resolve, reject) => {
     let filtered = undefined;
     let latest = undefined;
     let keyboard = undefined;
     let podcastId = undefined;
     let buttons = undefined;
     if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== lanCode &&
-        'string' === typeof (lanCode) && undefined !== maskFunction && 'function' === typeof (maskFunction)) {
+        'string' === typeof (lanCode) && undefined !== maskFunction && 'function' === typeof (maskFunction) &&
+        undefined !== shorten && 'function' === typeof (shorten) && undefined !== i18n && 'function' === typeof (i18n)) {
         filtered = data.results.filter(exports.hasItAll);
         if (0 < filtered.length) {
             Promise.all(filtered.map((element) => {
-                return exports.shortenLinks(element).then((shortened) => {
+                return exports.shortenLinks(element, shorten).then((shortened) => {
                     latest = moment(shortened.releaseDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
                     podcastId = shortened.collectionId || shortened.trackId;
-                    buttons = i18n.api().t('card', {}, lanCode.split('-')[0]);
+                    buttons = i18n().t('card', {}, lanCode.split('-')[0]);
                     keyboard = extra.markdown().markup((m) => {
                         return m.inlineKeyboard([
                             m.callbackButton(buttons[0], `subscribe/${podcastId}`),
                             { text: buttons[1], url: `t.me/${process.env.BOT_NAME}?start=${podcastId}` }
                         ]);
                     });
-                    return maskFunction(Object.assign({}, shortened, { latest, keyboard, lanCode: lanCode.split('-')[0] }));
+                    return maskFunction(Object.assign({}, shortened, { latest, keyboard, lanCode: lanCode.split('-')[0] }), i18n);
                 }).catch((error) => {
                     throw error;
                 });
@@ -141,18 +131,18 @@ exports.parse = (data, lanCode, maskFunction) => new Promise((resolve, reject) =
         }
     }
     else {
-        reject('Empty results.');
+        reject('Wrong argument.');
     }
 });
-exports.parseResponse = (data, lanCode, position = 0) => new Promise((resolve, reject) => {
-    exports.parse(data, lanCode, exports.maskResponse).then((results) => {
+exports.parseResponse = (data, lanCode, shorten, i18n, position = 0) => new Promise((resolve, reject) => {
+    exports.parse(data, lanCode, exports.maskResponse, shorten, i18n).then((results) => {
         resolve(results[position]);
     }).catch((error) => {
         reject(error);
     });
 });
-exports.parseResponseInline = (data, lanCode) => new Promise((resolve, reject) => {
-    exports.parse(data, lanCode, exports.maskResponseInline).then((parsed) => {
+exports.parseResponseInline = (data, lanCode, shorten, i18n) => new Promise((resolve, reject) => {
+    exports.parse(data, lanCode, exports.maskResponseInline, shorten, i18n).then((parsed) => {
         resolve(parsed);
     }).catch((error) => {
         reject(error);

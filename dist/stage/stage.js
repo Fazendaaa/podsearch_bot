@@ -1,7 +1,10 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = require("dotenv");
+const goo_gl_1 = require("goo.gl");
+const i18n_node_yaml = require("i18n-node-yaml");
 const itunes_search_1 = require("itunes-search");
+const path_1 = require("path");
 const parse_1 = require("../others/parse");
 const utils_1 = require("../others/utils");
 const telegraf = require('telegraf');
@@ -11,6 +14,12 @@ const extra = telegraf.Extra;
 const stage = require('telegraf/stage');
 const scene = require('telegraf/scenes/base');
 dotenv_1.config();
+goo_gl_1.setKey(process.env.GOOGLE_KEY);
+const i18nNode = i18n_node_yaml({
+    debug: true,
+    translationFolder: path_1.join(__dirname, '../../locales'),
+    locales: ['en', 'pt']
+});
 const telegramCore = new telegram(process.env.BOT_KEY);
 const talkingSearch = new scene('talkingSearch');
 const handleSearch = ({ i18n, replyWithMarkdown, text, language_code }, position = 0) => {
@@ -33,7 +42,7 @@ const handleSearch = ({ i18n, replyWithMarkdown, text, language_code }, position
                 console.error(err);
             }
             else {
-                parse_1.parseResponse(data, language_code, position).then((parsed) => {
+                parse_1.parseResponse(data, language_code, goo_gl_1.shorten, i18nNode.api, position).then((parsed) => {
                     telegramCore.editMessageText(chat.id, message_id, undefined, i18n.t('mask', parsed), parsed.keyboard).then(() => {
                         buttons = utils_1.arrayLoad(i18n.repository[language].confirm);
                         keyboard = extra.markdown().markup((m) => {

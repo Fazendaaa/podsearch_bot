@@ -4,20 +4,10 @@
 'use strict';
 
 import { readFile } from 'fs';
-import * as i18n_node_yaml from 'i18n-node-yaml';
+import { api } from 'i18n-node-yaml';
 import { join } from 'path';
 import { remove } from 'remove-accents';
 import { telegramInline } from 'telegraf';
-
-/**
- * Configure internationalization options.
- */
-const i18n = i18n_node_yaml({
-    debug: true,
-    translationFolder: join(__dirname, '../../locales'),
-    defaultLocale: 'en',
-    locales: ['en', 'pt']
-});
 
 /**
  * I  know  that  isn't  the right way of doing mocking tests but, right now, is the way that I came up to. This testing
@@ -59,7 +49,7 @@ export const arrayLoad = (options: Array<object>): Array<string | object> | Erro
  * This function removes the '/cmd' of the command.
  */
 export const removeCmd = (cmd: string): string => {
-    return (undefined !== cmd && 'string' === typeof cmd) ? cmd.replace(/(\/\w+)\s*/, '') : undefined;
+    return (undefined !== cmd && 'string' === typeof cmd) ? remove(cmd.replace(/(\/\w+)\s*/, '')) : undefined;
 };
 
 /**
@@ -74,31 +64,27 @@ export const messageToString = (message: string): string => {
 /**
  * Just an not found message to be sent to the user in case of failed search.
  */
-export const notFoundInline = (value: string, lanCode: string): Promise<telegramInline> =>
+export const notFoundInline = (value: string, lanCode: string, i18n: api): Promise<telegramInline> =>
 new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => void) => {
     let lang: string = undefined;
 
     if (undefined !== value && 'string' === typeof (value) && undefined !== lanCode && 'string' === typeof (lanCode)) {
         lang = lanCode.split('-')[0];
 
-        i18n.ready.then(() => {
-            resolve({
-                id: '0',
-                /**
-                 * Passing lang in api() call didn't fall to default when language isn't supported. That's why needed it
-                 * change to call it in t().
-                 */
-                title: i18n.api().t('notFoundInlineTitle', { value }, lang),
-                type: 'article',
-                input_message_content: {
-                    message_text: i18n.api().t('notFoundInlineMessage', { value }, lang),
-                    parse_mode: 'Markdown'
-                },
-                description: i18n.api().t('notFoundInlineDescription', { value }, lang),
-                thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
-            });
-        }).catch((error: Error) => {
-            reject(error);
+        resolve({
+            id: '0',
+            /**
+             * Passing lang in api() call didn't fall to default when language isn't supported. That's why needed it
+             * change to call it in t().
+             */
+            title: i18n().t('notFoundInlineTitle', { value }, lang),
+            type: 'article',
+            input_message_content: {
+                message_text: i18n().t('notFoundInlineMessage', { value }, lang),
+                parse_mode: 'Markdown'
+            },
+            description: i18n().t('notFoundInlineDescription', { value }, lang),
+            thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
         });
     } else {
         reject(undefined);
@@ -108,31 +94,27 @@ new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => v
 /**
  * Just an error message to be sent to the user in case of failed search.
  */
-export const errorInline = (lanCode: string): Promise<telegramInline> =>
+export const errorInline = (lanCode: string, i18n: api): Promise<telegramInline> =>
 new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => void) => {
     let lang: string = undefined;
 
     if (undefined !== lanCode && 'string' === typeof (lanCode)) {
         lang = lanCode.split('-')[0];
 
-        i18n.ready.then(() => {
-            resolve({
-                id: '0',
-                /**
-                 * Passing lang in api() call didn't fall to default when language isn't supported. That's why needed it
-                 * change to call it in t().
-                 */
-                title: i18n.api().t('errorInlineTitle', {}, lang),
-                type: 'article',
-                input_message_content: {
-                    message_text: i18n.api().t('errorInlineMessage', {}, lang),
-                    parse_mode: 'Markdown'
-                },
-                description: i18n.api().t('errorInlineDescription', {}, lang),
-                thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
-            });
-        }).catch((error: Error) => {
-            reject(error);
+        resolve({
+            id: '0',
+            /**
+             * Passing  lang  in  i18n() call didn't fall to default when language isn't supported. That's why needed it
+             * change to call it in t().
+             */
+            title: i18n().t('errorInlineTitle', {}, lang),
+            type: 'article',
+            input_message_content: {
+                message_text: i18n().t('errorInlineMessage', {}, lang),
+                parse_mode: 'Markdown'
+            },
+            description: i18n().t('errorInlineDescription', {}, lang),
+            thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/error.png'
         });
     } else {
         reject(undefined);
@@ -142,27 +124,23 @@ new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => v
 /**
  * Just a search message to be sent to the user in case of an empty search query.
  */
-export const searchInline = (lanCode: string): Promise<telegramInline> =>
+export const searchInline = (lanCode: string, i18n: api): Promise<telegramInline> =>
 new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => void) => {
     let lang: string = undefined;
 
     if (undefined !== lanCode && 'string' === typeof (lanCode)) {
         lang = lanCode.split('-')[0];
 
-        i18n.ready.then(() => {
-            resolve({
-                id: '0',
-                title: i18n.api().t('searchInlineTitle', {}, lang),
-                type: 'article',
-                input_message_content: {
-                    message_text: i18n.api().t('searchInlineMessage', {}, lang),
-                    parse_mode: 'Markdown'
-                },
-                description: i18n.api().t('searchInlineDescription', {}, lang),
-                thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
-            });
-        }).catch((error: Error) => {
-            reject(error);
+        resolve({
+            id: '0',
+            title: i18n().t('searchInlineTitle', {}, lang),
+            type: 'article',
+            input_message_content: {
+                message_text: i18n().t('searchInlineMessage', {}, lang),
+                parse_mode: 'Markdown'
+            },
+            description: i18n().t('searchInlineDescription', {}, lang),
+            thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
         });
     } else {
         reject(undefined);
@@ -172,27 +150,23 @@ new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => v
 /**
  * Just a end search message to be sent to the user at the bottom of search query.
  */
-export const endInline = (lanCode: string): Promise<telegramInline> =>
+export const endInline = (lanCode: string, i18n: api): Promise<telegramInline> =>
 new Promise((resolve: (data: telegramInline) => void, reject: (data: Error) => void) => {
     let lang: string = undefined;
 
     if (undefined !== lanCode && 'string' === typeof (lanCode)) {
         lang = lanCode.split('-')[0];
 
-        i18n.ready.then(() => {
-            resolve({
-                id: '0',
-                title: i18n.api().t('endInlineTitle', {}, lang),
-                type: 'article',
-                input_message_content: {
-                    message_text: i18n.api().t('endInlineMessage', {}, lang),
-                    parse_mode: 'Markdown'
-                },
-                description: i18n.api().t('endInlineDescription', {}, lang),
-                thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
-            });
-        }).catch((error: Error) => {
-            reject(error);
+        resolve({
+            id: '0',
+            title: i18n().t('endInlineTitle', {}, lang),
+            type: 'article',
+            input_message_content: {
+                message_text: i18n().t('endInlineMessage', {}, lang),
+                parse_mode: 'Markdown'
+            },
+            description: i18n().t('endInlineDescription', {}, lang),
+            thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
         });
     } else {
         reject(undefined);
