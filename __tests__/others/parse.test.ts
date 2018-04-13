@@ -37,6 +37,10 @@ import {
 } from '../../src/others/parse';
 import { readAsync } from '../../src/others/utils';
 
+config();
+
+setKey(process.env.GOOGLE_KEY);
+
 /**
  * Setting timeout to 60s === 60000ms.
  */
@@ -54,9 +58,9 @@ let i18nNode = undefined;
 let mockI18nNode = undefined;
 
 beforeAll(() => {
-    config();
-    setKey(process.env.GOOGLE_KEY);
-
+    /**
+     * It might not seen but, under the hood, i18n_node_yaml is calling a Promise.
+     */
     i18nNode = i18n_node_yaml({
         debug: true,
         translationFolder: join(__dirname, '../../locales'),

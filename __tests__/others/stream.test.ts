@@ -3,7 +3,15 @@
  */
 'use strict';
 
+import { config } from 'dotenv';
+import {
+    setKey,
+    shorten
+} from 'goo.gl';
+import * as i18n_node_yaml from 'i18n-node-yaml';
 import { response } from 'itunes-search';
+import { join } from 'path';
+import * as Parser from 'rss-parser';
 import { resultExtended } from '../../src/@types/parse/main';
 import { item } from '../../src/@types/stream/main';
 import {
@@ -13,10 +21,53 @@ import {
 } from '../../src/others/stream';
 import { readAsync } from '../../src/others/utils';
 
+config();
+
+setKey(process.env.GOOGLE_KEY);
+
 jest.setTimeout(60000);
+
+/**
+ * Emulate when the Parser isn't working.
+ */
+class MockParser extends Parser {
+    constructor(options?: object) {
+        super();
+    }
+
+    public parseURL(link: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            reject('some reject.');
+        });
+    }
+}
 
 const mockLanguage: string = 'en';
 const mockLanCode: string = 'en-us';
+const fetcherRss = new Parser();
+const mockFetcherRss = new MockParser();
+
+const mockShorten = (link: string): Promise<string> =>
+new Promise((resolve: (data: string) => void, reject: (error: string) => void) => {
+    reject('some reject.');
+});
+
+let i18nNode = undefined;
+let mockI18nNode = undefined;
+
+beforeAll(() => {
+    i18nNode = i18n_node_yaml({
+        debug: true,
+        translationFolder: join(__dirname, '../../locales'),
+        locales: ['en', 'pt']
+    });
+
+    mockI18nNode = i18n_node_yaml({
+        debug: true,
+        translationFolder: join(__dirname, '../../__mocks__/locales'),
+        locales: ['en', 'pt']
+    });
+});
 
 /**
  * RSS item has different kind of podcast link. Verifies all kind available.
@@ -91,13 +142,13 @@ describe('Testing linkEpisode function.', () => {
 describe('Testing nameEpisode function.', () => {
     test('both \"undefined\".', () => {
         return expect(() => {
-            return nameEpisode(undefined, undefined);
+            return nameEpisode(undefined, undefined, i18nNode.api);
         }).toThrow('Wrong argument.');
     });
 
     test('rss \"undefined\".', () => {
         return expect(() => {
-            return nameEpisode(undefined, mockLanguage);
+            return nameEpisode(undefined, mockLanguage, i18nNode.api);
         }).toThrow('Wrong argument.');
     });
 
@@ -106,10 +157,32 @@ describe('Testing nameEpisode function.', () => {
 
         return readAsync('nerdcast/unsupported/input/stream.json').then((mockInput: item) => {
             return expect(() => {
-                return nameEpisode(mockInput, undefined);
+                return nameEpisode(mockInput, undefined, i18nNode.api);
             }).toThrow('Wrong argument.');
         }).catch((error: Error) => {
             console.error(error);
+        });
+    });
+
+    test('Wrong i18n.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/stream.json').then((mockInput: item) => {
+            delete mockInput.title;
+
+            return expect(nameEpisode(mockInput, mockLanguage, mockI18nNode.api)).toBeUndefined();
+        });
+    });
+
+    test('Without title.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/stream.json').then((mockInput: item) => {
+            const returnString: string = 'No last episode name available. Please, report this to my creator.';
+
+            delete mockInput.title;
+
+            return expect(nameEpisode(mockInput, mockLanguage, i18nNode.api)).toMatch(returnString);
         });
     });
 
@@ -117,7 +190,7 @@ describe('Testing nameEpisode function.', () => {
         expect.assertions(1);
 
         return readAsync('nerdcast/unsupported/input/stream.json').then((mockInput: item) => {
-            return expect(nameEpisode(mockInput, mockLanguage)).toEqual(`${mockInput.title}`);
+            return expect(nameEpisode(mockInput, mockLanguage, i18nNode.api)).toEqual(`${mockInput.title}`);
         });
     });
 });
@@ -128,28 +201,58 @@ describe('Testing nameEpisode function.', () => {
  */
 describe('Testing lastEpisode function.', () => {
     test('both \"undefined\".', () => {
-        return expect(lastEpisode(undefined, undefined)).rejects.toMatch('Wrong argument.');
+        return expect(lastEpisode(undefined, undefined, i18nNode.api, shorten, fetcherRss)).rejects.toMatch('Wrong argument.');
     });
 
     test('id is \"undefined\".', () => {
-        return expect(lastEpisode(undefined, mockLanCode)).rejects.toMatch('Wrong argument.');
+        return expect(lastEpisode(undefined, mockLanCode, i18nNode.api, shorten, fetcherRss)).rejects.toMatch('Wrong argument.');
+    });
+
+    test('Wrong id.', () => {
+        expect.assertions(1);
+
+        return expect(lastEpisode(0, mockLanCode, shorten, i18nNode.api, fetcherRss)).rejects.toMatch('Something wrong occurred with search.');
     });
 
     test('lanCode is \"undefined\".', () => {
         expect.assertions(1);
 
         return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
-            return expect(lastEpisode(mockInput.results[0].trackId, undefined)).rejects.toMatch('Wrong argument.');
+            return expect(lastEpisode(mockInput.results[0].trackId, undefined, i18nNode.api, shorten, fetcherRss)).rejects.toMatch('Wrong argument.');
         }).catch((error: Error) => {
             console.error(error);
         });
     });
 
-    test('Wrong id.', () => {
+    test('Wrong parser.', () => {
         expect.assertions(1);
 
         return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
-            return expect(lastEpisode(0, mockLanCode)).rejects.toMatch('Something wrong occurred with search.');
+            return expect(lastEpisode(mockInput.results[0].trackId, mockLanCode, i18nNode.api, shorten, mockFetcherRss)).rejects.toMatch('some reject.');
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
+    test('Wrong shorten.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            return expect(lastEpisode(mockInput.results[0].trackId, mockLanCode, i18nNode.api, mockShorten, fetcherRss)).rejects.toMatch('some reject.');
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
+    test('Wrong i18n.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            return readAsync('nerdcast/unsupported/output/lastEpisode.json').then((mockOutput: resultExtended) => {
+                return expect(lastEpisode(mockInput.results[0].trackId, mockLanCode, mockI18nNode.api, shorten, fetcherRss)).resolves.toEqual(mockOutput);
+            }).catch((error: Error) => {
+                throw (error);
+            });
         }).catch((error: Error) => {
             console.error(error);
         });
@@ -162,8 +265,8 @@ describe('Testing lastEpisode function.', () => {
         expect.assertions(1);
 
         return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
-            return readAsync('nerdcast/unsupported/output/lastEpisode.json').then((mockOutput: resultExtended) => {
-                return expect(lastEpisode(mockInput.results[0].trackId, mockLanCode)).resolves.toEqual(mockOutput);
+            return readAsync('nerdcast/unsupported/output/lastEpisode.1.json').then((mockOutput: resultExtended) => {
+                return expect(lastEpisode(mockInput.results[0].trackId, mockLanCode, i18nNode.api, shorten, fetcherRss)).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw(error);
             });

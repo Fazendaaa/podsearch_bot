@@ -3,12 +3,7 @@
  */
 'use strict';
 
-import { config } from 'dotenv';
-import {
-    setKey,
-    shorten
-} from 'goo.gl';
-import * as i18n_node_yaml from 'i18n-node-yaml';
+import { api } from 'i18n-node-yaml';
 import {
     lookup,
     options,
@@ -17,25 +12,10 @@ import {
 } from 'itunes-search';
 import * as moment from 'moment';
 import { join } from 'path';
-import * as Parser from 'rss-parser';
+import { Parser } from 'rss-parser';
 import { resultExtended } from '../@types/parse/main';
 import { item } from '../@types/stream/main';
 const extra = require('telegraf').Extra;
-
-/**
- * RSS fetcher.
- */
-const handlerRss = new Parser();
-
-config();
-
-setKey(process.env.GOOGLE_KEY);
-
-const i18n = i18n_node_yaml({
-    debug: true,
-    translationFolder: join(__dirname, '../../locales'),
-    locales: ['en', 'pt']
-});
 
 /**
  * Since RSS feed has no rule to link which parameter will be the episode link, this function handles that; fetching the
@@ -72,14 +52,14 @@ export const linkEpisode = (rss: item): string => {
 /**
  * Fetch the episode name.
  */
-export const nameEpisode = (rss: item, language: string): string => {
+export const nameEpisode = (rss: item, language: string, i18n: api): string => {
     let name: string = undefined;
 
     if (undefined !== rss && 'object' === typeof(rss) && undefined !== language && 'string' === typeof(language)) {
         if (true === rss.hasOwnProperty('title')) {
             name = rss.title;
         } else {
-            name = i18n.api().t('noName', {}, language);
+            name = i18n().t('noName', {}, language);
         }
 
         return name;
@@ -91,7 +71,7 @@ export const nameEpisode = (rss: item, language: string): string => {
 /**
  * Fetch the last podcast episode.
  */
-export const lastEpisode = (id: number, lanCode: string): Promise<resultExtended> =>
+export const lastEpisode = (id: number, lanCode: string, i18n: api, shorten: Function, rssFetcher: Parser): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
     const options: object = {
         media: 'podcast',
@@ -114,9 +94,9 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
             if (err || 0 === data.resultCount) {
                 reject('Something wrong occurred with search.');
             } else {
-                handlerRss.parseURL(data.results[0].feedUrl).then((parsed) => {
+                rssFetcher.parseURL(data.results[0].feedUrl).then((parsed) => {
                     link = linkEpisode(parsed.items[0]);
-                    name = nameEpisode(parsed.items[0], language);
+                    name = nameEpisode(parsed.items[0], language, i18n);
                     latest = moment(parsed.items[0].pubDate).locale(country).format('Do MMMM YYYY, h:mm a');
 
                     /**
@@ -126,8 +106,8 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
                         shorten(link).then((short: string) => {
                             keyboard = extra.markdown().markup((m: any) => {
                                 return m.inlineKeyboard([
-                                    m.callbackButton(i18n.api().t('subscribe', {}, language), `subscribe/${id}`),
-                                    { text: i18n.api().t('listen', {}, language), url: short }
+                                    m.callbackButton(i18n().t('subscribe', {}, language), `subscribe/${id}`),
+                                    { text: i18n().t('listen', {}, language), url: short }
                                 ]);
                             });
 
@@ -138,7 +118,7 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
                                 ...data.results[0]
                             });
                         }).catch((error) => {
-                            throw(error);
+                            reject(error);
                         });
                     /**
                      * If not, the user will be notified and asked to report it to improve linkEpisode.
@@ -146,8 +126,8 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
                     } else {
                         keyboard = extra.markdown().markup((m: any) => {
                             return m.inlineKeyboard([
-                                m.callbackButton(i18n.api().t('subscribe', {}, language), `subscribe/${id}`),
-                                m.callbackButton(i18n.api().t('listen', {}, language), `episode/notAvailable/${id}`)
+                                m.callbackButton(i18n().t('subscribe', {}, language), `subscribe/${id}`),
+                                m.callbackButton(i18n().t('listen', {}, language), `episode/notAvailable/${id}`)
                             ]);
                         });
 

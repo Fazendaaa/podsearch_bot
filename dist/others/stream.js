@@ -1,21 +1,8 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv_1 = require("dotenv");
-const goo_gl_1 = require("goo.gl");
-const i18n_node_yaml = require("i18n-node-yaml");
 const itunes_search_1 = require("itunes-search");
 const moment = require("moment");
-const path_1 = require("path");
-const Parser = require("rss-parser");
 const extra = require('telegraf').Extra;
-const handlerRss = new Parser();
-dotenv_1.config();
-goo_gl_1.setKey(process.env.GOOGLE_KEY);
-const i18n = i18n_node_yaml({
-    debug: true,
-    translationFolder: path_1.join(__dirname, '../../locales'),
-    locales: ['en', 'pt']
-});
 exports.linkEpisode = (rss) => {
     let link = undefined;
     if (undefined !== rss && 'object' === typeof (rss)) {
@@ -34,14 +21,14 @@ exports.linkEpisode = (rss) => {
         throw (new Error('Wrong argument.'));
     }
 };
-exports.nameEpisode = (rss, language) => {
+exports.nameEpisode = (rss, language, i18n) => {
     let name = undefined;
     if (undefined !== rss && 'object' === typeof (rss) && undefined !== language && 'string' === typeof (language)) {
         if (true === rss.hasOwnProperty('title')) {
             name = rss.title;
         }
         else {
-            name = i18n.api().t('noName', {}, language);
+            name = i18n().t('noName', {}, language);
         }
         return name;
     }
@@ -49,7 +36,7 @@ exports.nameEpisode = (rss, language) => {
         throw (new Error('Wrong argument.'));
     }
 };
-exports.lastEpisode = (id, lanCode) => new Promise((resolve, reject) => {
+exports.lastEpisode = (id, lanCode, i18n, shorten, rssFetcher) => new Promise((resolve, reject) => {
     const options = {
         media: 'podcast',
         entity: 'podcast',
@@ -70,30 +57,30 @@ exports.lastEpisode = (id, lanCode) => new Promise((resolve, reject) => {
                 reject('Something wrong occurred with search.');
             }
             else {
-                handlerRss.parseURL(data.results[0].feedUrl).then((parsed) => {
+                rssFetcher.parseURL(data.results[0].feedUrl).then((parsed) => {
                     link = exports.linkEpisode(parsed.items[0]);
-                    name = exports.nameEpisode(parsed.items[0], language);
+                    name = exports.nameEpisode(parsed.items[0], language, i18n);
                     latest = moment(parsed.items[0].pubDate).locale(country).format('Do MMMM YYYY, h:mm a');
                     if (undefined !== link) {
-                        goo_gl_1.shorten(link).then((short) => {
+                        shorten(link).then((short) => {
                             keyboard = extra.markdown().markup((m) => {
                                 return m.inlineKeyboard([
-                                    m.callbackButton(i18n.api().t('subscribe', {}, language), `subscribe/${id}`),
-                                    { text: i18n.api().t('listen', {}, language), url: short }
+                                    m.callbackButton(i18n().t('subscribe', {}, language), `subscribe/${id}`),
+                                    { text: i18n().t('listen', {}, language), url: short }
                                 ]);
                             });
                             resolve(Object.assign({ name,
                                 latest,
                                 keyboard }, data.results[0]));
                         }).catch((error) => {
-                            throw (error);
+                            reject(error);
                         });
                     }
                     else {
                         keyboard = extra.markdown().markup((m) => {
                             return m.inlineKeyboard([
-                                m.callbackButton(i18n.api().t('subscribe', {}, language), `subscribe/${id}`),
-                                m.callbackButton(i18n.api().t('listen', {}, language), `episode/notAvailable/${id}`)
+                                m.callbackButton(i18n().t('subscribe', {}, language), `subscribe/${id}`),
+                                m.callbackButton(i18n().t('listen', {}, language), `episode/notAvailable/${id}`)
                             ]);
                         });
                         resolve(Object.assign({ keyboard }, data.results[0]));

@@ -5,6 +5,7 @@ const goo_gl_1 = require("goo.gl");
 const i18n_node_yaml = require("i18n-node-yaml");
 const itunes_search_1 = require("itunes-search");
 const path_1 = require("path");
+const Parser = require("rss-parser");
 const subscription_1 = require("./database/subscription");
 const parse_1 = require("./others/parse");
 const stream_1 = require("./others/stream");
@@ -34,6 +35,7 @@ bot.use(telegraf.log());
 bot.use(i18n.middleware());
 bot.use(stage_1.talkingSearchManager.middleware());
 const subscription = new subscription_1.Subscription();
+const handlerRss = new Parser();
 const commands = i18n.repository.commands;
 const helpCommand = utils_1.arrayLoad(commands.help);
 const aboutCommand = utils_1.arrayLoad(commands.about);
@@ -53,7 +55,7 @@ bot.start(({ i18n, replyWithMarkdown, message }) => {
         }
         else {
             replyWithMarkdown(i18n.t('sending')).then(() => {
-                stream_1.lastEpisode(parseInt(argument, 10), message.from.language_code).then((episode) => {
+                stream_1.lastEpisode(parseInt(argument, 10), message.from.language_code, i18nNode.api, goo_gl_1.shorten, handlerRss).then((episode) => {
                     replyWithMarkdown(i18n.t('episode', episode), episode.keyboard);
                 }).catch(error => {
                     replyWithMarkdown(i18n.t('error'));

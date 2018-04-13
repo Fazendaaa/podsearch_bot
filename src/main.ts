@@ -18,6 +18,7 @@ import {
     search
 } from 'itunes-search';
 import { join } from 'path';
+import * as Parser from 'rss-parser';
 import { telegramInline } from 'telegraf';
 import { resultExtended } from './@types/parse/main';
 import { Subscription } from './database/subscription';
@@ -97,6 +98,11 @@ bot.use(talkingSearchManager.middleware());
 const subscription = new Subscription();
 
 /**
+ * RSS fetcher.
+ */
+const handlerRss = new Parser();
+
+/**
  * This could lead to a problem someday(?)
  */
 const commands = i18n.repository.commands;
@@ -132,7 +138,7 @@ bot.start(({ i18n, replyWithMarkdown, message }) => {
          */
         } else {
             replyWithMarkdown(i18n.t('sending')).then(() => {
-                lastEpisode(parseInt(argument, 10), message.from.language_code).then((episode: resultExtended) => {
+                lastEpisode(parseInt(argument, 10), message.from.language_code, i18nNode.api, shorten, handlerRss).then((episode: resultExtended) => {
                     replyWithMarkdown(i18n.t('episode', episode), episode.keyboard);
                 }).catch(error => {
                     replyWithMarkdown(i18n.t('error'));
