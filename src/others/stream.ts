@@ -86,7 +86,7 @@ export const nameEpisode = (rss: item, language: string): string => {
     } else {
         throw (new Error('Wrong argument.'));
     }
-}
+};
 
 /**
  * Fetch the last podcast episode.

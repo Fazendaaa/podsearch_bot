@@ -6,13 +6,18 @@
 
 import { config } from 'dotenv';
 import {
+    setKey,
+    shorten
+} from 'goo.gl';
+import * as i18n_node_yaml from 'i18n-node-yaml';
+import {
     lookup,
     options,
     response,
     result,
     search
 } from 'itunes-search';
-import { resolve } from 'path';
+import { join } from 'path';
 import { telegramInline } from 'telegraf';
 import { resultExtended } from './@types/parse/main';
 import { Subscription } from './database/subscription';
@@ -52,6 +57,20 @@ const extra = telegraf.Extra;
 config();
 
 /**
+ * Set Google's API key.
+ */
+setKey(process.env.GOOGLE_KEY);
+
+/**
+ * Configure internationalization options.
+ */
+const i18nNode = i18n_node_yaml({
+    debug: true,
+    translationFolder: join(__dirname, '../locales'),
+    locales: ['en', 'pt']
+});
+
+/**
  * Start bot and then setting its options like:
  *  - Internationalization support;
  *  - Polling;
@@ -63,7 +82,7 @@ const bot = new telegraf(process.env.BOT_KEY);
 const i18n = new telegrafI18n({
     defaultLanguage: 'en',
     allowMissing: true,
-    directory: resolve(__dirname, '../locales')
+    directory: join(__dirname, '../locales')
 });
 
 bot.startPolling();
@@ -175,7 +194,7 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
                 replyWithMarkdown(i18n.t('error'));
                 console.error(err);
             } else {
-                parseResponse(data, message.from.language_code).then((parsed: resultExtended) => {
+                parseResponse(data, message.from.language_code, shorten, i18nNode.api).then((parsed: resultExtended) => {
                     replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
                 }).catch((error: string) => {
                     console.error(error);
@@ -188,11 +207,11 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
      */
     } else {
         replyWithMarkdown(i18n.t('wrongInputCmd')).then(() => {
-            replyWithVideo({ source: resolve(__dirname, '../gif/searchCmd.mp4') }).then(() => {
+            replyWithVideo({ source: join(__dirname, '../gif/searchCmd.mp4') }).then(() => {
                 replyWithMarkdown(i18n.t('wrongInputButton')).then(() => {
-                    replyWithVideo({ source: resolve(__dirname, '../gif/searchButton.mp4') }).then(() => {
+                    replyWithVideo({ source: join(__dirname, '../gif/searchButton.mp4') }).then(() => {
                         replyWithMarkdown(i18n.t('wrongInputInline')).then(() => {
-                            replyWithVideo({ source: resolve(__dirname, '../gif/searchInline.mp4') }).catch((error: Error) => {
+                            replyWithVideo({ source: join(__dirname, '../gif/searchInline.mp4') }).catch((error: Error) => {
                                 throw error;
                             });
                         }).catch((error: Error) => {
@@ -258,7 +277,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                      * fewer podcast options, or even none, in the search.
                      */
                     if (0 < data.results.length) {
-                        parseResponseInline(data, lanCode).then((results: Array<telegramInline>) => {
+                        parseResponseInline(data, lanCode, shorten, i18nNode.api).then((results: Array<telegramInline>) => {
                             answerInlineQuery(results, { next_offset: offset + pageLimit });
                         }).catch((error: Error) => {
                             console.error(error);

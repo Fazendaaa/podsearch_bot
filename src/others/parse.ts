@@ -4,12 +4,10 @@
  */
 'use strict';
 
-import { config } from 'dotenv';
-import {
-    setKey,
-    shorten
-} from 'goo.gl';
-import * as i18n_node_yaml from 'i18n-node-yaml';
+/**
+ * These are just typings.
+ */
+import { api } from 'i18n-node-yaml';
 import {
     response,
     result
@@ -19,22 +17,6 @@ import { join } from 'path';
 import { telegramInline } from 'telegraf';
 import { resultExtended } from '../@types/parse/main';
 const extra = require('telegraf').Extra;
-
-config();
-
-/**
- * Set Google's API key.
- */
-setKey(process.env.GOOGLE_KEY);
-
-/**
- * Configure internationalization options.
- */
-const i18n = i18n_node_yaml({
-    debug: true,
-    translationFolder: join(__dirname, '../../locales'),
-    locales: ['en', 'pt']
-});
 
 /**
  * Just concatenate genres.
@@ -110,7 +92,7 @@ export const maskResponse = (data: resultExtended): resultExtended => {
  * Returns the formated data that will be showed to the user.
  * This will be only used locally, but there's need to exported to be tested later.
  */
-export const maskResponseInline = (data: resultExtended): telegramInline => {
+export const maskResponseInline = (data: resultExtended, i18n: api): telegramInline => {
     let returnValue: telegramInline = undefined;
     let preview: string = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
 
@@ -138,7 +120,7 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
             title: data.artistName,
             type: 'article',
             input_message_content: {
-                message_text: i18n.api().t('mask', data, data.lanCode),
+                message_text: <string> i18n().t('mask', data, data.lanCode),
                 parse_mode: 'Markdown'
             },
             reply_markup: data.keyboard.reply_markup,
@@ -153,7 +135,7 @@ export const maskResponseInline = (data: resultExtended): telegramInline => {
 /**
  * This function takes an result a then returns it with the shortened links about it.
  */
-export const shortenLinks = (data: result): Promise<resultExtended> =>
+export const shortenLinks = (data: result, shorten: Function): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
     if (undefined !== data) {
         shorten(data.feedUrl).then((rss: string) => {
@@ -173,7 +155,7 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
 /**
  * Parsing data.
  */
-export const parse = (data: response, lanCode: string, maskFunction: Function): Promise<Array<resultExtended | telegramInline>> =>
+export const parse = (data: response, lanCode: string, maskFunction: Function, shorten: Function, i18n: api): Promise<Array<resultExtended | telegramInline>> =>
 new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, reject: (error: string) => void) => {
     let filtered: Array<result> = undefined;
     let latest: string = undefined;
@@ -182,7 +164,8 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
     let buttons: Array<string> = undefined;
 
     if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== lanCode &&
-        'string' === typeof (lanCode) && undefined !== maskFunction && 'function' === typeof(maskFunction)) {
+        'string' === typeof (lanCode) && undefined !== maskFunction && 'function' === typeof(maskFunction) &&
+        undefined !== shorten && 'function' === typeof(shorten) && undefined !== i18n && 'function' === typeof(i18n)) {
         /**
          * Some  data  info  comes  incomplete,  this  could  mean  an error later on the process; that's why it must be
          * filtered right here, to avoid it.
@@ -191,7 +174,7 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
 
         if (0 < filtered.length) {
             Promise.all(filtered.map((element: result) => {
-                return shortenLinks(element).then((shortened: resultExtended) => {
+                return shortenLinks(element, shorten).then((shortened: resultExtended) => {
                     /**
                      * There  is  no need to check whether or not releaseDate exists because the caller function already
                      * verified  this.  That  being said, if releaseDate is undefined, moment will return the current OS
@@ -207,7 +190,7 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
                     /**
                      * The "subscribe/podcastID" will be used for subscribing to episodes notifications upon release.
                      */
-                    buttons = i18n.api().t('card', {}, lanCode.split('-')[0]);
+                    buttons = <Array<string>> i18n().t('card', {}, lanCode.split('-')[0]);
                     keyboard = extra.markdown().markup((m: any) => {
                         return m.inlineKeyboard([
                             m.callbackButton(buttons[0], `subscribe/${podcastId}`),
@@ -216,9 +199,10 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
                     });
 
                     /**
-                     * Striping the country option from lanCode.
+                     * Striping  the country option from lanCode. And the i18n will only be used when maskResponseInline
+                     * is being called.
                      */
-                    return maskFunction({ ...shortened, latest, keyboard, lanCode: lanCode.split('-')[0] });
+                    return maskFunction({ ...shortened, latest, keyboard, lanCode: lanCode.split('-')[0] }, i18n);
                 }).catch((error: string) => {
                     throw error;
                 });
@@ -231,7 +215,7 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
             reject('No complete info in the results results to display it.');
         }
     } else {
-        reject('Empty results.');
+        reject('Wrong argument.');
     }
 });
 
@@ -239,9 +223,9 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
  * This function takes the search from itunes's API then parse it to the format that will be presented as message to the
  * user. Only takes it the first searched response because it is a command.
  */
-export const parseResponse = (data: response, lanCode: string, position: number = 0): Promise<resultExtended> =>
+export const parseResponse = (data: response, lanCode: string, shorten: Function, i18n: api, position: number = 0): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
-    parse(data, lanCode, maskResponse).then((results: Array<resultExtended>) => {
+    parse(data, lanCode, maskResponse, shorten, i18n).then((results: Array<resultExtended>) => {
         resolve(results[position]);
     }).catch((error: string) => {
         reject(error);
@@ -251,9 +235,9 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
 /**
  * Parse it the data for the inline mode of search.
  */
-export const parseResponseInline = (data: response, lanCode: string): Promise<Array<telegramInline>> =>
+export const parseResponseInline = (data: response, lanCode: string, shorten: Function, i18n: api): Promise<Array<telegramInline>> =>
 new Promise((resolve: (data: Array<telegramInline>) => void, reject: (error: string) => void) => {
-    parse(data, lanCode, maskResponseInline).then((parsed: Array<telegramInline>) => {
+    parse(data, lanCode, maskResponseInline, shorten, i18n).then((parsed: Array<telegramInline>) => {
         resolve(parsed);
     }).catch((error: string) => {
         reject(error);

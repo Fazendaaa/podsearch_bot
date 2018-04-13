@@ -1,6 +1,8 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = require("dotenv");
+const goo_gl_1 = require("goo.gl");
+const i18n_node_yaml = require("i18n-node-yaml");
 const itunes_search_1 = require("itunes-search");
 const path_1 = require("path");
 const subscription_1 = require("./database/subscription");
@@ -14,11 +16,17 @@ const session = telegraf.session;
 const markup = telegraf.Markup;
 const extra = telegraf.Extra;
 dotenv_1.config();
+goo_gl_1.setKey(process.env.GOOGLE_KEY);
+const i18nNode = i18n_node_yaml({
+    debug: true,
+    translationFolder: path_1.join(__dirname, '../locales'),
+    locales: ['en', 'pt']
+});
 const bot = new telegraf(process.env.BOT_KEY);
 const i18n = new telegrafI18n({
     defaultLanguage: 'en',
     allowMissing: true,
-    directory: path_1.resolve(__dirname, '../locales')
+    directory: path_1.join(__dirname, '../locales')
 });
 bot.startPolling();
 bot.use(session());
@@ -89,7 +97,7 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
                 console.error(err);
             }
             else {
-                parse_1.parseResponse(data, message.from.language_code).then((parsed) => {
+                parse_1.parseResponse(data, message.from.language_code, goo_gl_1.shorten, i18nNode.api).then((parsed) => {
                     replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
                 }).catch((error) => {
                     console.error(error);
@@ -100,11 +108,11 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
     }
     else {
         replyWithMarkdown(i18n.t('wrongInputCmd')).then(() => {
-            replyWithVideo({ source: path_1.resolve(__dirname, '../gif/searchCmd.mp4') }).then(() => {
+            replyWithVideo({ source: path_1.join(__dirname, '../gif/searchCmd.mp4') }).then(() => {
                 replyWithMarkdown(i18n.t('wrongInputButton')).then(() => {
-                    replyWithVideo({ source: path_1.resolve(__dirname, '../gif/searchButton.mp4') }).then(() => {
+                    replyWithVideo({ source: path_1.join(__dirname, '../gif/searchButton.mp4') }).then(() => {
                         replyWithMarkdown(i18n.t('wrongInputInline')).then(() => {
-                            replyWithVideo({ source: path_1.resolve(__dirname, '../gif/searchInline.mp4') }).catch((error) => {
+                            replyWithVideo({ source: path_1.join(__dirname, '../gif/searchInline.mp4') }).catch((error) => {
                                 throw error;
                             });
                         }).catch((error) => {
@@ -150,7 +158,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                 if (0 < data.resultCount) {
                     data.results = data.results.slice(offset, offset + pageLimit);
                     if (0 < data.results.length) {
-                        parse_1.parseResponseInline(data, lanCode).then((results) => {
+                        parse_1.parseResponseInline(data, lanCode, goo_gl_1.shorten, i18nNode.api).then((results) => {
                             answerInlineQuery(results, { next_offset: offset + pageLimit });
                         }).catch((error) => {
                             console.error(error);
