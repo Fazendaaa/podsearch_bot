@@ -113,18 +113,7 @@ Caso seja o código ou não, você pode me ajudar lendo as diretrizes no arquivo
 # Controle de versão
 Eu adoraria dizer que [SemVer](https://semver.org/) ou algo do tipo fora utilizado porém, em experiência pessoal, esse tipo de aborgaem não funciona muito bem comigo, o cara que pode comitar várias vezes esse projeto por duas semanas seguidas e passar um anos sem dar um simples ```npm update``` no projeto. Então, não se é utilizado sistemas de versionamento.
 # A realizar
-Como esse README estará sendo atualizado com as mudanças importantes, não pretendo utilizar nenhum histórico de atualizações de bugs corrigidos ou novas funcionalidades. Todavia, você pode ter uma noção do que virá:
-
-* Escrever um sistema de notificação para que usuário saiba quando saiu um novo episódio do podcast que ele ouve -- e fazer de tal maneira que leve em consideração a posição no globo que ele se encontra;
-* Adicionar recomendações de podcasts baseado no que ouve, ideia do [_lowhigh_](https://www.reddit.com/r/TelegramBots/comments/875tsz/podsearchbot/dwao2qj/) no feedback que me deu no Reddit;
-* Integração com o [wit.ia](https://wit.ai/);
-* Mudar o encurtardor de URL já que o Goo.gl será desativado;
-* Adicionar estatísticas sobre os podcasts -- como um ranking.
-## Em análise
-* Adicionar integração com o REDIS;
-* Integração com Spotify e Soundclound -- se for possível, facilitar acesso a podcasts através dos programas que boa parte das pessoas já utilizam;
-* Criar um GraphQL como uma "cache" para as requisições -- usar racing Promises para rodar melhor;
-* Fazer com que o sistema de recomendações melhore após "ouvir" as podcasts -- assim como essa [reportagem](https://medium.com/behavioral-signals-ai/using-ai-to-understand-the-way-a-movie-looks-and-sounds-fe931d487171) diz sobre filmes.
+Como esse README estará sendo atualizado com as mudanças importantes, não pretendo utilizar nenhum histórico de atualizações de bugs corrigidos ou novas funcionalidades. Todavia, você pode ter uma noção do que virá e o que está sob análise na aba de [Projects](https://github.com/Fazendaaa/podsearch_bot/projects/) -- aviso: o conteúdo se encontra em Inglês.
 # Autores
 * Apenas [eu](https://github.com/Fazendaaa) até agora.
 
