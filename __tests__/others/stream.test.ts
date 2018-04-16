@@ -42,10 +42,31 @@ class MockParser extends Parser {
     }
 }
 
+/**
+ * This  class will be used to test a podcast with a new pattern of episode link. This mock is without any knew pattern
+ * to simulate this.
+ */
+class MockParserLink extends Parser {
+    constructor(options?: object) {
+        super();
+    }
+
+    public parseURL(link: string): Promise<object> {
+        return new Promise((resolve, reject) => {
+            resolve({
+                items: [{
+                    title: 'test'
+                }]
+            });
+        });
+    }
+}
+
 const mockLanguage: string = 'en';
 const mockLanCode: string = 'en-us';
 const fetcherRss = new Parser();
 const mockFetcherRss = new MockParser();
+const mockFetcherLinkRss = new MockParserLink();
 
 const mockShorten = (link: string): Promise<string> =>
 new Promise((resolve: (data: string) => void, reject: (error: string) => void) => {
@@ -258,6 +279,20 @@ describe('Testing lastEpisode function.', () => {
         });
     });
 
+    test('Wrong episode link.', () => {
+        expect.assertions(1);
+
+        return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
+            return readAsync('nerdcast/unsupported/output/lastEpisode.1.json').then((mockOutput: resultExtended) => {
+                return expect(lastEpisode(mockInput.results[0].trackId, mockLanCode, mockI18nNode.api, shorten, mockFetcherLinkRss)).resolves.toEqual(mockOutput);
+            }).catch((error: Error) => {
+                throw (error);
+            });
+        }).catch((error: Error) => {
+            console.error(error);
+        });
+    });
+
     /**
      * Last at the time of this writing.
      */
@@ -265,7 +300,7 @@ describe('Testing lastEpisode function.', () => {
         expect.assertions(1);
 
         return readAsync('nerdcast/unsupported/input/searchCommand.json').then((mockInput: response) => {
-            return readAsync('nerdcast/unsupported/output/lastEpisode.1.json').then((mockOutput: resultExtended) => {
+            return readAsync('nerdcast/unsupported/output/lastEpisode.2.json').then((mockOutput: resultExtended) => {
                 return expect(lastEpisode(mockInput.results[0].trackId, mockLanCode, i18nNode.api, shorten, fetcherRss)).resolves.toEqual(mockOutput);
             }).catch((error: Error) => {
                 throw(error);

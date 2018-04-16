@@ -112,18 +112,8 @@ So, whether is code or not you can help me out making this code more accessible 
 # Versioning
 I would love to say that [SemVer](https://semver.org/) or anything like that is used but, in my personal experience, this kind of approach doesn't work very well with me, the guy who could be committing in this project for two weeks in a roll and leave it for almost one year with no simple ```npm update```. So, no versioning system is used. 
 # TODO
-Since I will be keeping this README up to date with any major change and I don't use any versioning system to log all the fixed bugs or previous projects updates, you can still have a taste of what comes next right here:
+Since I will be keeping this README up to date with any major change and I don't use any versioning system to log all the fixed bugs or previous projects updates, you can still have a taste of what comes next and what is being under analysis right in the [Projects](https://github.com/Fazendaaa/podsearch_bot/projects/) tab.
 
-* Writing a notification system, so that upon a new episode release the user will be notified -- making it available this notification at user timezone;
-* Adding podcasts recommendations thanks to [_lowhigh_](https://www.reddit.com/r/TelegramBots/comments/875tsz/podsearchbot/dwao2qj/) feedback on Reddit;
-* Integration with [wit.ia](https://wit.ai/);
-* Change URL shortener since Goo.gl will be shut down;
-* Add statistics about the podcasts -- like a trending.
-## Maybe
-* Adding REDIS integration;
-* Spotify and Soundclound account integration -- if possible to integrate and add new podcasts to your player already of podcasts;
-* Create a GraphQL as a "cache" to requests -- use Promise racing to perform it better;
-* Improve recommendation system through "listening" the podcast content -- like this [post](https://medium.com/behavioral-signals-ai/using-ai-to-understand-the-way-a-movie-looks-and-sounds-fe931d487171) says about movies.
 # Authors
 * Only [me](https://github.com/Fazendaaa) for now.
 

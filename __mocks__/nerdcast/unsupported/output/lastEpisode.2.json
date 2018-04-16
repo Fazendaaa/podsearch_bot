@@ -1,16 +1,19 @@
 {
+    "name": "Episode 6 – Comic Con Review, Cpt. Hydra? und die 1%",
+    "latest": "11th July 2016, 4:05 am",
     "keyboard": {
         "parse_mode": "Markdown",
         "reply_markup": {
             "inline_keyboard": [
                 [
                     {
+                        "text": "Subscribe",
                         "callback_data": "subscribe/1103141552",
                         "hide": false
                     },
                     {
-                        "callback_data": "episode/notAvailable/1103141552",
-                        "hide": false
+                        "text": "Listen now",
+                        "url": "https://goo.gl/yTNnvc"
                     }
                 ]
             ]
