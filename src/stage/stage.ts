@@ -4,10 +4,6 @@
 'use strict';
 
 import { config } from 'dotenv';
-import {
-    setKey,
-    shorten
-} from 'goo.gl';
 import * as i18n_node_yaml from 'i18n-node-yaml';
 import {
     lookup,
@@ -16,6 +12,7 @@ import {
     search
 } from 'itunes-search';
 import { join } from 'path';
+import { shorten } from 'tinyurl';
 import { resultExtended } from '../@types/parse/main';
 import { parseResponse } from '../others/parse';
 import { arrayLoad } from '../others/utils';
@@ -27,8 +24,6 @@ const stage = require('telegraf/stage');
 const scene = require('telegraf/scenes/base');
 
 config();
-
-setKey(process.env.GOOGLE_KEY);
 
 const i18nNode = i18n_node_yaml({
     debug: true,

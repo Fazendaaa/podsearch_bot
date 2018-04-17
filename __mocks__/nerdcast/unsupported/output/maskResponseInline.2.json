@@ -3,7 +3,7 @@
     "title": "Nerdcast",
     "type": "article",
     "input_message_content": {
-        "message_text": "[​](http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg)*Name*: _Nerdcast_\n*Genre*: _Comedy,Podcasts_\n*Episodes*: _2_\n*Latest Episode*: _11th July 2016, 4:05 am_\n*RSS*: https://goo.gl/bECbi2\n*iTunes*: https://goo.gl/kwHu7z\n",
+        "message_text": "[​](http://is1.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg)*Name*: _Nerdcast_\n*From:* _Nerdcast_\n*Genre*: _Comedy,Podcasts_\n*Episodes*: _2_\n*Latest Episode*: _11th July 2016, 4:05 am_\n*RSS*: https://goo.gl/bECbi2\n*iTunes*: https://goo.gl/kwHu7z\n",
         "parse_mode": "Markdown"
     },
     "reply_markup": {

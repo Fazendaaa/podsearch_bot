@@ -63,15 +63,16 @@ notAddedSubsciption:
   "Um erro ocorreu para adicioná-lo. Por favor, tente novamente mais tarde ou avise meu criador sobre."
 
 mask:
-  "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\
+  "[\u200B](${artworkUrl600})*Nome*: _${collectionName}_\n\
+  *Criadores*: _${artistName}_\n\
   *Gêneros*: _${genres}_\n\
   *Episódios*: _${trackCount}_\n\
   *Último episódio*: _${latest}_\n\
-  *RSS*: ${rss}\n\
-  *iTunes*: ${itunes}\n"
+  *Mais em*: [RSS](${rss}) ou [iTunes](${itunes})\n"
 
 episode:
-  "[\u200B](${artworkUrl600})*Nome*: _${artistName}_\n\
+  "[\u200B](${artworkUrl600})*Nome*: _${collectionName}_\n\
+  *Criadores*: _${artistName}_\n\
   *Nome do último episódio*: _${name}_\n\
   *Data de lançamento*: _${latest}_\n\
   *Gêneros*: _${genres}_\n\

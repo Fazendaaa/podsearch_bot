@@ -37,6 +37,7 @@ exports.maskResponse = (data) => {
         artworkUrl600: data.artworkUrl600,
         releaseDate: data.releaseDate,
         artistName: data.artistName,
+        collectionName: data.collectionName,
         genres: exports.hasGenres(data.genres),
         trackCount: data.trackCount,
         itunes: data.itunes,
@@ -78,23 +79,29 @@ exports.maskResponseInline = (data, i18n) => {
     }
     return returnValue;
 };
-exports.shortenLinks = (data, shorten) => new Promise((resolve, reject) => {
+exports.shortenLinks = (data, shortener) => new Promise((resolve, reject) => {
     if (undefined !== data) {
-        shorten(data.feedUrl).then((rss) => {
-            shorten(data.collectionViewUrl).then((itunes) => {
-                resolve(Object.assign({}, data, { itunes, rss }));
-            }).catch((error) => {
-                reject('Has no iTunes link available.');
-            });
-        }).catch((error) => {
-            reject('Has no RSS link available.');
+        shortener(data.feedUrl, (rss) => {
+            if ('' === rss) {
+                reject('Has no RSS link available.');
+            }
+            else {
+                shortener(data.collectionViewUrl, (itunes) => {
+                    if ('' === itunes) {
+                        reject('Has no iTunes link available.');
+                    }
+                    else {
+                        resolve(Object.assign({}, data, { itunes, rss }));
+                    }
+                });
+            }
         });
     }
     else {
         reject('Wrong argument.');
     }
 });
-exports.parse = (data, lanCode, maskFunction, shorten, i18n) => new Promise((resolve, reject) => {
+exports.parse = (data, lanCode, maskFunction, shortener, i18n) => new Promise((resolve, reject) => {
     let filtered = undefined;
     let latest = undefined;
     let keyboard = undefined;
@@ -102,11 +109,11 @@ exports.parse = (data, lanCode, maskFunction, shorten, i18n) => new Promise((res
     let buttons = undefined;
     if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== lanCode &&
         'string' === typeof (lanCode) && undefined !== maskFunction && 'function' === typeof (maskFunction) &&
-        undefined !== shorten && 'function' === typeof (shorten) && undefined !== i18n && 'function' === typeof (i18n)) {
+        undefined !== shortener && 'function' === typeof (shortener) && undefined !== i18n && 'function' === typeof (i18n)) {
         filtered = data.results.filter(exports.hasItAll);
         if (0 < filtered.length) {
             Promise.all(filtered.map((element) => {
-                return exports.shortenLinks(element, shorten).then((shortened) => {
+                return exports.shortenLinks(element, shortener).then((shortened) => {
                     latest = moment(shortened.releaseDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
                     podcastId = shortened.collectionId || shortened.trackId;
                     buttons = i18n().t('card', {}, lanCode.split('-')[0]);
@@ -134,15 +141,15 @@ exports.parse = (data, lanCode, maskFunction, shorten, i18n) => new Promise((res
         reject('Wrong argument.');
     }
 });
-exports.parseResponse = (data, lanCode, shorten, i18n, position = 0) => new Promise((resolve, reject) => {
-    exports.parse(data, lanCode, exports.maskResponse, shorten, i18n).then((results) => {
+exports.parseResponse = (data, lanCode, shortener, i18n, position = 0) => new Promise((resolve, reject) => {
+    exports.parse(data, lanCode, exports.maskResponse, shortener, i18n).then((results) => {
         resolve(results[position]);
     }).catch((error) => {
         reject(error);
     });
 });
-exports.parseResponseInline = (data, lanCode, shorten, i18n) => new Promise((resolve, reject) => {
-    exports.parse(data, lanCode, exports.maskResponseInline, shorten, i18n).then((parsed) => {
+exports.parseResponseInline = (data, lanCode, shortener, i18n) => new Promise((resolve, reject) => {
+    exports.parse(data, lanCode, exports.maskResponseInline, shortener, i18n).then((parsed) => {
         resolve(parsed);
     }).catch((error) => {
         reject(error);

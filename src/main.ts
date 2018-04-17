@@ -5,10 +5,6 @@
 'use strict';
 
 import { config } from 'dotenv';
-import {
-    setKey,
-    shorten
-} from 'goo.gl';
 import * as i18n_node_yaml from 'i18n-node-yaml';
 import {
     lookup,
@@ -20,6 +16,7 @@ import {
 import { join } from 'path';
 import * as Parser from 'rss-parser';
 import { telegramInline } from 'telegraf';
+import { shorten } from 'tinyurl';
 import { resultExtended } from './@types/parse/main';
 import { Subscription } from './database/subscription';
 import {
@@ -56,11 +53,6 @@ const extra = telegraf.Extra;
  * Allows the code to run without passing the environment variables as arguments.
  */
 config();
-
-/**
- * Set Google's API key.
- */
-setKey(process.env.GOOGLE_KEY);
 
 /**
  * Configure internationalization options.

@@ -1,5 +1,5 @@
 /**
- * Handling  functions  that  does  parsing  and  checking  of  data. More about the non official typings for goo.gl and
+ * Handling functions  that  does  parsing  and  checking  of  data. More about the non official typings for tinyurl and
  * itunes-search can be found at: ./src/@typings/
  */
 'use strict';
@@ -15,6 +15,7 @@ import {
 import * as moment from 'moment';
 import { join } from 'path';
 import { telegramInline } from 'telegraf';
+import { shorten } from 'tinyurl';
 import { resultExtended } from '../@types/parse/main';
 const extra = require('telegraf').Extra;
 
@@ -74,6 +75,7 @@ export const maskResponse = (data: resultExtended): resultExtended => {
         artworkUrl600: data.artworkUrl600,
         releaseDate: data.releaseDate,
         artistName: data.artistName,
+        collectionName: data.collectionName,
         /**
          * Just remember the good old days of C lang with its casting.
          */
@@ -133,19 +135,25 @@ export const maskResponseInline = (data: resultExtended, i18n: api): telegramInl
 };
 
 /**
- * This function takes an result a then returns it with the shortened links about it.
+ * This  function  takes  an  result  a  then returns it with the shortened links about it. Why use a URL shortener? For
+ * future-proof this bot, with any day when NPL is implemented, it will be more "user-friendly" send a shortened version
+ * of the link.
  */
-export const shortenLinks = (data: result, shorten: Function): Promise<resultExtended> =>
+export const shortenLinks = (data: result, shortener: shorten): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
     if (undefined !== data) {
-        shorten(data.feedUrl).then((rss: string) => {
-            shorten(data.collectionViewUrl).then((itunes: string) => {
-                resolve({ ...data, itunes, rss });
-            }).catch((error: string) => {
-                reject('Has no iTunes link available.');
-            });
-        }).catch((error: string) => {
-            reject('Has no RSS link available.');
+        shortener(data.feedUrl, (rss: string) => {
+            if ('' === rss) {
+                reject('Has no RSS link available.');
+            } else {
+                shortener(data.collectionViewUrl, (itunes: string) => {
+                    if ('' === itunes) {
+                        reject('Has no iTunes link available.');
+                    } else {
+                        resolve({ ...data, itunes, rss });
+                    }
+                });
+            }
         });
     } else {
         reject('Wrong argument.');
@@ -155,7 +163,7 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
 /**
  * Parsing data.
  */
-export const parse = (data: response, lanCode: string, maskFunction: Function, shorten: Function, i18n: api): Promise<Array<resultExtended | telegramInline>> =>
+export const parse = (data: response, lanCode: string, maskFunction: Function, shortener: shorten, i18n: api): Promise<Array<resultExtended | telegramInline>> =>
 new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, reject: (error: string) => void) => {
     let filtered: Array<result> = undefined;
     let latest: string = undefined;
@@ -165,7 +173,7 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
 
     if (undefined !== data && 0 < data.resultCount && undefined !== data.results && undefined !== lanCode &&
         'string' === typeof (lanCode) && undefined !== maskFunction && 'function' === typeof(maskFunction) &&
-        undefined !== shorten && 'function' === typeof(shorten) && undefined !== i18n && 'function' === typeof(i18n)) {
+        undefined !== shortener && 'function' === typeof (shortener) && undefined !== i18n && 'function' === typeof(i18n)) {
         /**
          * Some  data  info  comes  incomplete,  this  could  mean  an error later on the process; that's why it must be
          * filtered right here, to avoid it.
@@ -174,7 +182,7 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
 
         if (0 < filtered.length) {
             Promise.all(filtered.map((element: result) => {
-                return shortenLinks(element, shorten).then((shortened: resultExtended) => {
+                return shortenLinks(element, shortener).then((shortened: resultExtended) => {
                     /**
                      * There  is  no need to check whether or not releaseDate exists because the caller function already
                      * verified  this.  That  being said, if releaseDate is undefined, moment will return the current OS
@@ -223,9 +231,9 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
  * This function takes the search from itunes's API then parse it to the format that will be presented as message to the
  * user. Only takes it the first searched response because it is a command.
  */
-export const parseResponse = (data: response, lanCode: string, shorten: Function, i18n: api, position: number = 0): Promise<resultExtended> =>
+export const parseResponse = (data: response, lanCode: string, shortener: shorten, i18n: api, position: number = 0): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
-    parse(data, lanCode, maskResponse, shorten, i18n).then((results: Array<resultExtended>) => {
+    parse(data, lanCode, maskResponse, shortener, i18n).then((results: Array<resultExtended>) => {
         resolve(results[position]);
     }).catch((error: string) => {
         reject(error);
@@ -235,9 +243,9 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
 /**
  * Parse it the data for the inline mode of search.
  */
-export const parseResponseInline = (data: response, lanCode: string, shorten: Function, i18n: api): Promise<Array<telegramInline>> =>
+export const parseResponseInline = (data: response, lanCode: string, shortener: shorten, i18n: api): Promise<Array<telegramInline>> =>
 new Promise((resolve: (data: Array<telegramInline>) => void, reject: (error: string) => void) => {
-    parse(data, lanCode, maskResponseInline, shorten, i18n).then((parsed: Array<telegramInline>) => {
+    parse(data, lanCode, maskResponseInline, shortener, i18n).then((parsed: Array<telegramInline>) => {
         resolve(parsed);
     }).catch((error: string) => {
         reject(error);
