@@ -12,11 +12,6 @@
  */
 'use strict';
 
-import { config } from 'dotenv';
-import {
-    setKey,
-    shorten
-} from 'goo.gl';
 import * as i18n_node_yaml from 'i18n-node-yaml';
 import {
     response,
@@ -24,6 +19,7 @@ import {
 } from 'itunes-search';
 import { join } from 'path';
 import { telegramInline } from 'telegraf';
+import { shorten } from 'tinyurl';
 import { resultExtended } from '../../src/@types/parse/main';
 import {
     hasGenres,
@@ -36,10 +32,6 @@ import {
     shortenLinks
 } from '../../src/others/parse';
 import { readAsync } from '../../src/others/utils';
-
-config();
-
-setKey(process.env.GOOGLE_KEY);
 
 /**
  * Setting timeout to 60s === 60000ms.

@@ -3,7 +3,7 @@
     "title": "Nerdcast",
     "type": "article",
     "input_message_content": {
-        "message_text": "[​](https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png)*Name*: _Nerdcast_\n*Genre*: _Comedy,Podcasts_\n*Episodes*: _2_\n*Latest Episode*: _11th July 2016, 4:05 am_\n*RSS*: https://goo.gl/bECbi2\n*iTunes*: https://goo.gl/kwHu7z\n",
+        "message_text": "[​](https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png)*Name*: _Nerdcast_\n*From:* _Nerdcast_\n*Genre*: _Comedy,Podcasts_\n*Episodes*: _2_\n*Latest Episode*: _11th July 2016, 4:05 am_\n*RSS*: https://goo.gl/bECbi2\n*iTunes*: https://goo.gl/kwHu7z\n",
         "parse_mode": "Markdown"
     },
     "reply_markup": {
