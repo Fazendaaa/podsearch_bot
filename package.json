@@ -5,7 +5,7 @@
   "main": "node dist/main.js",
   "scripts": {
     "test": "jest --config jest.config.js --ci --runInBand",
-    "start": "node dist/main.js",
+    "start": "tsc && node dist/main.js",
     "build": "tsc",
     "watch": "tsc -w",
     "validate": "node node_modules/app.json/index.js validate"
@@ -27,24 +27,23 @@
     "@types/node": "^9.6.0",
     "app.json": "^1.3.0",
     "coveralls": "^3.0.0",
+    "jest": "^22.4.3",
+    "tslint": "^5.9.1",
+    "tslint-microsoft-contrib": "^5.0.3"
+  },
+  "dependencies": {
     "dotenv": "^5.0.1",
     "i18n-node-yaml": "^1.0.3",
     "itunes-search": "git+https://github.com/connor/itunes-node.git",
-    "jest": "^22.4.3",
     "moment": "^2.21.0",
     "mongoose": "^5.0.14",
     "remove-accents": "^0.4.2",
     "request": "^2.85.0",
     "rss-parser": "^3.1.2",
-    "shorturl": "0.0.3",
     "telegraf": "^3.20.0",
     "telegraf-i18n": "^6.0.4",
-    "tinyurl": "^1.1.2",
+    "tiny-shortener": "^1.3.0",
     "ts-jest": "^22.4.2",
-    "ts-node": "^5.0.1",
-    "tslint": "^5.9.1",
-    "tslint-microsoft-contrib": "^5.0.3",
     "typescript": "^2.7.2"
-  },
-  "dependencies": {}
+  }
 }

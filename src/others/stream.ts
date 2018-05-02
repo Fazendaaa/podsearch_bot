@@ -1,9 +1,5 @@
-/**
- * "Stream" the podcast through Telegram built-in browser.
- */
 'use strict';
 
-import { api } from 'i18n-node-yaml';
 import {
     lookup,
     options,
@@ -11,137 +7,86 @@ import {
     result
 } from 'itunes-search';
 import * as moment from 'moment';
-import { join } from 'path';
-import { Parser } from 'rss-parser';
 import { resultExtended } from '../@types/parse/main';
-import { item } from '../@types/stream/main';
-const extra = require('telegraf').Extra;
+import { lookupPodcast } from '../search/search';
+const markup = require('telegraf').Markup;
 
-/**
- * Since RSS feed has no rule to link which parameter will be the episode link, this function handles that; fetching the
- * last episode URL.
- */
-export const linkEpisode = (rss: item): string => {
-    let link: string = undefined;
+const assertLastEpisode = (searchParams: object, functionsParams: object): Promise<string | TypeError> =>
+new Promise(async (resolve: (message: string) => void, reject: (error: TypeError) => void) => {
+    const check = [ {
+        param: 'searchParams', property: 'id', type: 'number' }, {
+        param: 'searchParams', property: 'language', type: 'string' }, {
+        param: 'searchParams', property: 'country', type: 'string' }, {
+        param: 'functionsParams', property: 'translate', type: 'function' }, {
+        param: 'functionsParams', property: 'fetchRss', type: 'function' }, {
+        param: 'functionsParams', property: 'shorten', type: 'function'
+    }];
 
-    if (undefined !== rss && 'object' === typeof(rss)) {
-        /**
-         * Even  with  guid  property,  some  cases -- particularly in Soundcloud --, are populated with tags that won't
-         * return  the  proper  stream link. Just lookup to see whether or not an http -- or https -- link is available,
-         * that  would  be  faster  than requesting a search through any other API to find the episode link through that
-         * tags.
-         */
-        if (true === rss.hasOwnProperty('guid') && rss.guid.includes('http')) {
-            link = rss.guid;
-        } else if (true === rss.hasOwnProperty('link')) {
-            link = rss.link;
-        /**
-         * Since the shorten function will "short" anything that is a string, the best way is to pass an undefined so,
-         * that way, won't be shortened at all.
-         */
-        } else {
-            link = undefined;
+    await check.map(element => {
+        if (false === element.param.hasOwnProperty(element.property) || element.type !== typeof element.property) {
+            reject(new TypeError(`${element.param} has no ${element.property} property of type ${element.type}.`));
         }
+    });
 
-        return link;
-    } else {
-        throw(new Error('Wrong argument.'));
+    resolve('Ok');
+});
+
+const fetchLinkEpisode = (rss): string | Error => {
+    /**
+     * Even  with  guid property, some cases -- particularly in Soundcloud --, are populated with tags that won't return
+     * the  proper  stream link, that's why the need to check if contains and http/https attached to it.
+     */
+    if (true === rss.hasOwnProperty('guid') && rss.guid.includes('http')) {
+        return rss.guid;
+    } if (true === rss.hasOwnProperty('link')) {
+        return rss.link;
     }
+
+    throw (new Error('Undefined episode link.'));
 };
 
-/**
- * Fetch the episode name.
- */
-export const nameEpisode = (rss: item, language: string, i18n: api): string => {
-    let name: string = undefined;
-
-    if (undefined !== rss && 'object' === typeof(rss) && undefined !== language && 'string' === typeof(language)) {
-        if (true === rss.hasOwnProperty('title')) {
-            name = rss.title;
-        } else {
-            name = i18n().t('noName', {}, language);
-        }
-
-        return name;
-    } else {
-        throw (new Error('Wrong argument.'));
+const fetchNameEpisode = ({ lastEpisode, language }, { translate }): string => {
+    if (true === lastEpisode.hasOwnProperty('title')) {
+        return lastEpisode.title;
     }
+
+    return translate('noName', {}, language);
 };
 
-/**
- * Fetch the last podcast episode.
- */
-export const lastEpisode = (id: number, lanCode: string, i18n: api, shorten: Function, rssFetcher: Parser): Promise<resultExtended> =>
-new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
-    const options: object = {
-        media: 'podcast',
-        entity: 'podcast',
-        explicit: 'No',
-        limit: 1
-    };
-    let keyboard: any = undefined;
-    let link: string = undefined;
-    let country: string = undefined;
-    let language: string = undefined;
-    let name: string = undefined;
-    let latest: string = undefined;
+const fetchKeyboard = async ({ language, lastEpisode }, { translate, shorten }) => {
+    const keyboard = markup.inlineKeyboard([
+        markup.callbackButton(translate('subscribe', {}, language), `subscribe/${id}`),
+    ]).extra();
+    let linkButton;
 
-    if (undefined !== id && 'number' === typeof(id) && undefined !== lanCode && 'string' === typeof(lanCode)) {
-        language = lanCode.split('-')[0];
-        country = lanCode.split('-')[1];
-
-        lookup({ id, country, ...options}, (err: Error, data: response) => {
-            if (err || 0 === data.resultCount) {
-                reject('Something wrong occurred with search.');
-            } else {
-                rssFetcher.parseURL(data.results[0].feedUrl).then((parsed) => {
-                    link = linkEpisode(parsed.items[0]);
-                    name = nameEpisode(parsed.items[0], language, i18n);
-                    latest = moment(parsed.items[0].pubDate).locale(country).format('Do MMMM YYYY, h:mm a');
-
-                    /**
-                     * Verifies if the link is one of the know objects value then parse it.
-                     */
-                    if (undefined !== link) {
-                        shorten(link).then((short: string) => {
-                            keyboard = extra.markdown().markup((m: any) => {
-                                return m.inlineKeyboard([
-                                    m.callbackButton(i18n().t('subscribe', {}, language), `subscribe/${id}`),
-                                    { text: i18n().t('listen', {}, language), url: short }
-                                ]);
-                            });
-
-                            resolve({
-                                name,
-                                latest,
-                                keyboard,
-                                ...data.results[0]
-                            });
-                        }).catch((error) => {
-                            reject(error);
-                        });
-                    /**
-                     * If not, the user will be notified and asked to report it to improve linkEpisode.
-                     */
-                    } else {
-                        keyboard = extra.markdown().markup((m: any) => {
-                            return m.inlineKeyboard([
-                                m.callbackButton(i18n().t('subscribe', {}, language), `subscribe/${id}`),
-                                m.callbackButton(i18n().t('listen', {}, language), `episode/notAvailable/${id}`)
-                            ]);
-                        });
-
-                        resolve({
-                            keyboard,
-                            ...data.results[0]
-                        });
-                    }
-                }).catch((error) => {
-                    reject(error);
-                });
-            }
-        });
-    } else {
-        reject('Wrong argument.');
+    try {
+        linkButton = {
+            text: translate('listen', {}, language),
+            url: await shorten(fetchLinkEpisode(lastEpisode)).catch((error: Error) => {
+                throw new Error(`Shortening error: ${error}`);
+            })
+        };
+    } catch {
+        linkButton = markup.callbackButton(translate('listen', {}, language), `episode/notAvailable/${id}`);
+    } finally {
+        keyboard.push(linkButton);
     }
+
+    return keyboard;
+};
+
+export const fetchLastEpisode = ({ id, language, country }, { translate, fetchRss, shorten}): Promise<resultExtended | Error> =>
+new Promise(async (resolve: (data: resultExtended) => void, reject: (error: Error) => void) => {
+    await assertLastEpisode({ id, language, country }, { translate, fetchRss, shorten }).catch(reject);
+
+    const podcastItunes = <result> await lookupPodcast({ id, country }).catch(reject);
+    const podcastContent = await fetchRss(podcastItunes.feedUrl).catch(reject);
+    const lastEpisode = podcastContent.items[0];
+
+    resolve({
+        name: fetchNameEpisode({ lastEpisode, language }, { translate }),
+        latest: moment(lastEpisode.pubDate).locale(country).format('Do MMMM YYYY, h:mm a'),
+        keyboard: fetchKeyboard({ language, lastEpisode }, { translate, shorten }),
+        ...lastEpisode
+    });
 });

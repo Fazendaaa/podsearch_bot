@@ -1,98 +1,94 @@
 'use strict';
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const itunes_search_1 = require("itunes-search");
 const moment = require("moment");
-const extra = require('telegraf').Extra;
-exports.linkEpisode = (rss) => {
-    let link = undefined;
-    if (undefined !== rss && 'object' === typeof (rss)) {
-        if (true === rss.hasOwnProperty('guid') && rss.guid.includes('http')) {
-            link = rss.guid;
-        }
-        else if (true === rss.hasOwnProperty('link')) {
-            link = rss.link;
-        }
-        else {
-            link = undefined;
-        }
-        return link;
+const markup = require('telegraf').Markup;
+const assertLastEpisode = (searchParams, functionsParams) => new Promise((resolve, reject) => {
+    if (false === searchParams.hasOwnProperty('id') || 'number' !== typeof searchParams.id) {
+        reject(new TypeError('searchParams has no id property of type number.'));
     }
-    else {
-        throw (new Error('Wrong argument.'));
+    if (false === searchParams.hasOwnProperty('language') || 'string' !== typeof searchParams.language) {
+        reject(new TypeError('searchParams has no language property of type string.'));
     }
-};
-exports.nameEpisode = (rss, language, i18n) => {
-    let name = undefined;
-    if (undefined !== rss && 'object' === typeof (rss) && undefined !== language && 'string' === typeof (language)) {
-        if (true === rss.hasOwnProperty('title')) {
-            name = rss.title;
-        }
-        else {
-            name = i18n().t('noName', {}, language);
-        }
-        return name;
+    if (false === searchParams.hasOwnProperty('country') || 'string' !== typeof searchParams.country) {
+        reject(new TypeError('searchParams has no country property of type string.'));
     }
-    else {
-        throw (new Error('Wrong argument.'));
+    if (false === functionsParams.hasOwnProperty('translate') || 'function' !== typeof searchParams.translate) {
+        reject(new TypeError('searchParams has no translate property of type function.'));
     }
-};
-exports.lastEpisode = (id, lanCode, i18n, shorten, rssFetcher) => new Promise((resolve, reject) => {
+    if (false === functionsParams.hasOwnProperty('shorten') || 'function' !== typeof searchParams.shorten) {
+        reject(new TypeError('searchParams has no shorten property of type function.'));
+    }
+    if (false === functionsParams.hasOwnProperty('shorten') || 'function' !== typeof searchParams.fetchRss) {
+        reject(new TypeError('searchParams has no shorten property of type function.'));
+    }
+    resolve('Ok');
+});
+const fetchPodcast = (searchParams) => new Promise((resolve, reject) => {
     const options = {
+        id: searchParams.id,
+        country: searchParams.country,
         media: 'podcast',
         entity: 'podcast',
         explicit: 'No',
         limit: 1
     };
-    let keyboard = undefined;
-    let link = undefined;
-    let country = undefined;
-    let language = undefined;
-    let name = undefined;
-    let latest = undefined;
-    if (undefined !== id && 'number' === typeof (id) && undefined !== lanCode && 'string' === typeof (lanCode)) {
-        language = lanCode.split('-')[0];
-        country = lanCode.split('-')[1];
-        itunes_search_1.lookup(Object.assign({ id, country }, options), (err, data) => {
-            if (err || 0 === data.resultCount) {
-                reject('Something wrong occurred with search.');
-            }
-            else {
-                rssFetcher.parseURL(data.results[0].feedUrl).then((parsed) => {
-                    link = exports.linkEpisode(parsed.items[0]);
-                    name = exports.nameEpisode(parsed.items[0], language, i18n);
-                    latest = moment(parsed.items[0].pubDate).locale(country).format('Do MMMM YYYY, h:mm a');
-                    if (undefined !== link) {
-                        shorten(link).then((short) => {
-                            keyboard = extra.markdown().markup((m) => {
-                                return m.inlineKeyboard([
-                                    m.callbackButton(i18n().t('subscribe', {}, language), `subscribe/${id}`),
-                                    { text: i18n().t('listen', {}, language), url: short }
-                                ]);
-                            });
-                            resolve(Object.assign({ name,
-                                latest,
-                                keyboard }, data.results[0]));
-                        }).catch((error) => {
-                            reject(error);
-                        });
-                    }
-                    else {
-                        keyboard = extra.markdown().markup((m) => {
-                            return m.inlineKeyboard([
-                                m.callbackButton(i18n().t('subscribe', {}, language), `subscribe/${id}`),
-                                m.callbackButton(i18n().t('listen', {}, language), `episode/notAvailable/${id}`)
-                            ]);
-                        });
-                        resolve(Object.assign({ keyboard }, data.results[0]));
-                    }
-                }).catch((error) => {
-                    reject(error);
-                });
-            }
-        });
-    }
-    else {
-        reject('Wrong argument.');
-    }
+    itunes_search_1.lookup(options, (err, data) => {
+        if (err || 0 === data.resultCount) {
+            reject(new Error('Something wrong occurred with search.'));
+        }
+        resolve(data.results[0]);
+    });
 });
+const fetchLinkEpisode = (rss) => {
+    if (true === rss.hasOwnProperty('guid') && rss.guid.includes('http')) {
+        return rss.guid;
+    }
+    if (true === rss.hasOwnProperty('link')) {
+        return rss.link;
+    }
+    throw (new Error('Undefined episode link.'));
+};
+const fetchNameEpisode = (searchParams, functionsParams) => {
+    if (true === searchParams.lastEpisode.hasOwnProperty('title')) {
+        return searchParams.lastEpisode.title;
+    }
+    return functionsParams.translate('noName', {}, searchParams.language);
+};
+const fetchKeyboard = (searchParams, functionsParams) => __awaiter(this, void 0, void 0, function* () {
+    const keyboard = markup.inlineKeyboard([
+        markup.callbackButton(functionsParams.translate('subscribe', {}, searchParams.language), `subscribe/${searchParams.id}`),
+    ]).extra();
+    let linkButton;
+    try {
+        linkButton = {
+            text: functionsParams.translate('listen', {}, searchParams.language),
+            url: yield functionsParams.shorten(fetchLinkEpisode(searchParams.lastEpisode)).catch((error) => {
+                throw new Error(`Shortening error: ${error}`);
+            })
+        };
+    }
+    catch (_a) {
+        linkButton = markup.callbackButton(functionsParams.translate('listen', {}, searchParams.language), `episode/notAvailable/${searchParams.id}`);
+    }
+    finally {
+        keyboard.push(linkButton);
+    }
+    return keyboard;
+});
+exports.fetchLastEpisode = (searchParams, functionsParams) => new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+    yield assertLastEpisode(searchParams, functionsParams).catch(reject);
+    const podcastItunes = yield fetchPodcast(searchParams).catch(reject);
+    const podcastContent = yield functionsParams.fetchRss(podcastItunes.feedUrl).catch(reject);
+    const lastEpisode = podcastContent.items[0];
+    resolve(Object.assign({ name: fetchNameEpisode(Object.assign({ lastEpisode }, searchParams), functionsParams), latest: moment(lastEpisode.pubDate).locale(searchParams.country).format('Do MMMM YYYY, h:mm a'), keyboard: fetchKeyboard(Object.assign({ lastEpisode }, searchParams), functionsParams) }, podcastItunes));
+}));
 //# sourceMappingURL=stream.js.map

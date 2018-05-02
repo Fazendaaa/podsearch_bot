@@ -4,7 +4,7 @@ const dotenv_1 = require("dotenv");
 const i18n_node_yaml = require("i18n-node-yaml");
 const itunes_search_1 = require("itunes-search");
 const path_1 = require("path");
-const tinyurl_1 = require("tinyurl");
+const tiny_shortener_1 = require("tiny-shortener");
 const parse_1 = require("../others/parse");
 const utils_1 = require("../others/utils");
 const telegraf = require('telegraf');
@@ -41,7 +41,7 @@ const handleSearch = ({ i18n, replyWithMarkdown, text, language_code }, position
                 console.error(err);
             }
             else {
-                parse_1.parseResponse(data, language_code, tinyurl_1.shorten, i18nNode.api, position).then((parsed) => {
+                parse_1.parseResponse(data, language_code, tiny_shortener_1.tiny, i18nNode.api, position).then((parsed) => {
                     telegramCore.editMessageText(chat.id, message_id, undefined, i18n.t('mask', parsed), parsed.keyboard).then(() => {
                         buttons = utils_1.arrayLoad(i18n.repository[language].confirm);
                         keyboard = extra.markdown().markup((m) => {

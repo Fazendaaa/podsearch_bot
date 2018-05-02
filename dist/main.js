@@ -5,7 +5,7 @@ const i18n_node_yaml = require("i18n-node-yaml");
 const itunes_search_1 = require("itunes-search");
 const path_1 = require("path");
 const Parser = require("rss-parser");
-const tinyurl_1 = require("tinyurl");
+const tiny_shortener_1 = require("tiny-shortener");
 const subscription_1 = require("./database/subscription");
 const parse_1 = require("./others/parse");
 const stream_1 = require("./others/stream");
@@ -54,7 +54,17 @@ bot.start(({ i18n, replyWithMarkdown, message }) => {
         }
         else {
             replyWithMarkdown(i18n.t('sending')).then(() => {
-                stream_1.lastEpisode(parseInt(argument, 10), message.from.language_code, i18nNode.api, tinyurl_1.shorten, handlerRss).then((episode) => {
+                const searchParams = {
+                    id: parseInt(argument, 10),
+                    language: message.from.language_code.split('-')[0] || 'en',
+                    country: message.from.language_code.split('-')[1] || 'us'
+                };
+                const functionsParams = {
+                    translate: i18nNode.api.t,
+                    shorten: tiny_shortener_1.tiny,
+                    fetchRss: handlerRss.parseURL
+                };
+                stream_1.lastEpisode(searchParams, i18nNode.api, functionsParams).then((episode) => {
                     replyWithMarkdown(i18n.t('episode', episode), episode.keyboard);
                 }).catch(error => {
                     replyWithMarkdown(i18n.t('error'));
@@ -98,7 +108,7 @@ bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }
                 console.error(err);
             }
             else {
-                parse_1.parseResponse(data, message.from.language_code, tinyurl_1.shorten, i18nNode.api).then((parsed) => {
+                parse_1.parseResponse(data, message.from.language_code, tiny_shortener_1.tiny, i18nNode.api).then((parsed) => {
                     replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
                 }).catch((error) => {
                     console.error(error);
@@ -159,7 +169,7 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
                 if (0 < data.resultCount) {
                     data.results = data.results.slice(offset, offset + pageLimit);
                     if (0 < data.results.length) {
-                        parse_1.parseResponseInline(data, lanCode, tinyurl_1.shorten, i18nNode.api).then((results) => {
+                        parse_1.parseResponseInline(data, lanCode, tiny_shortener_1.tiny, i18nNode.api).then((results) => {
                             answerInlineQuery(results, { next_offset: offset + pageLimit });
                         }).catch((error) => {
                             console.error(error);

@@ -24,7 +24,10 @@
         "align": false,
         "no-unnecessary-initializer": false,
         "export-name": false,
-        "no-submodule-imports": false
+        "no-submodule-imports": false,
+        "triple-equals": false,
+        "one-line": false,
+        "missing-jsdoc": false
     },
     "rulesDirectory": []
 }
