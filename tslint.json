@@ -27,7 +27,8 @@
         "no-submodule-imports": false,
         "triple-equals": false,
         "one-line": false,
-        "missing-jsdoc": false
+        "missing-jsdoc": false,
+        "class-name": false,
     },
     "rulesDirectory": []
 }

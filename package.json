@@ -14,8 +14,8 @@
     "type": "git",
     "url": "git+https://github.com/Fazendaaa/podsearch_bot.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Fazendaaa",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Fazendaaa/podsearch_bot/issues"
   },
@@ -29,11 +29,12 @@
     "coveralls": "^3.0.0",
     "jest": "^22.4.3",
     "tslint": "^5.9.1",
-    "tslint-microsoft-contrib": "^5.0.3"
+    "ts-jest": "^22.4.2",
+    "tslint-microsoft-contrib": "^5.0.3",
+    "typescript": "^2.7.2"
   },
   "dependencies": {
     "dotenv": "^5.0.1",
-    "i18n-node-yaml": "^1.0.3",
     "itunes-search": "git+https://github.com/connor/itunes-node.git",
     "moment": "^2.21.0",
     "mongoose": "^5.0.14",
@@ -42,8 +43,6 @@
     "rss-parser": "^3.1.2",
     "telegraf": "^3.20.0",
     "telegraf-i18n": "^6.0.4",
-    "tiny-shortener": "^1.3.0",
-    "ts-jest": "^22.4.2",
-    "typescript": "^2.7.2"
+    "tiny-shortener": "^1.3.0"
   }
 }

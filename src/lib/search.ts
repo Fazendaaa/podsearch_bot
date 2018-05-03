@@ -3,55 +3,38 @@
  * third-parties  app.  Was  decided  to  not  shown  then since Telegram had some fights in the past about this kind of
  * content.
  */
-
 'use strict';
 
-import {
-    lookup,
-    options,
-    response,
-    result,
-    search
-} from 'itunes-search';
+import { lookup, options, response, result, search } from 'itunes-search';
 import { join } from 'path';
+import { telegramInline } from 'telegraf';
 import { resultExtended } from '../@types/parse/main';
-import {
-    parseResponse,
-    parseResponseInline
-} from '../others/parse';
-import {
-    arrayLoad,
-    endInline,
-    errorInline,
-    messageToString,
-    notFoundInline,
-    removeCmd,
-    searchInline
-} from '../others/utils';
+import { parseResponse, parseResponseInline } from '../lib/parse';
+import { arrayLoad, endInline, errorInline, messageToString, notFoundInline, removeCmd, searchInline } from '../lib/utils';
 
-const replyGIFNoSearch = async ({ replyWithMarkdown, replyWithVideo, i18n }) => {
-    await replyWithMarkdown(i18n.t('wrongInputCmd')).catch((error: Error) => {
-        replyWithMarkdown(i18n.t('error'));
+const replyGIFNoSearch = async ({ replyWithMarkdown, replyWithVideo, translate }) => {
+    await replyWithMarkdown(translate('wrongInputCmd')).catch((error: Error) => {
+        replyWithMarkdown(translate('error'));
         console.error(error);
     });
     await replyWithVideo({ source: join(__dirname, '../../gif/searchCmd.mp4') }).catch((error: Error) => {
-        replyWithMarkdown(i18n.t('error'));
+        replyWithMarkdown(translate('error'));
         console.error(error);
     });
-    await replyWithMarkdown(i18n.t('wrongInputButton')).catch((error: Error) => {
-        replyWithMarkdown(i18n.t('error'));
+    await replyWithMarkdown(translate('wrongInputButton')).catch((error: Error) => {
+        replyWithMarkdown(translate('error'));
         console.error(error);
     });
     await replyWithVideo({ source: join(__dirname, '../../gif/searchButton.mp4') }).catch((error: Error) => {
-        replyWithMarkdown(i18n.t('error'));
+        replyWithMarkdown(translate('error'));
         console.error(error);
     });
-    await replyWithMarkdown(i18n.t('wrongInputInline')).catch((error: Error) => {
-        replyWithMarkdown(i18n.t('error'));
+    await replyWithMarkdown(translate('wrongInputInline')).catch((error: Error) => {
+        replyWithMarkdown(translate('error'));
         console.error(error);
     });
     await replyWithVideo({ source: join(__dirname, '../../gif/searchInline.mp4') }).catch((error: Error) => {
-        replyWithMarkdown(i18n.t('error'));
+        replyWithMarkdown(translate('error'));
         console.error(error);
     });
 };
@@ -91,42 +74,39 @@ new Promise((resolve: (searchResult: result) => void, reject: (error: Error) => 
     });
 });
 
-export const searchThroughCommand = async ({ country, term, message }, { replyWithMarkdown, replyWithVideo, i18n }) => {
+export const searchThroughCommand = async ({ country, term, message }, { tiny, replyWithMarkdown, replyWithVideo, translate }) => {
     if ('' === term) {
-        replyGIFNoSearch({ replyWithMarkdown, replyWithVideo, i18n });
+        replyGIFNoSearch({ replyWithMarkdown, replyWithVideo, translate });
     }
 
     const podcasts = <response> await searchPodcast({ term, country, limit: 1 }).catch((error: Error) => {
-        replyWithMarkdown(i18n.t('error'));
+        replyWithMarkdown(translate('error'));
         console.error(error);
     });
 
-    const parsed = <resultExtended> await parseResponse(podcasts, message.from.language_code, tiny, i18nNode.api).catch((error: string) => {
+    const parsed = <resultExtended> await parseResponse(podcasts, message.from.language_code, tiny, translate).catch((error: string) => {
         console.error(error);
-        replyWithMarkdown(i18n.t('noResult', { term }));
+        replyWithMarkdown(translate('noResult', { term }));
     });
 
-    replyWithMarkdown(i18n.t('mask', parsed), parsed.keyboard);
+    replyWithMarkdown(translate('mask', parsed), parsed.keyboard);
 };
 
-const sendInlineError = async ({ error, lanCode }, { i18nNode, answerInlineQuery }) => {
-    const errorMessage = await errorInline(lanCode, i18nNode.api).catch(console.error);
-
-    answerInlineQuery([errorMessage]);
+const sendInlineError = (error, { translate, answerInlineQuery }) => {
+    answerInlineQuery([errorInline(translate)]);
     console.error(error);
 };
 
-export const searchThroughInline = async ({ country, term, offset, pageLimit, lanCode }, { tiny, i18n, i18nNode, answerInlineQuery, inlineQuery }) => {
+export const searchThroughInline = async ({ country, language, term, offset, pageLimit }, { tiny, translate, answerInlineQuery, inlineQuery }) => {
     /**
      * Verify whether or not the user has typed anything to search for.
      */
     if ('' === term) {
-        const inline = await searchInline(lanCode, i18nNode.api).catch(console.error);
-        answerInlineQuery([inline]);
+        answerInlineQuery([searchInline(translate)]);
     }
 
     const podcasts = <response> await searchPodcast({ term, country, limit: offset + pageLimit }).catch((error: Error) => {
-        sendInlineError({ error, lanCode }, { i18nNode, answerInlineQuery });
+        sendInlineError(error, { translate, answerInlineQuery });
     });
 
     /**
@@ -135,13 +115,11 @@ export const searchThroughInline = async ({ country, term, offset, pageLimit, la
     podcasts.results = podcasts.results.slice(offset, offset + pageLimit);
 
     if (0 === podcasts.results.length) {
-        const endMessage = await endInline(lanCode, i18nNode.api).catch(console.error);
-
-        answerInlineQuery([endMessage]);
+        answerInlineQuery([endInline(translate)]);
     }
 
-    const results = await parseResponseInline(podcasts, lanCode, tiny, i18nNode.api).catch((error: Error) => {
-        sendInlineError({ error, lanCode}, { i18nNode, answerInlineQuery});
+    const results = await parseResponseInline(podcasts, tiny, translate).catch((error: Error) => {
+        sendInlineError(error, { translate, answerInlineQuery });
     });
 
     answerInlineQuery(results, { next_offset: offset + pageLimit });

@@ -5,17 +5,12 @@
 'use strict';
 
 import { config } from 'dotenv';
-import * as i18n_node_yaml from 'i18n-node-yaml';
 import { join } from 'path';
-import * as Parser from 'rss-parser';
-import { telegramInline } from 'telegraf';
-import { tiny } from 'tiny-shortener';
-import { resultExtended } from './@types/parse/main';
-import { Subscription } from './database/subscription';
+import { languageCode } from './lib/middleware';
+import { searchThroughCommand, searchThroughInline } from './lib/search';
+import { talkingSearchManager } from './lib/stage';
+import { arrayLoad, messageToString, removeCmd } from './lib/utils';
 import { handleEpisode, handlePrivateConversation, handleSubscribe, handleUnsubscribe } from './mainHandler';
-import { fetchLastEpisode } from './others/stream';
-import { searchThroughCommand, searchThroughInline } from './search/search';
-import { talkingSearchManager } from './stage/stage';
 
 /**
  * Why using the "old" pattern instead of the new one?
@@ -26,35 +21,24 @@ import { talkingSearchManager } from './stage/stage';
 const telegrafI18n = require('telegraf-i18n');
 const telegraf = require('telegraf');
 const session = telegraf.session;
-const markup = telegraf.Markup;
-const extra = telegraf.Extra;
 
 config();
 
-const subscription = new Subscription();
-const handlerRss = new Parser();
-const bot = new telegraf(process.env.BOT_KEY);
 const i18n = new telegrafI18n({
     defaultLanguage: 'en',
     allowMissing: true,
     directory: join(__dirname, '../locales')
 });
-const i18nNode = i18n_node_yaml({
-    debug: true,
-    translationFolder: join(__dirname, '../locales'),
-    locales: ['en', 'pt']
-});
 
-/**
- * This could lead to a problem someday(?)
- */
 const commands = i18n.repository.commands;
-const helpCommand: Array<string> = <Array<string>> arrayLoad(commands.help);
-const aboutCommand: Array<string> = <Array<string>> arrayLoad(commands.about);
-const searchCommand: Array<string> = <Array<string>> arrayLoad(commands.search);
+const helpCommand = <Array<string>> arrayLoad(commands.help);
+const aboutCommand = <Array<string>> arrayLoad(commands.about);
+const searchCommand = <Array<string>> arrayLoad(commands.search);
 
+const bot = new telegraf(process.env.BOT_KEY);
 bot.startPolling();
 bot.use(session());
+bot.use(new languageCode().middleware());
 bot.use(telegraf.log());
 bot.use(i18n.middleware());
 bot.use(talkingSearchManager.middleware());
@@ -63,55 +47,46 @@ bot.catch((err) => {
     console.log(err);
 });
 
-bot.start(({ i18n, replyWithMarkdown, message }) => {
-    const language: string = message.from.language_code.split('-')[0] || 'en';
-    const argument: string = removeCmd(message.text);
-
+bot.start(async ({ i18n, replyWithMarkdown, message, language, country }) => {
     i18n.locale(language);
 
     if ('private' === message.chat.type) {
-        handlePrivateConversation();
+        const paramsArgs = { id: parseInt(removeCmd(message.text), 10), country, language };
+        const functionsArgs = { translate: i18n, replyWithMarkdown };
+        const sendMessage = await handlePrivateConversation(paramsArgs, functionsArgs);
+
+        replyWithMarkdown(sendMessage.text, sendMessage.keyboard);
     }
 
     replyWithMarkdown(i18n.t('greetingsGroup'));
 });
 
-bot.command(helpCommand, ({ i18n, replyWithMarkdown, message }) => {
-    const language: string = message.from.language_code.split('-')[0] || 'en';
-
+bot.command(helpCommand, ({ i18n, replyWithMarkdown, message, language }) => {
     i18n.locale(language);
 
     replyWithMarkdown(i18n.t('help'));
 });
 
-bot.command(aboutCommand, ({ i18n, replyWithMarkdown, message }) => {
-    const language: string = message.from.language_code.split('-')[0] || 'en';
-
+bot.command(aboutCommand, ({ i18n, replyWithMarkdown, message, language }) => {
     i18n.locale(language);
 
     replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
 });
 
-bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message }) => {
+bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message, language, country }) => {
     const term: string = removeCmd(message.text);
-    const country: string = message.from.language_code.split('-')[1] || 'us';
-    const language: string = message.from.language_code.split('-')[0] || 'en';
 
     i18n.locale(language);
 
-    searchThroughCommand({ country, term, message }, { replyWithMarkdown, replyWithVideo, i18n });
+    searchThroughCommand({ country, term, message }, { tiny, replyWithMarkdown, replyWithVideo, translate: i18n });
 });
 
-bot.hears(helpCommand, ({ i18n, replyWithMarkdown, message }) => {
-    const language: string = message.from.language_code.split('-')[0] || 'en';
-
+bot.hears(helpCommand, ({ i18n, replyWithMarkdown, message, language }) => {
     i18n.locale(language);
     replyWithMarkdown(i18n.t('help'));
 });
 
-bot.hears(aboutCommand, ({ i18n, replyWithMarkdown, message }) => {
-    const language: string = message.from.language_code.split('-')[0] || 'en';
-
+bot.hears(aboutCommand, ({ i18n, replyWithMarkdown, message, language }) => {
     i18n.locale(language);
     replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
 });
@@ -120,35 +95,32 @@ bot.hears(searchCommand, ({ scene }) => {
     scene.enter('talkingSearch');
 });
 
-bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery }) => {
+bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery, language, country }) => {
     const term: string = messageToString(inlineQuery.query);
-    const lanCode: string = inlineQuery.from.language_code;
     const pageLimit: number = 20;
     const offset: number = parseInt(inlineQuery.offset, 10) || 0;
-    const country: string = inlineQuery.from.language_code.split('-')[1] || 'us';
 
-    searchThroughInline({ country, term, offset, pageLimit, lanCode }, { i18n, answerInlineQuery, inlineQuery });
+    searchThroughInline({ country, language, term, offset, pageLimit }, { translate: i18n, answerInlineQuery, inlineQuery });
 });
 
 /**
  * Handling buttons request.
  */
-bot.on('callback_query', ({ i18n, answerCbQuery, update, scene, replyWithMarkdown }) => {
-    const language: string = update.callback_query.from.language_code.split('-')[0] || 'en';
+bot.on('callback_query', async ({ i18n, answerCbQuery, update, scene, language }) => {
     const options: Array<string> = update.callback_query.data.split('/');
 
     i18n.locale(language);
 
     if ('subscribe' === options[0]) {
-        handleSubscribe({ answerCbQuery });
-    } else if ('unsubscribe' === options[0]) {
-        handleUnsubscribe({ answerCbQuery });
-    } else if ('episode' === options[0]) {
-        handleEpisode({ episode: options[1] }, { answerCbQuery });
-    } else if ('again' === options[0]) {
+        answerCbQuery(await handleSubscribe({ userId: 0, podcastId: 0 }, { translate: i18n }), true);
+    } if ('unsubscribe' === options[0]) {
+        answerCbQuery(await handleUnsubscribe({ userId: 0, podcastId: 0 }, { translate: i18n }), true);
+    } if ('episode' === options[0]) {
+        answerCbQuery(handleEpisode({ episode: options[1], id: options[2] }, { translate: i18n }), true);
+    } if ('again' === options[0]) {
         answerCbQuery(i18n.t('again'), false);
         scene.reenter();
-    } else if ('finished' === options[0]) {
+    } if ('finished' === options[0]) {
         answerCbQuery(i18n.t('finished'), false);
         scene.leave();
     }

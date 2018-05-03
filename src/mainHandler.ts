@@ -1,64 +1,78 @@
 'use strict';
 
-export const handlePrivateConversation = async ({ argument, message }, { replyWithMarkdown }) => {
-    if ('' === argument) {
-        const keyboard = markup.keyboard(arrayLoad(i18n.repository[language].keyboard)).resize().extra();
-        replyWithMarkdown(i18n.t('greetingsPrivate'), keyboard);
-    }
+import { join } from 'path';
+import * as Parser from 'rss-parser';
+import { tiny } from 'tiny-shortener';
+import { resultExtended } from './@types/parse/main';
+import { Subscription } from './database/subscription';
+import { fetchLastEpisode } from './lib/stream';
+import { arrayLoad } from './lib/utils';
+const telegraf = require('telegraf');
+const markup = telegraf.Markup;
 
-    const searchParams = {
-        id: parseInt(argument, 10),
-        language: message.from.language_code.split('-')[0] || 'en',
-        country: message.from.language_code.split('-')[1] || 'us'
-    };
-    const functionsParams = {
-        translate: i18nNode.api.t,
-        shorten: tiny,
-        fetchRss: handlerRss.parseURL
-    };
+const handlerRss = new Parser();
+const subscription = new Subscription();
+
+const functionsParams = {
+    shorten: tiny,
+    fetchRss: handlerRss.parseURL
+};
+
+export const handlePrivateConversation = async ({ id, country, language }, { translate, replyWithMarkdown }) => {
+    if (isNaN(id)) {
+        const buttons = arrayLoad(translate.repository[language].keyboard);
+        const keyboard = markup.keyboard(buttons).resize().extra();
+
+        return { text: translate('greetingsPrivate'), keyboard };
+    }
 
     /**
      * That would mean starting a bot conversation through a link to listen some podcast.
      */
-    await replyWithMarkdown(i18n.t('sending')).catch(console.error);
-    lastEpisode(searchParams, i18nNode.api, functionsParams).then((episode: resultExtended) => {
-        replyWithMarkdown(i18n.t('episode', episode), episode.keyboard);
+    await replyWithMarkdown(translate('sending')).catch(console.error);
+
+    return fetchLastEpisode({ id, country, language }, { translate, ...functionsParams }).then((episode: resultExtended) => {
+        return { text: translate('episode', episode), keyboard: episode.keyboard };
     }).catch(error => {
-        replyWithMarkdown(i18n.t('error'));
         console.error(error);
+
+        return { text: translate('error'), keyboard: null };
     });
 };
 
-export const handleSubscribe = async ({ answerCbQuery }) => {
-    const result = await subscription.add(0, 0).catch(console.error);
+export const handleSubscribe = async ({ userId, podcastId }, { translate }): Promise<string> => {
+    const result = await subscription.add(userId, podcastId).catch(console.error);
 
     if ('added' === result) {
-        answerCbQuery(i18n.t('working'), true);
-    } else if ('already subscribed' === result) {
-        answerCbQuery(i18n.t('working'), true);
+        return translate('working');
+    } if ('already subscribed' === result) {
+        return translate('working');
     }
 
-    answerCbQuery(i18n.t('working'), true);
+    /**
+     * Even in a case of error trough the catch, this will run.
+     */
+    return translate('working');
 };
 
-export const handleUnsubscribe = async ({ answerCbQuery }) => {
-    const result = await subscription.remove(0, 0).catch(console.error);
+export const handleUnsubscribe = async ({ userId, podcastId }, { translate }): Promise<string> => {
+    const result = await subscription.remove(userId, podcastId).catch(console.error);
 
     if ('added' === result) {
-        answerCbQuery(i18n.t('working'), true);
+        return translate('working');
     } else if ('already subscribed' === result) {
-        answerCbQuery(i18n.t('working'), true);
+        return translate('working');
     }
 
-    answerCbQuery(i18n.t('working'), true);
+    return translate('working');
 };
 
-export const handleEpisode = ({ episode }, { answerCbQuery }) => {
+export const handleEpisode = ({ episode, id }, { translate }): string => {
     if ('last' === episode) {
-        answerCbQuery(i18n.t('sending'), false);
+        return translate('sending');
     } else if ('notAvailable' === episode) {
-        answerCbQuery(i18n.t('notAvailable', { id: options[2] }), true);
+        return translate('notAvailable', { id });
     }
 
-    answerCbQuery('default', true);
+    return translate('default');
 };

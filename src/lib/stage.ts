@@ -1,27 +1,19 @@
 'use strict';
 
 import { config } from 'dotenv';
-import * as i18n_node_yaml from 'i18n-node-yaml';
-import { lookup, options, response, search } from 'itunes-search';
 import { join } from 'path';
 import { tiny } from 'tiny-shortener';
 import { resultExtended } from '../@types/parse/main';
-import { parseResponse } from '../others/parse';
-import { arrayLoad } from '../others/utils';
-import { searchPodcast } from '../search/search';
+import { parseResponse } from './parse';
+import { searchPodcast } from './search';
+import { arrayLoad } from './utils';
 const telegraf = require('telegraf');
-const telegram = telegraf.Telegram;
-const markup = telegraf.Markup;
 const stage = require('telegraf/stage');
 const scene = require('telegraf/scenes/base');
+const markup = telegraf.Markup;
+const telegram = telegraf.Telegram;
 
 config();
-
-const i18nNode = i18n_node_yaml({
-    debug: true,
-    translationFolder: join(__dirname, '../../locales'),
-    locales: ['en', 'pt']
-});
 
 const telegramCore = new telegram(process.env.BOT_KEY);
 const talkingSearch = new scene('talkingSearch');
