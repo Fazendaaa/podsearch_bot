@@ -12,6 +12,18 @@ export class languageCode {
             }
     
             next();
-        }
+        };
+    }
+};
+
+export class setLocale {
+    middleware () {
+        return (ctx, next) => {
+            if (ctx.hasOwnProperty('i18n') && ctx.hasOwnProperty('language')) {
+                ctx.i18n.locale(ctx.language);
+            }
+
+            next();
+        };
     }
 };

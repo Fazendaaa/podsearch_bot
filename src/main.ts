@@ -6,18 +6,19 @@
 
 import { config } from 'dotenv';
 import { join } from 'path';
-import { languageCode } from './lib/middleware';
-import { searchThroughCommand, searchThroughInline } from './lib/search';
+import { languageCode, setLocale } from './lib/middleware';
 import { talkingSearchManager } from './lib/stage';
 import { arrayLoad, messageToString, removeCmd } from './lib/utils';
-import { handleEpisode, handlePrivateConversation, handleSubscribe, handleUnsubscribe } from './mainHandler';
-
-/**
- * Why using the "old" pattern instead of the new one?
- * I had a little bit of an issue making the typing for Telegraf package, had to open my own question in Stack Overflow.
- * Thankfully I had a lot of help. You can see more at: https://stackoverflow.com/q/49348607/7092954
- * brentatkins opened my eys to the real issue: https://stackoverflow.com/q/49348607/7092954
- */
+import {
+    handleEpisode,
+    handlePrivateConversation,
+    handleStartKeyboard,
+    handleSearchCommand,
+    handleSearchInline,
+    handleSubscribe,
+    handleUnsubscribe,
+    handleNoSearch
+} from './mainHandler';
 const telegrafI18n = require('telegraf-i18n');
 const telegraf = require('telegraf');
 const session = telegraf.session;
@@ -38,9 +39,10 @@ const searchCommand = <Array<string>> arrayLoad(commands.search);
 const bot = new telegraf(process.env.BOT_KEY);
 bot.startPolling();
 bot.use(session());
-bot.use(new languageCode().middleware());
 bot.use(telegraf.log());
 bot.use(i18n.middleware());
+bot.use(new languageCode().middleware());
+bot.use(new setLocale().middleware());
 bot.use(talkingSearchManager.middleware());
 
 bot.catch((err) => {
@@ -48,46 +50,56 @@ bot.catch((err) => {
 });
 
 bot.start(async ({ i18n, replyWithMarkdown, message, language, country }) => {
-    i18n.locale(language);
+    const id = parseInt(removeCmd(message.text), 10);
 
-    if ('private' === message.chat.type) {
-        const paramsArgs = { id: parseInt(removeCmd(message.text), 10), country, language };
-        const functionsArgs = { translate: i18n, replyWithMarkdown };
-        const sendMessage = await handlePrivateConversation(paramsArgs, functionsArgs);
-
-        replyWithMarkdown(sendMessage.text, sendMessage.keyboard);
+    /**
+     * A new conversation.
+     */
+    if (isNaN(id)) {
+        replyWithMarkdown(i18n.t('greetingsPrivate'), handleStartKeyboard({ rootTranslate: i18n, language }));
     }
+    /**
+     * Sending a podcast episode link to listen.
+    */
+    else if ('private' === message.chat.type) {
+        const sendMessage = await handlePrivateConversation({ id, country }, { translate: i18n.t });  
 
-    replyWithMarkdown(i18n.t('greetingsGroup'));
+        await replyWithMarkdown(i18n.t('sending')).catch(console.error);
+        replyWithMarkdown(sendMessage.text, sendMessage.keyboard);
+    } else {
+        replyWithMarkdown(i18n.t('greetingsGroup'));
+    }
 });
 
-bot.command(helpCommand, ({ i18n, replyWithMarkdown, message, language }) => {
-    i18n.locale(language);
-
+bot.command(helpCommand, ({ i18n, replyWithMarkdown }) => {
     replyWithMarkdown(i18n.t('help'));
 });
 
-bot.command(aboutCommand, ({ i18n, replyWithMarkdown, message, language }) => {
-    i18n.locale(language);
-
+bot.command(aboutCommand, ({ i18n, replyWithMarkdown }) => {
     replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
 });
 
-bot.command(searchCommand, ({ i18n, replyWithMarkdown, replyWithVideo, message, language, country }) => {
+bot.command(searchCommand, async ({ i18n, replyWithMarkdown, replyWithVideo, message, language, country }) => {
     const term: string = removeCmd(message.text);
+    
+    if ('' === term) {
+        const gifs = handleNoSearch({ translate: i18n.t });
 
-    i18n.locale(language);
+        gifs.map((element) => {
+            element.hasOwnProperty('source') ? replyWithVideo(element) : replyWithMarkdown(element.text);
+        });
+    } else {
+        const searched = await handleSearchCommand({ country, term }, { translate: i18n.t });
 
-    searchThroughCommand({ country, term, message }, { tiny, replyWithMarkdown, replyWithVideo, translate: i18n });
+        replyWithMarkdown(searched.text, searched.keyboard);
+    }
 });
 
-bot.hears(helpCommand, ({ i18n, replyWithMarkdown, message, language }) => {
-    i18n.locale(language);
+bot.hears(helpCommand, ({ i18n, replyWithMarkdown }) => {
     replyWithMarkdown(i18n.t('help'));
 });
 
-bot.hears(aboutCommand, ({ i18n, replyWithMarkdown, message, language }) => {
-    i18n.locale(language);
+bot.hears(aboutCommand, ({ i18n, replyWithMarkdown }) => {
     replyWithMarkdown(i18n.t('about'), { disable_web_page_preview: true });
 });
 
@@ -95,12 +107,13 @@ bot.hears(searchCommand, ({ scene }) => {
     scene.enter('talkingSearch');
 });
 
-bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery, language, country }) => {
-    const term: string = messageToString(inlineQuery.query);
+bot.on('inline_query', async ({ i18n, answerInlineQuery, inlineQuery, language, country }) => {
     const pageLimit: number = 20;
+    const term: string = messageToString(inlineQuery.query);
     const offset: number = parseInt(inlineQuery.offset, 10) || 0;
+    const results = await handleSearchInline({ country, term, offset, pageLimit }, { translate: i18n.t });
 
-    searchThroughInline({ country, language, term, offset, pageLimit }, { translate: i18n, answerInlineQuery, inlineQuery });
+    answerInlineQuery(results, { next_offset: offset + pageLimit });
 });
 
 /**
@@ -109,21 +122,19 @@ bot.on('inline_query', ({ i18n, answerInlineQuery, inlineQuery, language, countr
 bot.on('callback_query', async ({ i18n, answerCbQuery, update, scene, language }) => {
     const options: Array<string> = update.callback_query.data.split('/');
 
-    i18n.locale(language);
-
     if ('subscribe' === options[0]) {
-        answerCbQuery(await handleSubscribe({ userId: 0, podcastId: 0 }, { translate: i18n }), true);
+        answerCbQuery(await handleSubscribe({ userId: 0, podcastId: 0 }, { translate: i18n.t }), true);
     } if ('unsubscribe' === options[0]) {
-        answerCbQuery(await handleUnsubscribe({ userId: 0, podcastId: 0 }, { translate: i18n }), true);
+        answerCbQuery(await handleUnsubscribe({ userId: 0, podcastId: 0 }, { translate: i18n.t }), true);
     } if ('episode' === options[0]) {
-        answerCbQuery(handleEpisode({ episode: options[1], id: options[2] }, { translate: i18n }), true);
+        answerCbQuery(handleEpisode({ episode: options[1], id: options[2] }, { translate: i18n.t }), true);
     } if ('again' === options[0]) {
         answerCbQuery(i18n.t('again'), false);
         scene.reenter();
     } if ('finished' === options[0]) {
         answerCbQuery(i18n.t('finished'), false);
         scene.leave();
+    } else {
+        answerCbQuery('default', true);
     }
-
-    answerCbQuery('default', true);
 });

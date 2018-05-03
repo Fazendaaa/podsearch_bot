@@ -7,14 +7,6 @@ import { telegramInline } from 'telegraf';
 import { resultExtended } from '../@types/parse/main';
 const extra = require('telegraf').Extra;
 
-export const hasGenres = (genres: Array<string>): string => {
-    if (undefined == genres) {
-        throw (new TypeError('Wrong argument.'));
-    }
-
-    return genres.reduce((accumulator, current) => `${accumulator} | ${current}`);
-};
-
 export const hasItAll = (data: result): boolean => {
     const properties = ['releaseDate', 'artistName', 'country', 'trackCount', 'feedUrl', 'genres', 'collectionViewUrl',
     'artworkUrl60', 'artworkUrl100', 'artworkUrl600'];
@@ -26,63 +18,6 @@ export const hasItAll = (data: result): boolean => {
     });
 
     return true;
-};
-
-export const maskResponse = (data: resultExtended): resultExtended => {
-    return {
-        artworkUrl600: data.artworkUrl600,
-        releaseDate: data.releaseDate,
-        artistName: data.artistName,
-        collectionName: data.collectionName,
-        genres: hasGenres(<Array<string>> data.genres),
-        trackCount: data.trackCount,
-        itunes: data.itunes,
-        rss: data.rss,
-        latest: data.latest,
-        keyboard: data.keyboard,
-        trackId: data.trackId,
-        collectionId: data.collectionId
-    };
-};
-
-export const maskResponseInline = (data: resultExtended, i18n: api): telegramInline => {
-    let preview: string = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
-
-    if (undefined == data) {
-        throw (new TypeError('Wrong argument.'));
-    }
-
-    /**
-     * It  takes  the  "lowest"  resolution  image  as  inline  thumbnail  --  the  real  one of the lowest would be
-     * artworkUrl30 however, this one has a really low resolution, so the minimum expected has to be artworkUrl60.
-     */
-    if (undefined != data.artworkUrl60) {
-        preview = data.artworkUrl60;
-    } else if (undefined != data.artworkUrl100) {
-        preview = data.artworkUrl100;
-    } else if (undefined != data.artworkUrl600) {
-        preview = data.artworkUrl600;
-    }
-    /**
-     * If  this  else is being called id because artworkUrl600 is not available, in that case, one must be set to be
-     * presented to the user at message.
-     */
-    else {
-        data.artworkUrl600 = preview;
-    }
-
-    return {
-        id: `${data.trackId}`,
-        title: data.artistName,
-        type: 'article',
-        input_message_content: {
-            message_text: <string> i18n().t('mask', data, data.lanCode),
-            parse_mode: 'Markdown'
-        },
-        reply_markup: data.keyboard.reply_markup,
-        description: hasGenres(<Array<string>> data.genres),
-        thumb_url: preview
-    };
 };
 
 export const shortenLinks = (data: result, shortener: Function): Promise<resultExtended> =>
@@ -174,7 +109,7 @@ new Promise((resolve: (data: Array<resultExtended | telegramInline>) => void, re
     });
 });
 
-export const parseResponse = (data: response, shortener: Function, i18n: api, position: number = 0): Promise<resultExtended> =>
+export const parsePodcastCommand = ({ data, position: number = 0 }, { shortener, translate }): Promise<resultExtended> =>
 new Promise((resolve: (data: resultExtended) => void, reject: (error: string) => void) => {
     parse(data, maskResponse, shortener, i18n).then((results: Array<resultExtended>) => {
         resolve(results[position]);
@@ -183,7 +118,7 @@ new Promise((resolve: (data: resultExtended) => void, reject: (error: string) =>
     });
 });
 
-export const parseResponseInline = (data: response, shortener: Function, i18n: api): Promise<Array<telegramInline>> =>
+export const parsePodcastInline = (data: response, shortener: Function, i18n: api): Promise<Array<telegramInline>> =>
 new Promise((resolve: (data: Array<telegramInline>) => void, reject: (error: string) => void) => {
     parse(data, maskResponseInline, shortener, i18n).then((parsed: Array<telegramInline>) => {
         resolve(parsed);

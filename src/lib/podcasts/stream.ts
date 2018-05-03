@@ -1,21 +1,17 @@
 'use strict';
 
 import {
-    lookup,
-    options,
-    response,
     result
 } from 'itunes-search';
 import * as moment from 'moment';
 import { resultExtended } from '../@types/parse/main';
-import { lookupPodcast } from '../search/search';
+import { lookupPodcast } from './search';
 const markup = require('telegraf').Markup;
 
 const assertLastEpisode = (searchParams: object, functionsParams: object): Promise<string | TypeError> =>
 new Promise(async (resolve: (message: string) => void, reject: (error: TypeError) => void) => {
     const check = [ {
         param: 'searchParams', property: 'id', type: 'number' }, {
-        param: 'searchParams', property: 'language', type: 'string' }, {
         param: 'searchParams', property: 'country', type: 'string' }, {
         param: 'functionsParams', property: 'translate', type: 'function' }, {
         param: 'functionsParams', property: 'fetchRss', type: 'function' }, {
@@ -45,29 +41,27 @@ const fetchLinkEpisode = (rss): string | Error => {
     throw (new Error('Undefined episode link.'));
 };
 
-const fetchNameEpisode = ({ lastEpisode, language }, { translate }): string => {
+const fetchNameEpisode = ({ lastEpisode }, { translate }): string => {
     if (true === lastEpisode.hasOwnProperty('title')) {
         return lastEpisode.title;
     }
 
-    return translate('noName', {}, language);
+    return translate('noName');
 };
 
-const fetchKeyboard = async ({ language, lastEpisode }, { translate, shorten }) => {
-    const keyboard = markup.inlineKeyboard([
-        markup.callbackButton(translate('subscribe', {}, language), `subscribe/${id}`),
-    ]).extra();
+const fetchKeyboard = async ({ lastEpisode }, { translate, shorten }) => {
+    const keyboard = markup.inlineKeyboard([ markup.callbackButton(translate('subscribe'), `subscribe/${id}`) ]).extra();
     let linkButton;
 
     try {
         linkButton = {
-            text: translate('listen', {}, language),
+            text: translate('listen'),
             url: await shorten(fetchLinkEpisode(lastEpisode)).catch((error: Error) => {
                 throw new Error(`Shortening error: ${error}`);
             })
         };
     } catch {
-        linkButton = markup.callbackButton(translate('listen', {}, language), `episode/notAvailable/${id}`);
+        linkButton = markup.callbackButton(translate('listen'), `episode/notAvailable/${id}`);
     } finally {
         keyboard.push(linkButton);
     }
@@ -75,18 +69,18 @@ const fetchKeyboard = async ({ language, lastEpisode }, { translate, shorten }) 
     return keyboard;
 };
 
-export const fetchLastEpisode = ({ id, language, country }, { translate, fetchRss, shorten}): Promise<resultExtended | Error> =>
+export const fetchLastEpisode = ({ id, country }, { translate, fetchRss, shorten}): Promise<resultExtended | Error> =>
 new Promise(async (resolve: (data: resultExtended) => void, reject: (error: Error) => void) => {
-    await assertLastEpisode({ id, language, country }, { translate, fetchRss, shorten }).catch(reject);
+    await assertLastEpisode({ id, country }, { translate, fetchRss, shorten }).catch(reject);
 
     const podcastItunes = <result> await lookupPodcast({ id, country }).catch(reject);
     const podcastContent = await fetchRss(podcastItunes.feedUrl).catch(reject);
     const lastEpisode = podcastContent.items[0];
 
     resolve({
-        name: fetchNameEpisode({ lastEpisode, language }, { translate }),
+        name: fetchNameEpisode({ lastEpisode }, { translate }),
         latest: moment(lastEpisode.pubDate).locale(country).format('Do MMMM YYYY, h:mm a'),
-        keyboard: fetchKeyboard({ language, lastEpisode }, { translate, shorten }),
+        keyboard: fetchKeyboard({ lastEpisode }, { translate, shorten }),
         ...lastEpisode
     });
 });
