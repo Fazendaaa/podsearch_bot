@@ -8,7 +8,7 @@ export const hasGenres = (genres: Array<string>): string => {
     return genres.reduce((accumulator, current) => `${accumulator} | ${current}`);
 };
 
-export const maskResponse = (data: resultExtended): resultExtended => {
+export const maskResponse = (data) => {
     return {
         artworkUrl600: data.artworkUrl600,
         releaseDate: data.releaseDate,
@@ -25,7 +25,7 @@ export const maskResponse = (data: resultExtended): resultExtended => {
     };
 };
 
-export const maskResponseInline = (data: resultExtended, i18n: api): telegramInline => {
+export const maskResponseInline = (data, translate) => {
     let preview: string = 'https://github.com/Fazendaaa/podsearch_bot/blob/dev/img/error.png';
 
     if (undefined == data) {
@@ -56,7 +56,7 @@ export const maskResponseInline = (data: resultExtended, i18n: api): telegramInl
         title: data.artistName,
         type: 'article',
         input_message_content: {
-            message_text: <string>i18n().t('mask', data, data.lanCode),
+            message_text: <string>translate('mask', data),
             parse_mode: 'Markdown'
         },
         reply_markup: data.keyboard.reply_markup,
