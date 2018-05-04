@@ -1,8 +1,8 @@
 'use strict';
 
 import { join } from 'path';
-import { resultExtended } from './@types/parse/main';
-import { arrayLoad } from './lib/utils';
+import { resultExtended } from '../../@types/parse/main';
+import { arrayLoad } from '../utils';
 const telegraf = require('telegraf');
 const markup = telegraf.Markup;
 
@@ -14,12 +14,14 @@ export const handleStartKeyboard = ({ rootTranslate, language }) => {
 }
 
 export const handleNoSearch = ({ translate }) => {
+    const mainPath: string = '../../gif/';
+
     return [{
         text: translate('wrongInputCmd') }, { 
-        source: join(__dirname, '../gif/searchCmd.mp4') }, {
+        source: join(__dirname, mainPath, 'searchCmd.mp4') }, {
         text: translate('wrongInputButton') }, {
-        source: join(__dirname, '../gif/searchButton.mp4') }, {
+        source: join(__dirname, mainPath, 'searchButton.mp4') }, {
         text: translate('wrongInputInline') }, {
-        source: join(__dirname, '../gif/searchInline.mp4')
+        source: join(__dirname, mainPath, 'searchInline.mp4')
     }];
 };

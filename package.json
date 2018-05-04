@@ -4,7 +4,7 @@
   "description": "Telegram bot that searches Podcast in iTunes store.",
   "main": "node dist/main.js",
   "scripts": {
-    "test": "jest --config jest.config.js --ci --runInBand",
+    "test": "jest --config jest.config.json --ci --runInBand",
     "start": "tsc && node dist/main.js",
     "build": "tsc",
     "watch": "tsc -w",

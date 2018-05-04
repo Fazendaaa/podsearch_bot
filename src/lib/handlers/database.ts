@@ -1,6 +1,6 @@
 'use strict';
 
-import { Subscription } from './lib/database/subscription';
+import { Subscription } from '../database/subscription';
 
 const subscription = new Subscription();
 

@@ -2,11 +2,11 @@
 
 import * as Parser from 'rss-parser';
 import { tiny } from 'tiny-shortener';
-import { resultExtended } from './@types/parse/main';
-import { parsePodcastCommand, parsePodcastInline } from './lib/podcasts/parse';
-import { searchPodcast } from './lib/podcasts/search';
-import { fetchLastEpisode } from './lib/podcasts/stream';
-import { endInline, searchInline, errorInline } from './lib/telegram/messages';
+import { resultExtended } from '../../@types/parse/main';
+import { parsePodcastCommand, parsePodcastInline } from '../podcasts/parse';
+import { searchPodcast } from '../podcasts/search';
+import { fetchLastEpisode } from '../podcasts/stream';
+import { endInline, searchInline, errorInline } from '../telegram/messages';
 const telegraf = require('telegraf');
 const markup = telegraf.Markup;
 const handlerRss = new Parser();

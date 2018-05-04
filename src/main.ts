@@ -9,9 +9,9 @@ import { join } from 'path';
 import { languageCode, setLocale } from './lib/telegram/middleware';
 import { talkingSearchManager } from './lib/telegram/stage';
 import { arrayLoad, messageToString, removeCmd } from './lib/utils';
-import { handleStartKeyboard, handleNoSearch } from './defaultHandler';
-import { handleSubscribe, handleUnsubscribe } from './databaseHandler';
-import { handleEpisode, handleSearchCommand, handleLastEpisode, handleSearchInline } from './podcastHandler';
+import { handleStartKeyboard, handleNoSearch } from './lib/handlers/default';
+import { handleSubscribe, handleUnsubscribe } from './lib/handlers/database';
+import { handleEpisode, handleSearchCommand, handleLastEpisode, handleSearchInline } from './lib/handlers/podcast';
 const telegraf = require('telegraf');
 const session = telegraf.session;
 const telegrafI18n = require('telegraf-i18n');
@@ -22,7 +22,7 @@ const bot = new telegraf(process.env.BOT_KEY);
 const i18n = new telegrafI18n({
     defaultLanguage: 'en',
     allowMissing: true,
-    directory: join(__dirname, '../locales')
+    directory: join(__dirname, './locales')
 });
 
 bot.startPolling();
@@ -111,9 +111,6 @@ bot.on('inline_query', async ({ i18n, answerInlineQuery, inlineQuery, language, 
 bot.on('callback_query', async ({ i18n, answerCbQuery, update, scene, language }) => {
     const options: Array<string> = update.callback_query.data.split('/');
 
-    /**
-     * "Pattern-matching"?
-     */
     if ('subscribe' === options[0]) {
         answerCbQuery(await handleSubscribe({ userId: 0, podcastId: 0 }, { translate: i18n.t }), true);
     } if ('unsubscribe' === options[0]) {
