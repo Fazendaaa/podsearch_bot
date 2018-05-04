@@ -1,6 +1,3 @@
-/**
- * User testing.
- */
 'use strict';
 
 jest.setTimeout(60000);

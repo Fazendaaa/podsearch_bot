@@ -2,11 +2,9 @@
 
 import { response, result } from 'itunes-search';
 import * as moment from 'moment';
-import { join } from 'path';
-import { telegramInline } from 'telegraf';
-import { resultExtended } from '../../@types/parse/main';
+import { parseParameters, parseFunctions } from '../@types/podcast/parse';
 import { maskResponse, maskResponseInline } from './mask';
-const extra = require('telegraf').Extra;
+import { podcastKeyboard } from '../telegram/keyboard';
 
 const hasItAll = (data: result): boolean => {
     const properties = ['releaseDate', 'artistName', 'country', 'trackCount', 'feedUrl', 'genres', 'collectionViewUrl',
@@ -21,40 +19,31 @@ const hasItAll = (data: result): boolean => {
     return true;
 };
 
-const shortenLinks = (data: result, shortener: Function): Promise<resultExtended> =>
-new Promise(async (resolve: (response: resultExtended) => void, reject: (error: string) => void) => {
-    const rss = await shortener(data.feedUrl).catch(reject('Has no RSS link available.'));
-    const itunes = await shortener(data.collectionViewUrl).catch(reject('Has no iTunes link available.'));
+const shortenLinks = (data: result, shortener: Function) => {
+    const rss = shortener(data.feedUrl).catch((error: Error) => {
+        console.error(error);
 
-    resolve({ ...data, itunes, rss });
-});
+        return data.feedUrl;
+    });
+    const itunes = shortener(data.collectionViewUrl).catch((error: Error) => {
+        console.error(error);
 
-const parseMap = (shortened: resultExtended, lanCode: string, i18n: api, maskFunction: Function) => {
-    const latest = moment(shortened.releaseDate).locale(lanCode).format('Do MMMM YYYY, h:mm a');
-    const podcastId = shortened.collectionId || shortened.trackId;
-    const buttons = <Array<string>> i18n().t('card', {}, lanCode.split('-')[0]);
-    const keyboard = extra.markdown().markup((m: any) => {
-        return m.inlineKeyboard([
-            m.callbackButton(buttons[0], `subscribe/${podcastId}`),
-            { text: buttons[1], url: `t.me/${process.env.BOT_NAME}?start=${podcastId}` }
-        ]);
+        return data.collectionViewUrl;
     });
 
-    return maskFunction({ ...shortened, latest, keyboard, lanCode: lanCode.split('-')[0] }, i18n);
+    return { itunes, rss };
 };
 
-type parseParameters = {
-    podcasts;
-    position?: number;
+const parseMapping = ({ podcast, country }, { translate, shortener, maskFunction }) => {
+    const links = shortenLinks(podcast, shortener);
+    const latest = moment(podcast.releaseDate).locale(country).format('Do MMMM YYYY, h:mm a');
+    const podcastId = podcast.collectionId || podcast.trackId;
+    const keyboard = podcastKeyboard({ podcastId }, { translate });
+
+    return maskFunction({ ...podcast, latest, keyboard, links }, translate);
 };
 
-type parseFunctions = {
-    maskFunction: Function;
-    shortener: Function;
-    translate: Function;
-};
-
-const parsePodcast = async ({ podcasts, position }: parseParameters, { maskFunction, shortener, translate }: parseFunctions) => {
+const parsePodcast = async ({ podcasts, country }: parseParameters, { maskFunction, shortener, translate }: parseFunctions) => {
     if (undefined == podcasts ) {
         return new TypeError('Wrong argument.');
     }
@@ -66,25 +55,17 @@ const parsePodcast = async ({ podcasts, position }: parseParameters, { maskFunct
     }
 
     return await Promise.all(filtered.map((element: result) => {
-        return shortenLinks(element, shortener).then((shortened: resultExtended) => {
-            return parseMap(shortened, lanCode, i18n, maskFunction);
-        }).catch((error: Error) => {
-            throw error;
-        });
+        return parseMapping({ podcast: element, country }, { translate, shortener, maskFunction });
+    }));
+};
+
+export const parsePodcastCommand = async ({ podcasts, country, position = 0 }, { shortener, translate }) => {
+    return await parsePodcast({ podcasts, country }, { shortener, translate, maskFunction: maskResponse })
+    .then((results) => {
+        return results[ position ];
     });
 };
 
-export const parsePodcastCommand = async ({ podcasts, position = 0 }, { shortener, translate }) => {
-    /**
-     * It doesn't simply returns the result because that would mean  the "then" would be unnecessary, meaning that would
-     * be removable but the catch would not be returned.
-     */
-    return await parsePodcast({ podcasts, position }, { shortener, translate, maskFunction: maskResponse })
-    .then((results: Array<resultExtended>) => {
-        return results[position];
-    });
-};
-
-export const parsePodcastInline = async ({ podcasts }, { shortener, translate }) => {
-    return await parsePodcast({ podcasts }, { shortener, translate, maskFunction: maskResponseInline });
+export const parsePodcastInline = async ({ podcasts, country }, { shortener, translate }) => {
+    return await parsePodcast({ podcasts, country }, { shortener, translate, maskFunction: maskResponseInline });
 };
