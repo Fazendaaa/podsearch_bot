@@ -1,8 +1,6 @@
 'use strict';
 
-import {
-    result
-} from 'itunes-search';
+import { result } from 'itunes-search';
 import * as moment from 'moment';
 import { resultExtended } from '../@types/parse/main';
 import { lookupPodcast } from './search';

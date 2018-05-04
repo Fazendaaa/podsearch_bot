@@ -67,7 +67,7 @@ declare module 'itunes-search' {
         results: Array<result>;
     };
 
-    export function search(opts: options, callback: (err: Error, response: response) => void): void;
+    export function search(opts: options, callback: (err: string, response: response) => void): void;
 
-    export function lookup(opts: options, callback: (err: Error, response: response) => void): void;
+    export function lookup(opts: options, callback: (err: string, response: response) => void): void;
 }

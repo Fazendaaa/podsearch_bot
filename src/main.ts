@@ -6,37 +6,25 @@
 
 import { config } from 'dotenv';
 import { join } from 'path';
-import { languageCode, setLocale } from './lib/middleware';
-import { talkingSearchManager } from './lib/stage';
+import { languageCode, setLocale } from './lib/telegram/middleware';
+import { talkingSearchManager } from './lib/telegram/stage';
 import { arrayLoad, messageToString, removeCmd } from './lib/utils';
-import {
-    handleEpisode,
-    handlePrivateConversation,
-    handleStartKeyboard,
-    handleSearchCommand,
-    handleSearchInline,
-    handleSubscribe,
-    handleUnsubscribe,
-    handleNoSearch
-} from './mainHandler';
-const telegrafI18n = require('telegraf-i18n');
+import { handleStartKeyboard, handleNoSearch } from './defaultHandler';
+import { handleSubscribe, handleUnsubscribe } from './databaseHandler';
+import { handleEpisode, handleSearchCommand, handleLastEpisode, handleSearchInline } from './podcastHandler';
 const telegraf = require('telegraf');
 const session = telegraf.session;
+const telegrafI18n = require('telegraf-i18n');
 
 config();
 
+const bot = new telegraf(process.env.BOT_KEY);
 const i18n = new telegrafI18n({
     defaultLanguage: 'en',
     allowMissing: true,
     directory: join(__dirname, '../locales')
 });
 
-const commands = i18n.repository.commands;
-const helpCommand = <Array<string>> arrayLoad(commands.help);
-const aboutCommand = <Array<string>> arrayLoad(commands.about);
-const searchCommand = <Array<string>> arrayLoad(commands.search);
-
-const bot = new telegraf(process.env.BOT_KEY);
 bot.startPolling();
 bot.use(session());
 bot.use(telegraf.log());
@@ -44,6 +32,11 @@ bot.use(i18n.middleware());
 bot.use(new languageCode().middleware());
 bot.use(new setLocale().middleware());
 bot.use(talkingSearchManager.middleware());
+
+const commands = i18n.repository.commands;
+const helpCommand = <Array<string>> arrayLoad(commands.help);
+const aboutCommand = <Array<string>> arrayLoad(commands.about);
+const searchCommand = <Array<string>> arrayLoad(commands.search);
 
 bot.catch((err) => {
     console.log(err);
@@ -57,12 +50,8 @@ bot.start(async ({ i18n, replyWithMarkdown, message, language, country }) => {
      */
     if (isNaN(id)) {
         replyWithMarkdown(i18n.t('greetingsPrivate'), handleStartKeyboard({ rootTranslate: i18n, language }));
-    }
-    /**
-     * Sending a podcast episode link to listen.
-    */
-    else if ('private' === message.chat.type) {
-        const sendMessage = await handlePrivateConversation({ id, country }, { translate: i18n.t });  
+    } else if ('private' === message.chat.type) {
+        const sendMessage = await handleLastEpisode({ id, country }, { translate: i18n.t });  
 
         await replyWithMarkdown(i18n.t('sending')).catch(console.error);
         replyWithMarkdown(sendMessage.text, sendMessage.keyboard);
@@ -122,6 +111,9 @@ bot.on('inline_query', async ({ i18n, answerInlineQuery, inlineQuery, language, 
 bot.on('callback_query', async ({ i18n, answerCbQuery, update, scene, language }) => {
     const options: Array<string> = update.callback_query.data.split('/');
 
+    /**
+     * "Pattern-matching"?
+     */
     if ('subscribe' === options[0]) {
         answerCbQuery(await handleSubscribe({ userId: 0, podcastId: 0 }, { translate: i18n.t }), true);
     } if ('unsubscribe' === options[0]) {

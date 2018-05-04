@@ -1,6 +1,5 @@
 'use strict';
 
-import { config } from 'dotenv';
 import { join } from 'path';
 import { tiny } from 'tiny-shortener';
 import { resultExtended } from '../@types/parse/main';
@@ -12,8 +11,6 @@ const stage = require('telegraf/stage');
 const scene = require('telegraf/scenes/base');
 const markup = telegraf.Markup;
 const telegram = telegraf.Telegram;
-
-config();
 
 const telegramCore = new telegram(process.env.BOT_KEY);
 const talkingSearch = new scene('talkingSearch');
