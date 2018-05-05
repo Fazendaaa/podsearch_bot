@@ -15,7 +15,7 @@ const functions = [{
     name: 'notFoundInline', func: notFoundInline 
 }];
 const languagesCode = [ 'en_us', 'pt_br' ];
-let i18n, translations;
+let i18n, mock;
 
 const readFiles = (root) => functions.reduce((acc, cur) => {
     const functionName = cur.name;
@@ -24,7 +24,7 @@ const readFiles = (root) => functions.reduce((acc, cur) => {
     return acc;
 }, {});
 
-const reduceTranslations = (acc, cur) => {
+const reduceMock = (acc, cur) => {
     const language = cur.split('_')[0];
     const obj = {
         output: readFiles(cur),
@@ -44,25 +44,20 @@ beforeAll(async (done) => {
         allowMissing: true,
         directory: join(__dirname, '../../src/locales')
     });
-    translations = languagesCode.reduce(reduceTranslations, {});
+    mock = languagesCode.reduce(reduceMock, {});
     
     done();
 });
 
-functions.forEach((element) => {
-    const method = element.name;
-    const func = element.func;
+const functionTesting = (element) => functions.forEach(({ name, func }) => {
+    test(name, () => {
+        const translateFunction = mock[element].translate;
+        const outputFile = mock[element].output[name];
 
-    describe(method, () => {
-        test('Translations.', async () => {
-            expect.assertions(translations.length);
-            
-            return await Object.keys(translations).forEach((language) => {
-                const translateFunction = translations[language].translate;
-                const outputFile = translations[language].output[method];
-
-                return expect(func(translateFunction, 'mistyped')).toEqual(outputFile);
-            });
-        });
+        expect(func(translateFunction, 'mistyped')).toEqual(outputFile);
     });
+});
+
+languagesCode.forEach((element) => {
+    describe(`[${element}] Function testing`, () => functionTesting(element));
 });

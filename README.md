@@ -37,10 +37,13 @@ This is a bot made using [TypeScript](http://typescriptlang.org/)(TS) because I 
 Two new things in one project? Yes, and a third one is [Continuos Integration](https://en.wikipedia.org/wiki/Continuous_integration)(CI) just to be able to push running code at a master branch to be running at the server. And, a fourth one, is making a bot that supports it multiple languages.
 
 Like so, once I've "finished" this code I intend to write an article at [Medium](https://medium.com/) talking about it. All the knowledge that I've got it because some one laid a trail so that I can build my own on it.
+
 ## How to use it
 First of all, talk to [@podsearchbot](https://telegram.me/podsearchbot).
+
 ### Disclaimer
 By default all the commands are in English, but you can see if que same command is available in your language.
+
 ### Search
 There're three ways of doing that:
 
@@ -81,36 +84,33 @@ If you have any other questions about it just use it the help command:
 ```
 /help
 ```
+
 # How does it work?
 You can build yourself a bot just like this one, just follow the procedures listed in [BUILDING.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/building/BUILDING.md).
+
 ## Want know more?
 If you want to understand the "whys" of I did what I did, you can read ALL THE CODE... Just joking, I've wrote some of the pros and cons of my approach on the macro vision of the code. If you want to know more, read:
 * [DATABASE.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/database/DATABASE.md) -- How the data is stored, for subscription and "classes" of users;
 * [RECOMMENDATION.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/recommendation/RECOMMENDATION.md) -- How it's handle the discovery option of new podcasts.
+
 # Deployment
 This bot is up and running at [Heroku](http://heroku.com/) through the Github integration, that means that each new push to the ```master``` branch means that is the code serving the bot. You can see more about how does it run at the server by looking at the [Procfile](https://github.com/Fazendaaa/podsearch_bot/blob/master/Procfile). You can also deploy yourself this bot into Heroku through:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Fazendaaa/podsearch_bot)
 
 There's also a [Travis CI](http://travis-ci.org/) integration.
+
 # Build with
-* [App.json](https://www.npmjs.com/package/app.json) - Deploy config to Heroku through deploy button;
-* [Wallaby.j](http://wallabyjs.com/) - Live [Visual Studio Code](https://code.visualstudio.com/) test runner plug-in;
-* [Jest](https://facebook.github.io/jest/) - Test runner;
-* [Telegraf.js](http://telegraf.js.org/) - Library that handles it the Telegram connection;
-* [Telegraf-i18n](https://github.com/telegraf/telegraf-i18n) - Library that handles language integration;
-* [moment.js](https://momentjs.com/) - Library that handles it the date and time formating;
-* [i18n-yaml](https://github.com/martinheidegger/i18n-node-yaml) - Since Telegraf-i18n only handles Telegraf context, there's a need to parse other kinds of context;
-* [dotenv](https://github.com/motdotla/dotenv) - Library that imports environment variables;
-* [tinyurl](https://github.com/AlphaT3ch/TinyURL) - Library that handles it the URL shorten requests;
-* [remove-accents](https://github.com/tyxla/remove-accents) - Some international content has accents and this library removes it -- makes de search more easy to perform given that even if the podcast name has accents not necessary it will be marked as having those in the iTunes store;
-* [itunes-search](https://github.com/connor/itunes-node) - One of many libraries that does the fetching from iTunes API, but this one is the only one that does it right.
+Too large to put ir here, see in [BUILD_WITH](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/build_with/BUILD_WITH_EN.md).
+
 # Contributing
 Please, I'm not a native/fluent english speaker, so whether you see a variable name wrote the wrong way or even some comment where I've wrote something with the wrong "past perfect way of life" or something like that, please let me know it. Not always is just about the code, but rather making it more clear to other people to learn from it.
 
 So, whether is code or not you can help me out making this code more accessible by reading the [CONTRIBUTING.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/contributing/CONTRIBUTING.md). 
+
 # Versioning
 I would love to say that [SemVer](https://semver.org/) or anything like that is used but, in my personal experience, this kind of approach doesn't work very well with me, the guy who could be committing in this project for two weeks in a roll and leave it for almost one year with no simple ```npm update```. So, no versioning system is used. 
+
 # TODO
 Since I will be keeping this README up to date with any major change and I don't use any versioning system to log all the fixed bugs or previous projects updates, you can still have a taste of what comes next and what is being under analysis right in the [Projects](https://github.com/Fazendaaa/podsearch_bot/projects/) tab.
 
@@ -132,5 +132,6 @@ Like many Open-Source Software (OSS) the MIT license is used, more about it in [
 # Acknowledgments
 * Thanks to [PurpleBooth](https://gist.github.com/PurpleBooth) and this great [README](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) template and hers [CONTRIBUTING](https://gist.github.com/PurpleBooth/b24679402957c63ec426) template also;
 * [Mattias Petter Johansson](https://twitter.com/mpjme) and his channel [FunFunFunction](https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q), where I've learnt so many important coding best practices; please don't think that this is a channel that will give any kind of "lazy-intro-tutorial" or anything like that, this channel open your eyes to how you can improve your existing skills and learn some more new ones;
+* [Devhints](https://devhints.io/jest) helped me were the Jest documentations lacks;
 * Since Jest mocking documentation left me with a lot of doubts, [this](https://hackernoon.com/api-testing-with-jest-d1ab74005c0a) tutorial helped me out a little, still have some issues to understand how to correct mock data. I highly think that is because of my testing logic, once I figure out how to do it correctly I will rewrite all testing code; for now is "working" the best way I came up to; even being that horrible is not that much compared to having an API request all the time;
 * I highly recommend checking it out my [**ytlofi**](https://github.com/Fazendaaa/ytlofi) project whether you ran through some issues trying to get any CI integration or even project badges.

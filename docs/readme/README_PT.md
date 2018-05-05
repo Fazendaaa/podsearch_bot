@@ -39,12 +39,16 @@ Duas coisas novas em um projeto só? Sim, e a terceira é [Continuos Integration
 
 ### Medium
 Eu escrevi um pouco mais sobre como foi o processo de escrever esse bot no [Medium](https://medium.com/@Fazendaaa/como-construir-um-bot-para-telegram-com-node-ts-testes-ci-e-deploy-para-o-heroku-e763b83fc44e), caso você se interesse sobre e gostaria de fazer um igual.
+
 ## Como utilizar?
 Primeiro de tudo, abra uma conversa com o [@podsearchbot](https://telegram.me/podsearchbot).
+
 ### Aviso
 Por padrão os comandos se encontram por em Inglês mas possuem seu equivalente em Português. 
+
 ### Pesquisa
 Há três maneiras de se fazer isso:
+
 #### Inline
 O modo de pesquisa inline funciona na conversa com o Podsearch ou qualquer outra:
 ```
@@ -82,38 +86,36 @@ Caso precise de ajuda ou algo do tipo, use o comando:
 ```
 /ajuda
 ```
+
 # Como funciona?
 Você pode construir um bot igual a esse daqui, basta seguir os procedimentos listados em [BUILDING_PT.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/building/BUILDING_PT.md).
+
 ## Quer saber mais?
 Se você quer entender os "porquês" do que é feito no código, você pode ler TODO O CÓDIGO... Brincadeiras a parte, eu escrevi alguns dos prós e contras da minha abordagem em uma macro visão do projeto. Se você quiser saber mais, leia:
 * [DATABASE_PT.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/database/DATABASE_PT.md) -- Como os dados são armazenados, seja para as notificações e os tipos de usuários;
 * [RECOMMENDATION_PT.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/recommendation/RECOMMENDATION_PT.md) -- Como o sistema de recomendação de podcasts funciona.
+
 # Deployment
 Esse bot está rodando no [Heroku](http://heroku.com/) através de integração direta do Github, isso significa que cada nova push para a branch ```master``` representa o código que está atualmente servindo de diretriz por bot. Você pode verificar mais como o bot está rodando através do arquivo [Procfile](https://github.com/Fazendaaa/podsearch_bot/blob/master/Procfile). Você também pode enviar uma cópia direta desse código para o Heroku através do seguinte botão:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Fazendaaa/podsearch_bot)
 
 Há também um integração com [Travis CI](http://travis-ci.org/).
+
 # Construído com
-* [App.json](https://www.npmjs.com/package/app.json) - Configurações para disponibilizar esse projeto através do botão do Heroku;
-* [Wallaby.j](http://wallabyjs.com/) - Plug-in de rodar testes para o [Visual Studio Code](https://code.visualstudio.com/);
-* [Jest](https://facebook.github.io/jest/) - Roda os testes;
-* [Telegraf.js](http://telegraf.js.org/) - Biblioteca responsável para realizar integração com o Telegram;
-* [Telegraf-i18n](https://github.com/telegraf/telegraf-i18n) - Biblioteca responsável para realizar integração com suporte a multiplos idiomas;
-* [moment.js](https://momentjs.com/) - Biblioteca que realiza formatação de data;
-* [i18n-yaml](https://github.com/martinheidegger/i18n-node-yaml) - Como Telegraf-i18n apenas funciona com Telegraf, há a necessidade de se traduzir outros contextos;
-* [dotenv](https://github.com/motdotla/dotenv) - Biblioteca que importa variáveis de ambiente;
-* [tinyurl](https://github.com/AlphaT3ch/TinyURL) - Biblioteca que reduz os tamanhos dos links;
-* [remove-accents](https://github.com/tyxla/remove-accents) - Essa biblioteca remove os acentos das pesquisas -- como o conteúdo da iTunes store não necessariamente terá acentos, ao remover eles isso facilitará a pesquisa;
-* [itunes-search](https://github.com/connor/itunes-node) - Uma das várias bibliotecas que realiza a integração com a loja do iTunes, porém essa é a que melhor o faz.
+Muitos a serem listados, veja em [BUILD_WITH_PT](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/build_with/BUILD_WITH_PT.md).
+
 # Contribuindo
 Por favor, eu não sou nativo/fluente em Inglês, então se você ver uma variável escrita errada ou até mesmo um comentário que eu escrevi de maneira errada, me avise. Contribuições não necessariamente devem ser feitas através de código apenas, elas tem a ver com melhorar o que já está presente das mais diversas maneiras para que mais pessoas possam aprender sobre.
 
 Caso seja o código ou não, você pode me ajudar lendo as diretrizes no arquivo [CONTRIBUTING_PT.md](https://github.com/Fazendaaa/podsearch_bot/blob/master/docs/contributing/CONTRIBUTING_PT.md). 
+
 # Controle de versão
 Eu adoraria dizer que [SemVer](https://semver.org/) ou algo do tipo fora utilizado porém, em experiência pessoal, esse tipo de aborgaem não funciona muito bem comigo, o cara que pode comitar várias vezes esse projeto por duas semanas seguidas e passar um anos sem dar um simples ```npm update``` no projeto. Então, não se é utilizado sistemas de versionamento.
+
 # A realizar
 Como esse README estará sendo atualizado com as mudanças importantes, não pretendo utilizar nenhum histórico de atualizações de bugs corrigidos ou novas funcionalidades. Todavia, você pode ter uma noção do que virá e o que está sob análise na aba de [Projects](https://github.com/Fazendaaa/podsearch_bot/projects/) -- aviso: o conteúdo se encontra em Inglês.
+
 # Autores
 * Apenas [eu](https://github.com/Fazendaaa) até agora.
 
@@ -131,8 +133,10 @@ Você pode ler mais sobre as minhas escolhas de aceitar doações e de não vend
 
 # Licença
 Assim como muitos projetos de código livre, a licença MIT é utilizada aqui. Mais sobre em [LICENSE](https://github.com/Fazendaaa/podsearch_bot/blob/master/LICENSE).
+
 # Reconhecimentos
 * Obrigado a [PurpleBooth](https://gist.github.com/PurpleBooth) por esse [README](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) e esse [CONTRIBUTING](https://gist.github.com/PurpleBooth/b24679402957c63ec426) formato;
 * [Mattias Petter Johansson](https://twitter.com/mpjme) e o canal dele [FunFunFunction](https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q), onde eu aprendi várias coisas importantes sobre código e práticas; por favor não pense que são "tutoriais-genéricos" que encontrará lá, ele demonstrará como melhorar o que já possuiu e o que pode aprender em seguida;
+* [Devhints](https://devhints.io/jest) ajudou-me quando a própria documentação do Jest não pode;
 * Como a documentação do Jest se demonstrou um pouco confusa para mim, [esse](https://hackernoon.com/api-testing-with-jest-d1ab74005c0a) tutorial me ajudou um pouco, ainda possuo alguns problemas e dificuldades que pretendo corrigir. Acredito que boa parte desses problemas são devidos a lógica pro trás, uma vez que descobrir como corrigí-los irei arrumar isso; por hora tudo está "funcionando" da melhor maneira que consegui abordar;
 * Atalmente recomendo ver meu projeto [**ytlofi**](https://github.com/Fazendaaa/ytlofi) caso tenha sofrido com alguns problemas durante a fase de pré-requitos, lá eu explico um pouco melhor sobre outros fatores.
