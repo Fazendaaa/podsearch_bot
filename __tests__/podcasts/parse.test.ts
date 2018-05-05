@@ -1,8 +1,6 @@
 'use strict';
 
 import { parsePodcastCommand, parsePodcastInline } from '../../src/lib/podcasts/parse';
-import { readAsync } from '../../src/lib/utils';
-
 let input;
 let output;
 

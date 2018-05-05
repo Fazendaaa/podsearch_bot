@@ -1,19 +1,6 @@
 'use strict';
 
-import { readFile } from 'fs';
-import { join } from 'path';
 import { remove } from 'remove-accents';
-
-export const readAsync = (filename: string): Promise<object> =>
-new Promise((resolve: (data: object) => void, reject: (data: Error) => void) => {
-    readFile(join(__dirname, `../../__mocks__/${filename}`), 'utf8', (err: Error, data: string) => {
-        if (err) {
-            reject(err);
-        } else {
-            resolve(JSON.parse(data));
-        }
-    });
-});
 
 export const arrayLoad = (options: Array<object>): Array<string | object> | Error => {
     if (undefined == options || 'object' !== typeof(options)) {

@@ -1,8 +1,6 @@
 'use strict';
 
-import { telegramInline } from 'telegraf';
-
-export const errorInline = (translate): telegramInline => {
+export const errorInline = (translate: Function) => {
     return {
         id: '0',
         title: translate('errorInlineTitle'),
@@ -16,7 +14,7 @@ export const errorInline = (translate): telegramInline => {
     };
 };
 
-export const searchInline = (translate): telegramInline => {
+export const searchInline = (translate: Function) => {
     return {
         id: '0',
         title: translate('searchInlineTitle'),
@@ -28,9 +26,9 @@ export const searchInline = (translate): telegramInline => {
         description: translate('searchInlineDescription'),
         thumb_url: 'https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png'
     };
-);
+};
 
-export const endInline = (translate): telegramInline => {
+export const endInline = (translate: Function) => {
     return {
         id: '0',
         title: translate('endInlineTitle'),
@@ -44,7 +42,7 @@ export const endInline = (translate): telegramInline => {
     };
 };
 
-export const notFoundInline = (value: string, translate): telegramInline => {
+export const notFoundInline = (translate: Function, value: string) => {
     return {
         id: '0',
         title: translate('notFoundInlineTitle', { value }),
