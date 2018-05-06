@@ -1,21 +1,16 @@
 'use strict';
 
-import { readMock } from '../../__mocks__/readMocks';
+import { languagesCode, readMock, translateRoot } from '../../__mocks__/mocks';
 import { join } from 'path';
 import { errorInline, searchInline, endInline, notFoundInline } from '../../src/lib/telegram/messages';
-const telegrafI18n = require('telegraf-i18n');
 
-/**
- * Function.name not working in Jest, maybe in a next update.
- */
 const functions = [{
     name: 'errorInline', func: errorInline }, {
     name: 'searchInline', func: searchInline }, {
     name: 'endInline', func: endInline }, {
     name: 'notFoundInline', func: notFoundInline 
 }];
-const languagesCode = [ 'en_us', 'pt_br' ];
-let i18n, mock;
+let mock;
 
 const readFiles = (root) => functions.reduce((acc, cur) => {
     const functionName = cur.name;
@@ -28,7 +23,7 @@ const reduceMock = (acc, cur) => {
     const language = cur.split('_')[0];
     const obj = {
         output: readFiles(cur),
-        translate: (languageCode, resourceKey) => i18n.t(language, languageCode, resourceKey)
+        translate: (languageCode, resourceKey) => translateRoot.t(language, languageCode, resourceKey)
     }
 
     acc[cur] = obj;
@@ -39,11 +34,6 @@ const reduceMock = (acc, cur) => {
 jest.setTimeout(60000);
 
 beforeAll(async (done) => {
-    i18n = new telegrafI18n({
-        defaultLanguage: 'en',
-        allowMissing: true,
-        directory: join(__dirname, '../../src/locales')
-    });
     mock = languagesCode.reduce(reduceMock, {});
     
     done();

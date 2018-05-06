@@ -15,7 +15,7 @@ const defaultOptions: options = {
 
 export const searchPodcast = async (searchOptions): Promise<Array<result> | Error> =>
 new Promise((resolve: (searchResult: Array<result>) => void, reject: (error: Error) => void) => {
-    search({ defaultOptions, ...searchOptions }, (err: string, data: results) => {
+    search({ defaultOptions, ...searchOptions }, (err: string, data: response) => {
         if (err || 0 === data.resultCount) {
             reject(new Error(err));
         }

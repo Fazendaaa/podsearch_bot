@@ -1,5 +1,6 @@
 export type parseParameters = {
     podcasts;
+    language: string;
     country: string;
     position?: number;
 };
@@ -7,5 +8,5 @@ export type parseParameters = {
 export type parseFunctions = {
     maskFunction: Function;
     shortener: Function;
-    translate: Function;
+    translateRoot: Function;
 };

@@ -2,24 +2,20 @@
 
 import { response, result } from 'itunes-search';
 import * as moment from 'moment';
-import { parseParameters, parseFunctions } from '../@types/podcast/parse';
+import { parseParameters, parseFunctions } from '../@types/podcasts/parse';
 import { maskResponse, maskResponseInline } from './mask';
 import { podcastKeyboard } from '../telegram/keyboard';
 
-const hasItAll = (data: result): boolean => {
-    const properties = ['releaseDate', 'artistName', 'country', 'trackCount', 'feedUrl', 'genres', 'collectionViewUrl',
-    'artworkUrl60', 'artworkUrl100', 'artworkUrl600'];
+const hasAllPodcastData = (data: result): boolean => {
+    const properties = [ 'releaseDate', 'artistName', 'country', 'trackCount', 'feedUrl', 'genres', 'collectionViewUrl',
+    'artworkUrl60', 'artworkUrl100', 'artworkUrl600', 'collectionId', 'trackId', 'collectionName' ];
 
-    properties.map((element: string) => {
-        if (undefined == data.hasOwnProperty(element)) {
-            return false;
-        }
-    });
-
-    return true;
+    return properties.reduce((acc, cur) => {
+        return (false === acc || false === data.hasOwnProperty(cur)) ? false : true;
+    }, true);
 };
 
-const shortenLinks = (data: result, shortener: Function) => {
+const shortenLinks = async (data: result, shortener: Function) => {
     const rss = shortener(data.feedUrl).catch((error: Error) => {
         console.error(error);
 
@@ -31,41 +27,38 @@ const shortenLinks = (data: result, shortener: Function) => {
         return data.collectionViewUrl;
     });
 
-    return { itunes, rss };
+    return { itunes: await itunes, rss: await rss };
 };
 
-const parseMapping = ({ podcast, country }, { translate, shortener, maskFunction }) => {
+const parseMapping = ({ podcast, language, country }, { maskFunction, shortener, translateRoot }) => {
     const links = shortenLinks(podcast, shortener);
     const latest = moment(podcast.releaseDate).locale(country).format('Do MMMM YYYY, h:mm a');
+    /**
+     * What was the logic behind this?
+     */
     const podcastId = podcast.collectionId || podcast.trackId;
-    const keyboard = podcastKeyboard({ podcastId }, { translate });
+    const keyboard = podcastKeyboard({ language, podcastId }, { translateRoot });
 
-    return maskFunction({ ...podcast, latest, keyboard, links }, translate);
+    return maskFunction({ ...podcast, latest, keyboard, links }, translateRoot.t );
 };
 
-const parsePodcast = async ({ podcasts, country }: parseParameters, { maskFunction, shortener, translate }: parseFunctions) => {
-    if (undefined == podcasts ) {
-        return new TypeError('Wrong argument.');
-    }
+const parsePodcast = ({ podcasts, language, country }: parseParameters, { maskFunction, shortener, translateRoot }: parseFunctions) => {
+    return podcasts.reduce((acc, podcast) => {
+        if (hasAllPodcastData(podcast)) {
+            acc.push(parseMapping({ podcast, language, country }, { maskFunction, shortener, translateRoot }));
+        }
 
-    const filtered = podcasts.results.filter(hasItAll);
-
-    if (0 === filtered.length) {
-        return new Error('No complete info in the results results to display it.');
-    }
-
-    return await Promise.all(filtered.map((element: result) => {
-        return parseMapping({ podcast: element, country }, { translate, shortener, maskFunction });
-    }));
+        return acc;
+    }, []);
 };
 
-export const parsePodcastCommand = async ({ podcasts, country, position = 0 }, { shortener, translate }) => {
-    return await parsePodcast({ podcasts, country }, { shortener, translate, maskFunction: maskResponse })
-    .then((results) => {
-        return results[ position ];
-    });
+/**
+ * Do some bindings here.
+ */
+export const parsePodcastCommand = ({ podcasts, language, country }, { shortener, translateRoot }) => {
+    return parsePodcast({ podcasts, language, country }, { shortener, translateRoot, maskFunction: maskResponse });
 };
 
-export const parsePodcastInline = async ({ podcasts, country }, { shortener, translate }) => {
-    return await parsePodcast({ podcasts, country }, { shortener, translate, maskFunction: maskResponseInline });
+export const parsePodcastInline = ({ podcasts, language, country }, { shortener, translateRoot }) => {
+    return parsePodcast({ podcasts, language, country }, { shortener, translateRoot, maskFunction: maskResponseInline });
 };
