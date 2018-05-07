@@ -34,24 +34,17 @@ const parseMapping = async ({ podcast, language, country }, { maskFunction, shor
     return maskFunction({ ...podcast, ...links, latest, keyboard }, translateRoot.t );
 };
 
-const parsePodcast = ({ podcasts, language, country }: parseParameters, { maskFunction, shortener, translateRoot }: parseFunctions) => {
-    return podcasts.reduce(async (acc, podcast) => {
-        if (hasAllPodcastData(podcast)) {
-            const parsed = await parseMapping({ podcast, language, country }, { maskFunction, shortener, translateRoot });
-            acc.then((result) => result.push(parsed));
-        }
+const parsePodcast = ({ podcasts, language, country }: parseParameters, { maskFunction, shortener, translateRoot }: parseFunctions) =>
+podcasts.reduce(async (acc, podcast) => {
+    if (hasAllPodcastData(podcast)) {
+        const parsed = await parseMapping({ podcast, language, country }, { maskFunction, shortener, translateRoot });
+        acc.then((result) => result.push(parsed));
+    }
 
-        return acc;
-    }, Promise.resolve( [] ));
-};
+    return acc;
+}, Promise.resolve( [] ));
 
-/**
- * Do some bindings here.
- */
-export const parsePodcastCommand = ({ podcasts, language, country }, { shortener, translateRoot }) => {
-    return parsePodcast({ podcasts, language, country }, { shortener, translateRoot, maskFunction: maskResponse });
-};
+const curryParsePodcast = ({ maskFunction }) => ((first, second) => parsePodcast(first, { maskFunction, ...second }));
 
-export const parsePodcastInline = ({ podcasts, language, country }, { shortener, translateRoot }) => {
-    return parsePodcast({ podcasts, language, country }, { shortener, translateRoot, maskFunction: maskResponseInline });
-};
+export const parsePodcastCommand = curryParsePodcast({ maskFunction: maskResponse });
+export const parsePodcastInline = curryParsePodcast({ maskFunction: maskResponseInline });
