@@ -27,3 +27,8 @@ export class setLocale {
         };
     }
 };
+
+/**
+ * Do some bindings here.
+ */
+export const translate = (languageCode, resourceKey?) => translateRoot.t(language, languageCode, resourceKey);

@@ -1,6 +1,6 @@
 'use strict';
 
-import { languagesCode, readMock, translateRoot } from '../../__mocks__/mocks';
+import { languagesCode, readFiles, translateRoot } from '../../__mocks__/mocks';
 import { join } from 'path';
 import { errorInline, searchInline, endInline, notFoundInline } from '../../src/lib/telegram/messages';
 
@@ -12,17 +12,10 @@ const functions = [{
 }];
 let mock;
 
-const readFiles = (root) => functions.reduce((acc, cur) => {
-    const functionName = cur.name;
-    acc[functionName] = readMock(`telegram/messages/${root}/${functionName}.json`);
-
-    return acc;
-}, {});
-
 const reduceMock = (acc, cur) => {
     const language = cur.split('_')[0];
     const obj = {
-        output: readFiles(cur),
+        mock: readFiles(cur, functions, 'telegram/messages'),
         translate: (languageCode, resourceKey) => translateRoot.t(language, languageCode, resourceKey)
     }
 
@@ -42,12 +35,12 @@ beforeAll(async (done) => {
 const functionTesting = (element) => functions.forEach(({ name, func }) => {
     test(name, () => {
         const translateFunction = mock[element].translate;
-        const outputFile = mock[element].output[name];
+        const outputFile = mock[element].mock[name];
 
         expect(func(translateFunction, 'mistyped')).toEqual(outputFile);
     });
 });
 
-languagesCode.forEach((element) => {
+languagesCode.forEach((element: string) => {
     describe(`[${element}] Function testing`, () => functionTesting(element));
 });

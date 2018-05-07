@@ -8,48 +8,41 @@ import { podcastKeyboard } from '../telegram/keyboard';
 
 const hasAllPodcastData = (data: result): boolean => {
     const properties = [ 'releaseDate', 'artistName', 'country', 'trackCount', 'feedUrl', 'genres', 'collectionViewUrl',
-    'artworkUrl60', 'artworkUrl100', 'artworkUrl600', 'collectionId', 'trackId', 'collectionName' ];
+    'artworkUrl60', 'artworkUrl100', 'artworkUrl600', 'collectionId', 'collectionName' ];
 
     return properties.reduce((acc, cur) => {
         return (false === acc || false === data.hasOwnProperty(cur)) ? false : true;
     }, true);
 };
 
-const shortenLinks = async (data: result, shortener: Function) => {
-    const rss = shortener(data.feedUrl).catch((error: Error) => {
-        console.error(error);
+const shortenLinks = (data: result, shortener: Function) => {
+    return Promise.all([ shortener(data.feedUrl), shortener(data.collectionViewUrl) ]).then((shortened) => {
+        return { rss: shortened[0], itunes: shortened[1] };
+    }).catch((error: Error) => {
+        console.log(error);
 
-        return data.feedUrl;
+        return { rss: data.feedUrl, itunes: data.collectionViewUrl };
     });
-    const itunes = shortener(data.collectionViewUrl).catch((error: Error) => {
-        console.error(error);
-
-        return data.collectionViewUrl;
-    });
-
-    return { itunes: await itunes, rss: await rss };
 };
 
-const parseMapping = ({ podcast, language, country }, { maskFunction, shortener, translateRoot }) => {
-    const links = shortenLinks(podcast, shortener);
+const parseMapping = async ({ podcast, language, country }, { maskFunction, shortener, translateRoot }) => {
+    const links = await shortenLinks(podcast, shortener);
     const latest = moment(podcast.releaseDate).locale(country).format('Do MMMM YYYY, h:mm a');
-    /**
-     * What was the logic behind this?
-     */
-    const podcastId = podcast.collectionId || podcast.trackId;
+    const podcastId = podcast.collectionId;
     const keyboard = podcastKeyboard({ language, podcastId }, { translateRoot });
 
-    return maskFunction({ ...podcast, latest, keyboard, links }, translateRoot.t );
+    return maskFunction({ ...podcast, ...links, latest, keyboard }, translateRoot.t );
 };
 
 const parsePodcast = ({ podcasts, language, country }: parseParameters, { maskFunction, shortener, translateRoot }: parseFunctions) => {
-    return podcasts.reduce((acc, podcast) => {
+    return podcasts.reduce(async (acc, podcast) => {
         if (hasAllPodcastData(podcast)) {
-            acc.push(parseMapping({ podcast, language, country }, { maskFunction, shortener, translateRoot }));
+            const parsed = await parseMapping({ podcast, language, country }, { maskFunction, shortener, translateRoot });
+            acc.then((result) => result.push(parsed));
         }
 
         return acc;
-    }, []);
+    }, Promise.resolve( [] ));
 };
 
 /**

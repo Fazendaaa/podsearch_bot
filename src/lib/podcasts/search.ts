@@ -13,22 +13,26 @@ const defaultOptions: options = {
     explicit: 'No'
 };
 
-export const searchPodcast = async (searchOptions): Promise<Array<result> | Error> =>
-new Promise((resolve: (searchResult: Array<result>) => void, reject: (error: Error) => void) => {
-    search({ defaultOptions, ...searchOptions }, (err: string, data: response) => {
+export const searchPodcast = async (searchOptions): Promise<Array<result>> =>
+new Promise((resolve: (searchResult: Array<result>) => void, reject: (error: Array<result>) => void) => {
+    search({ ...defaultOptions, ...searchOptions }, (err: string, data: response) => {
         if (err || 0 === data.resultCount) {
-            reject(new Error(err));
+            console.error(new Error(err));
+
+            reject([]);
         }
 
         resolve(data.results);
     });
 });
 
-export const lookupPodcast = (searchOptions): Promise<result | Error> =>
-new Promise((resolve: (searchResult: result) => void, reject: (error: Error) => void) => {
-    lookup({ defaultOptions, limit: 1, ...searchOptions }, (err: string, data: response) => {
+export const lookupPodcast = (searchOptions): Promise<result> =>
+new Promise((resolve: (searchResult: result) => void, reject: (error) => void) => {
+    lookup({ limit: 1, ...defaultOptions, ...searchOptions }, (err: string, data: response) => {
         if (err || 0 === data.resultCount) {
-            reject(new Error(err));
+            console.error(new Error(err));
+
+            reject({});
         }
 
         resolve(data.results[0]);

@@ -1,0 +1,29 @@
+[
+    {
+        "input": {
+            "term": "Nerdcast",
+            "country": "us",
+            "language": "pt"
+        },
+        "output": {
+            "text": "[​](https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg)*Nome*: _Nerdcast_\n*Criadores*: _Nerdcast_\n*Gêneros*: _Comedy | Podcasts_\n*Episódios*: _2_\n*Último episódio*: _11th July 2016, 4:05 am_\n*Mais em*: [RSS](https://tinyurl.com/y7hl5rf7) ou [iTunes](https://tinyurl.com/y8zuutgx)\n",
+            "keyboard": {
+                "reply_markup": {
+                    "inline_keyboard": [
+                        [
+                            {
+                                "text": "Inscrever-se",
+                                "callback_data": "subscribe/undefined",
+                                "hide": false
+                            },
+                            {
+                                "text": "Ouça",
+                                "url": "t.me/undefined?start=undefined"
+                            }
+                        ]
+                    ]
+                }
+            }
+        }
+    }
+]

@@ -1,45 +1,24 @@
 'use strict';
 
-import * as tinyShortener from 'tiny-shortener';
-import { parsePodcastCommand } from '../podcasts/parse';
-import { searchPodcast } from '../podcasts/search';
-import { searchKeyboard, botKeyboard, forceReplyKeyboard } from './keyboard';
+import { handleStage } from '../handlers/stage';
+import { searchKeyboard, botKeyboard, forceReplyKeyboard } from '../telegram/keyboard';
 const stage = require('telegraf/stage');
 const scene = require('telegraf/scenes/base');
 
 const talkingSearch = new scene('talkingSearch');
-
-/**
- * The  export  here  is  just  for  unit testing. After learning how to do tests with integration to talkingSearch this
- * export will be removed.
- */
-export const handleStage = async ({ term, country, language, position = 0 }, { translateRoot }) => {
-    const shortener = tinyShortener.tiny;
-    const translate = (languageCode, resourceKey?) => translateRoot.t(language, languageCode, resourceKey);
-
-    return await searchPodcast({ term }).then((podcasts) => {
-        const podcast = parsePodcastCommand({ podcasts, language, country }, { shortener, translateRoot });
-
-        return (0 !== podcast.length) ?
-            { text: translate('searchResult'), keyboard: searchKeyboard({ position, language }, { translateRoot }) } :
-            { text: translate('error'), keyboard: null };
-    }).catch((error: Error) => {
-        console.error(error);
-
-        return { text: translate('noResult', { value: term }), keyboard: null };
-    });
-};
 
 talkingSearch.enter(async ({ i18n, deleteMessage, language, country, replyWithMarkdown, message, update, session, editMessageText }) => {
     const src = message || update.callback_query;
     const userId: number = src.from.id;
     const term: string = session[userId];
     const position = parseInt(update.callback_query.data.split('/')[1], 10) || 0;
+    const translateRoot = i18n;
+    const translate = (languageCode, resourceKey?) => translateRoot.t(language, languageCode, resourceKey);
 
     if (undefined != message) {
-        replyWithMarkdown(i18n.t('search'), forceReplyKeyboard);
+        replyWithMarkdown(translate('search'), forceReplyKeyboard);
     } if (undefined == update) {
-        replyWithMarkdown(i18n.t('error'));        
+        replyWithMarkdown(translate('error'));        
     }
     
     /**
@@ -47,10 +26,12 @@ talkingSearch.enter(async ({ i18n, deleteMessage, language, country, replyWithMa
      */
     deleteMessage();
 
-    const { message_id, chat } = await replyWithMarkdown(i18n.t('searching')).catch(console.error);
-    const send = await handleStage({ term, country, language, position }, { translateRoot: i18n });
+    const { message_id, chat } = await replyWithMarkdown(translate('searching')).catch(console.error);
+    const send = await handleStage({ term, country, language, position }, { translateRoot, translate });
 
     editMessageText(chat.id, message_id, undefined, send.text, send.keyboard).catch(console.error);
+
+    replyWithMarkdown(translate('searchResult'), searchKeyboard({ position, language }, { translateRoot }));
 });
 
 talkingSearch.on('text', ({ i18n, replyWithMarkdown, lanCode, message, session }) => {
