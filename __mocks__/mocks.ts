@@ -5,8 +5,8 @@ import { join } from 'path';
 const telegrafI18n = require('telegraf-i18n');
 
 const readMock = (filename: string) => JSON.parse(readFileSync(join(__dirname, `./${filename}.json`), 'utf8'));
-
-export const languagesCode = readMock('languages');
+const languagesCode = readMock('languages');
+export const initMock = (path: string, functions: Array<object>) => languagesCode.reduce(curryReduceMock(path, functions), {});
 
 export const readFiles = (root, functions, path) => functions.reduce((acc, cur) => {
     const functionName = cur.name;
@@ -33,4 +33,8 @@ const curryReduceMock = (path: string, functions: Array<object>) => ((acc, cur) 
     return acc;
 });
 
-export const initMock = (path: string, functions: Array<object>) => languagesCode.reduce(curryReduceMock(path, functions), {});
+export const languageTesting = (functionTesting: Function) => {
+    languagesCode.forEach((element: string) => {
+        describe(`[${element}] Function Testing`, () => functionTesting(element));
+    });
+};
