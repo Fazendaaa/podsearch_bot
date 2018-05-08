@@ -1,0 +1,46 @@
+[
+    {
+        "type": "resolve",
+        "input": {
+            "term": "Jovem Nerd",
+            "country": "us"
+        },
+        "output": {
+            
+        }
+    },
+    {
+        "type": "resolve",
+        "input": {
+            "term": "Jovem Nerd"
+        },
+        "output": []
+    },
+    {
+        "type": "reject",
+        "input": {
+            "term": "",
+            "country": "us"
+        },
+        "output": []
+    },
+    {
+        "type": "reject",
+        "input": {
+            "term": ""            
+        },
+        "output": []
+    },
+    {
+        "type": "reject",
+        "input": {
+            "country": "us"
+        },
+        "output": []
+    },
+    {
+        "type": "reject",
+        "input": [],
+        "output": []
+    }
+]

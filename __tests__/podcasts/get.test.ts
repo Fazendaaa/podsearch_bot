@@ -9,8 +9,18 @@ const functionTesting = (languageCountry) => {
         name: 'lookupPodcast', func: lookupPodcast        
     }];
     const mock = initMock('podcasts/get', functions);
+    const translate = mock[languageCountry].translate;
+    const array = mock[languageCountry].mock[name];
 
-    
+    expect.assertions(array.length);
+
+    return functions.forEach(({ name, func }) => {
+
+    });
 };
 
-languageTesting(functionTesting);
+describe.skip('Skiping', () => {
+    test.skip('skipping');
+});
+
+// languageTesting(functionTesting);

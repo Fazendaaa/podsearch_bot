@@ -33,7 +33,7 @@ const curryReduceMock = (path: string, functions: Array<object>) => ((acc, cur) 
     return acc;
 });
 
-export const languageTesting = (functionTesting: Function) => {
+export const languageTesting = (functionTesting: (languageCountry) => void) => {
     languagesCode.forEach((element: string) => {
         describe(`[${element}] Function Testing`, () => functionTesting(element));
     });
