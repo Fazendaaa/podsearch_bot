@@ -1,6 +1,6 @@
 'use strict';
 
-import { languagesCode, readFiles, translateRoot } from '../../__mocks__/mocks';
+import { languagesCode, initMock, translateRoot } from '../../__mocks__/mocks';
 import { handleStage } from '../../src/lib/handlers/stage';
 
 const functions = [{
@@ -8,22 +8,10 @@ const functions = [{
 }];
 let mock;
 
-const reduceMock = (acc, cur) => {
-    const language = cur.split('_')[0];
-    const obj = {
-        mock: readFiles(cur, functions, 'handlers/stage'),
-        translate: (languageCode, resourceKey) => translateRoot.t(language, languageCode, resourceKey)
-    }
-
-    acc[cur] = obj;
-
-    return acc;
-};
-
 jest.setTimeout(60000);
 
 beforeAll(async (done) => {
-    mock = languagesCode.reduce(reduceMock, {});
+    mock = initMock('handlers/stage', functions);
 
     done();
 });

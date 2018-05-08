@@ -20,3 +20,17 @@ export const translateRoot = new telegrafI18n({
     allowMissing: true,
     directory: join(__dirname, '../src/locales')
 });
+
+const curryReduceMock = (path: string, functions: Array<object>) => ((acc, cur) => {
+    const language = cur.split('_')[0];
+    const obj = {
+        mock: readFiles(cur, functions, path),
+        translate: (languageCode, resourceKey) => translateRoot.t(language, languageCode, resourceKey)
+    }
+
+    acc[cur] = obj;
+
+    return acc;
+});
+
+export const initMock = (path: string, functions: Array<object>) => languagesCode.reduce(curryReduceMock(path, functions), {});
