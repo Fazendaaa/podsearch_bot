@@ -1,5 +1,6 @@
 [
     {
+        "type": "resolve",
         "input": {
             "term": "Nerdcast",
             "country": "us",
@@ -25,5 +26,23 @@
                 }
             }
         }
+    },
+    {
+        "type": "reject",
+        "input": {
+            "term": "",
+            "country": "br",
+            "language": "pt"
+        },
+        "output": []
+    },
+    {
+        "type": "mistyped",
+        "input": {
+            "term": "",
+            "country": "br",
+            "language": "pt"
+        },
+        "output": []
     }
 ]

@@ -27,20 +27,23 @@ beforeAll(async (done) => {
 
     done();
 });
-let counter = 0;
 
-const functionTesting = (element) => functions.forEach(( { name, func } ) => {
-    test(name, async () => {
-        const translate = mock[element].translate;
-        const array = mock[element].mock[name];
+const functionTesting = (element) => functions.forEach(( { name, func } ) => test(name, async () => {
+    const translate = mock[element].translate;
+    const array = mock[element].mock[name];
 
-        expect.assertions(array.length);
+    expect.assertions(array.length);
 
-        return await array.reduce(async (acc, cur) => {
-            return expect(await func(cur.input, { translateRoot, translate })).toEqual(cur.output);
-        }, Promise.resolve( [] ));
-    });
-});
+    return array.reduce(async (acc, cur) => {
+        const value = ('resolve' === cur.type) ?
+                      await expect(func(cur.input, { translateRoot, translate })).resolves.toEqual(cur.output) :
+                      await expect(func(cur.input, { translateRoot, translate })).rejects.toEqual(cur.output);
+
+        acc.then((result) => result.push(value));
+        
+        return acc;
+    }, Promise.resolve( [] ));
+}));
 
 languagesCode.forEach((element: string) => {
     describe(`[${element}] Function Testing`, () => functionTesting(element));

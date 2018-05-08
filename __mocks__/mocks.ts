@@ -6,7 +6,7 @@ const telegrafI18n = require('telegraf-i18n');
 
 const readMock = (filename: string) => JSON.parse(readFileSync(join(__dirname, `./${filename}.json`), 'utf8'));
 
-export const languagesCode = readMock('languages').languages;
+export const languagesCode = readMock('languages');
 
 export const readFiles = (root, functions, path) => functions.reduce((acc, cur) => {
     const functionName = cur.name;
