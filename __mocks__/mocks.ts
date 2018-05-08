@@ -38,3 +38,18 @@ export const languageTesting = (functionTesting: (languageCountry) => void) => {
         describe(`[${element}] Function Testing`, () => functionTesting(element));
     });
 };
+
+export const safeAttribution = async ({ cur }, { func }) => {
+    let value;
+
+    try {
+        value = ('resolve' === cur.type) ?
+            await expect(func).resolves.toEqual(cur.output) :
+            await expect(func).rejects.toEqual(cur.output);
+    } catch (error) {
+        console.error(error);
+    } finally {
+        return value;
+    }
+};
+

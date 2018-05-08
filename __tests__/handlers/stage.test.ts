@@ -1,7 +1,7 @@
 'use strict';
 
-import { languageTesting, initMock, translateRoot } from '../../__mocks__/mocks';
 import { handleStage } from '../../src/lib/handlers/stage';
+import { languageTesting, initMock, translateRoot, safeAttribution } from '../../__mocks__/mocks';
 
 jest.setTimeout(60000);
 
@@ -14,17 +14,14 @@ const functions = [{
 }];
 const mock = initMock('handlers/stage', functions);
 
-const applyFunction = ({ name, func, mock, languageCountry }) => test(name, async () => {
+const functionTesting = ({ name, mock, languageCountry }, { func }) => test(name, async () => {
     const translate = mock[languageCountry].translate;
     const array = mock[languageCountry].mock[name];
     
     expect.assertions(array.length);
-    
+
     return array.reduce(async (acc, cur) => {
-        const value = ('resolve' === cur.type) ?
-        await expect(func(cur.input, { translateRoot, translate })).resolves.toEqual(cur.output) :
-        await expect(func(cur.input, { translateRoot, translate })).rejects.toEqual(cur.output);
-        
+        const value = await safeAttribution({ cur }, { func: func(cur.input, { translateRoot, translate }) });
         acc.then((result) => result.push(value));
         
         return acc;
@@ -32,5 +29,5 @@ const applyFunction = ({ name, func, mock, languageCountry }) => test(name, asyn
 });
 
 languageTesting((languageCountry) => {
-    functions.forEach(({ name, func }) => applyFunction({ name, func, mock, languageCountry }));
+    functions.forEach(({ name, func }) => functionTesting({ name, mock, languageCountry }, { func }));
 });
