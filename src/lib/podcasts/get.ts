@@ -16,25 +16,29 @@ const defaultOptions: options = {
 export const searchPodcast = async (searchOptions): Promise<Array<result>> =>
 new Promise((resolve: (searchResult: Array<result>) => void, reject: (error: Array<result>) => void) => {
     search({ ...defaultOptions, ...searchOptions }, (err: string, data: response) => {
-        if (err || 0 === data.resultCount) {
+        if (err) {
             console.error(new Error(err));
 
             reject([]);
+        } if (0 === data.resultCount) {
+            reject([]);            
         }
 
         resolve(data.results);
     });
 });
 
-export const lookupPodcast = (searchOptions): Promise<result> =>
-new Promise((resolve: (searchResult: result) => void, reject: (error) => void) => {
+export const lookupPodcast = (searchOptions): Promise<Array<result>> =>
+new Promise((resolve: (searchResult: Array<result>) => void, reject: (error) => void) => {
     lookup({ limit: 1, ...defaultOptions, ...searchOptions }, (err: string, data: response) => {
-        if (err || 0 === data.resultCount) {
+        if (err) {
             console.error(new Error(err));
 
-            reject({});
+            reject([]);
+        } if (0 === data.resultCount) {
+            reject([]);
         }
 
-        resolve(data.results[0]);
+        resolve(data.results);
     });
 });

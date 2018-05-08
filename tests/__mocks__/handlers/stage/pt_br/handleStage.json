@@ -37,9 +37,9 @@
         "output": []
     },
     {
-        "type": "mistyped",
+        "type": "reject",
         "input": {
-            "term": "",
+            "term": "mistyped",
             "country": "br",
             "language": "pt"
         },

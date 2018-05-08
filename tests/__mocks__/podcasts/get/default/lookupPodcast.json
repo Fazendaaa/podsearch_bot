@@ -2,8 +2,7 @@
     {
         "type": "resolve",
         "input": {
-            "term": "Jovem Nerd",
-            "country": "us"
+            "id": 381816509
         },
         "output": [{
             "artistName": "Jovem Nerd",
@@ -48,25 +47,7 @@
     },
     {
         "type": "reject",
-        "input": {
-            "term": "",
-            "country": "us"
-        },
-        "output": []
-    },
-    {
-        "type": "reject",
-        "input": {
-            "term": "mistyped",
-            "country": "us"
-        },
-        "output": []
-    },
-    {
-        "type": "reject",
-        "input": {
-            "country": "us"
-        },
+        "input": {},
         "output": []
     }
 ]

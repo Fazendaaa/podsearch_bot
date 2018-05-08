@@ -2,13 +2,7 @@
 
 import { languagesCode } from './locales/locales';
 
-export const languageTesting = (functionTesting: (languageCountry) => void) => {
-    languagesCode.forEach((element: string) => {
-        describe(`[${element}] Function Testing`, () => functionTesting(element));
-    });
-};
-
-export const safeAttribution = async ({ cur }, { func }) => {
+const safeAttribution = async ({ cur }, { func }) => {
     let value;
 
     try {
@@ -22,16 +16,20 @@ export const safeAttribution = async ({ cur }, { func }) => {
     }
 };
 
-export const functionTesting = ({ name, mock, languageCountry }, { func }) => test(name, async () => {
+export const functionTesting = ({ name, mock, languageCountry }, { func, opts }) => test(name, async () => {
     const translate = mock[languageCountry].translate;
     const array = mock[languageCountry].mock[name];
 
     expect.assertions(array.length);
 
     return array.reduce(async (acc, cur) => {
-        const value = await safeAttribution({ cur }, { func: func(cur.input) });
+        const value = await safeAttribution({ cur }, { func: func(cur.input, opts) });
         acc.then((result) => result.push(value));
 
         return acc;
     }, Promise.resolve([]));
+});
+
+export const languageTesting = (functionTesting: (languageCountry) => void) => languagesCode.forEach((element: string) => {
+    describe(`[${element}] Function Testing`, () => functionTesting(element));
 });

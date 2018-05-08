@@ -11,5 +11,5 @@ const functions = [{
 const mock = initMock({ path: 'podcasts/get' }, { functions });
 
 languageTesting((languageCountry) => {
-    functions.forEach(({ name, func }) => functionTesting({ name, mock, languageCountry }, { func }));
+    functions.forEach(({ name, func }) => functionTesting({ name, mock, languageCountry }, { func, opts: {} }));
 });

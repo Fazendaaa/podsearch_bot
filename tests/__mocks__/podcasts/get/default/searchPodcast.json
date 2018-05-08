@@ -2,8 +2,7 @@
     {
         "type": "resolve",
         "input": {
-            "term": "Jovem Nerd",
-            "country": "us"
+            "term": "Jovem Nerd"
         },
         "output": [{
             "artistName": "Jovem Nerd",
@@ -49,24 +48,13 @@
     {
         "type": "reject",
         "input": {
-            "term": "",
-            "country": "us"
+            "term": ""            
         },
         "output": []
     },
     {
         "type": "reject",
-        "input": {
-            "term": "mistyped",
-            "country": "us"
-        },
-        "output": []
-    },
-    {
-        "type": "reject",
-        "input": {
-            "country": "us"
-        },
+        "input": {},
         "output": []
     }
 ]

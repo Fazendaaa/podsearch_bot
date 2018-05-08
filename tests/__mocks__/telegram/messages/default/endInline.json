@@ -1,0 +1,11 @@
+{
+    "id": "0",
+    "title": "End of results",
+    "type": "article",
+    "input_message_content": {
+        "message_text": "[\u200B](https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png)There's no other content to be presented.",
+        "parse_mode": "Markdown"
+    },
+    "description": "There's no other content to be presented.",
+    "thumb_url": "https://raw.githubusercontent.com/Fazendaaa/podsearch_bot/master/img/logo.png"
+}

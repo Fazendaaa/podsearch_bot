@@ -14,11 +14,14 @@ const readFiles = (root, functions, path) => functions.reduce((acc, cur) => {
 }, {});
 
 const curryReduceMock = ({ path }, { functions }) => ((acc, cur) => {
-    const language = cur.split('_')[0];
+    /**
+     * English is here because it's the default language for when missing this option.
+     */
+    const language = cur.split('_')[0] || 'en';
     const obj = {
         mock: readFiles(cur, functions, path),
         translate: (languageCode, resourceKey) => translateRoot.t(language, languageCode, resourceKey)
-    }
+    };
     
     acc[cur] = obj;
     

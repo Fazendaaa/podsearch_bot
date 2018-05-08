@@ -6,6 +6,14 @@ import { parseParameters, parseFunctions } from '../@types/podcasts/parse';
 import { maskResponse, maskResponseInline } from './mask';
 import { podcastKeyboard } from '../telegram/keyboard';
 
+const hasAllFunctions = ({ maskFunction, shortener, translateRoot }) => {
+    if (undefined == maskFunction || undefined == shortener || undefined == translateRoot) {
+        return false;
+    }
+
+    return true;
+};
+
 const hasAllPodcastData = (data: result): boolean => {
     const properties = [ 'releaseDate', 'artistName', 'country', 'trackCount', 'feedUrl', 'genres', 'collectionViewUrl',
     'artworkUrl60', 'artworkUrl100', 'artworkUrl600', 'collectionId', 'collectionName' ];
@@ -34,15 +42,27 @@ const parseMapping = async ({ podcast, language, country }, { maskFunction, shor
     return maskFunction({ ...podcast, ...links, latest, keyboard }, translateRoot.t );
 };
 
-const parsePodcast = ({ podcasts, language, country }: parseParameters, { maskFunction, shortener, translateRoot }: parseFunctions) =>
-podcasts.reduce(async (acc, podcast) => {
+const reducePodcast = ({ language, country }, { maskFunction, shortener, translateRoot }) => (async (acc, podcast) => {
     if (hasAllPodcastData(podcast)) {
         const parsed = await parseMapping({ podcast, language, country }, { maskFunction, shortener, translateRoot });
         acc.then((result) => result.push(parsed));
     }
 
     return acc;
-}, Promise.resolve( [] ));
+});
+
+const parsePodcast = ({ podcasts, language, country }: parseParameters, { maskFunction, shortener, translateRoot }: parseFunctions) => {
+    language = (undefined != language) ? language : 'en';
+    country = (undefined != country) ? country : 'us';
+
+    if (undefined != podcasts && hasAllFunctions({ maskFunction, shortener, translateRoot })) {
+        return podcasts.reduce(reducePodcast({ language, country }, { maskFunction, shortener, translateRoot }), Promise.resolve([]));
+    }
+
+    console.error(new Error('Missing important parameter in parsePodcast.'));
+
+    return [];
+};
 
 const curryParsePodcast = ({ maskFunction }) => ((first, second) => parsePodcast(first, { maskFunction, ...second }));
 
