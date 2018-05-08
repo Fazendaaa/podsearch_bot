@@ -2,7 +2,7 @@
 
 import * as tinyShortener from 'tiny-shortener';
 import { parsePodcastCommand } from '../podcasts/parse';
-import { searchPodcast } from '../podcasts/search';
+import { searchPodcast } from '../podcasts/get';
 import { podcastKeyboard } from '../telegram/keyboard';
 
 export const handleStage = async ({ term, country, language, position = 0 }, { translateRoot, translate }) => {
