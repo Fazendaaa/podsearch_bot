@@ -1,4 +1,7 @@
 node_modules
 coverage
 dist
+.vscode
 .env
+tslint.json
+wallaby.js

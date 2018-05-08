@@ -1,8 +1,8 @@
 'use strict';
 
-import { languageTesting, initMock } from '../../__mocks__/mocks';
-import { join } from 'path';
-import { errorInline, searchInline, endInline, notFoundInline } from '../../src/lib/telegram/messages';
+import { errorInline, searchInline, endInline, notFoundInline } from '../../../src/lib/telegram/messages';
+import { initMock } from '../../__mocks__/mocks';
+import { languageTesting } from '../../tests';
 
 jest.setTimeout(60000);
 
@@ -12,7 +12,7 @@ const functions = [{
     name: 'endInline', func: endInline }, {
     name: 'notFoundInline', func: notFoundInline
 }];
-const mock = initMock('telegram/messages', functions);
+const mock = initMock({ path: 'telegram/messages' }, { functions });
 
 languageTesting((languageCountry) => functions.forEach(({ name, func }) => test(name, () => {
     const translateFunction = mock[languageCountry].translate;

@@ -13,7 +13,7 @@
         "./node_modules/",
         "./dist/"
     ],
-    "testRegex": "(./__tests__/.*| (\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testRegex": "(.tests/__tests__/.*| (\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
         "ts",
         "tsx",

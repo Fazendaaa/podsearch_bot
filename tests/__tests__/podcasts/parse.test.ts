@@ -1,6 +1,6 @@
 'use strict';
 
-import { parsePodcastCommand, parsePodcastInline } from '../../src/lib/podcasts/parse';
+import { parsePodcastCommand, parsePodcastInline } from '../../../src/lib/podcasts/parse';
 let input;
 let output;
 

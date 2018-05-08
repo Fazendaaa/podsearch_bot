@@ -1,7 +1,9 @@
 'use strict';
 
-import { handleStage } from '../../src/lib/handlers/stage';
-import { languageTesting, initMock, translateRoot, safeAttribution } from '../../__mocks__/mocks';
+import { handleStage } from '../../../src/lib/handlers/stage';
+import { initMock } from '../../__mocks__/mocks';
+import { languageTesting, safeAttribution } from '../../tests'; 
+import { translateRoot } from '../../locales/locales';
 
 jest.setTimeout(60000);
 
@@ -12,7 +14,7 @@ jest.setTimeout(60000);
 const functions = [{
     name: 'handleStage', func: handleStage
 }];
-const mock = initMock('handlers/stage', functions);
+const mock = initMock({ path: 'handlers/stage' }, { functions });
 
 const functionTesting = ({ name, mock, languageCountry }, { func }) => test(name, async () => {
     const translate = mock[languageCountry].translate;

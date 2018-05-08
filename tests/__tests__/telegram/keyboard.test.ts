@@ -1,8 +1,7 @@
 'use strict';
 
-import { readFiles, translateRoot, languagesCode } from '../../__mocks__/mocks';
-import { join } from 'path';
-import { podcastKeyboard, forceReplyKeyboard, botKeyboard, searchKeyboard } from '../../src/lib/telegram/keyboard';
+import { translateRoot, languagesCode } from '../../locales/locales';
+import { podcastKeyboard, forceReplyKeyboard, botKeyboard, searchKeyboard } from '../../../src/lib/telegram/keyboard';
 
 jest.setTimeout(60000);
 
