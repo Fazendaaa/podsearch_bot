@@ -6,8 +6,6 @@ import { searchPodcast } from '../podcasts/get';
 import { podcastKeyboard } from '../telegram/keyboard';
 
 export const handleStage = async ({ term, country, language, position = 0 }, { translateRoot, translate }) => {
-    language = (undefined != language) ? language : 'en';
-    country = (undefined != country) ? country : 'us';
     const shortener = tinyShortener.tiny;
     const podcasts = await searchPodcast({ term });
     const parsed = await parsePodcastCommand({ podcasts, language, country }, { shortener, translateRoot });

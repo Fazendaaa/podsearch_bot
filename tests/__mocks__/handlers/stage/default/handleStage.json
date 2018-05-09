@@ -3,6 +3,7 @@
         "type": "resolve",
         "input": {
             "term": "Nerdcast",
+            "language": "en",
             "country": "us"
         },
         "output": {
@@ -27,44 +28,10 @@
         }
     },
     {
-        "type": "resolve",
-        "input": {
-            "term": "Nerdcast",
-            "language": "en"
-        },
-        "output": {
-            "text": "[​](https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg)*Name*: _Nerdcast_\n*From:* _Nerdcast_\n*Genre*: _Comedy | Podcasts_\n*Episodes*: _2_\n*Latest Episode*: _11th July 2016, 4:05 am_\n*More in*: [RSS](https://tinyurl.com/y7hl5rf7) or [iTunes](https://tinyurl.com/y8zuutgx)\n",
-            "keyboard": {
-                "reply_markup": {
-                    "inline_keyboard": [
-                        [
-                            {
-                                "text": "Subscribe",
-                                "callback_data": "subscribe/undefined",
-                                "hide": false
-                            },
-                            {
-                                "text": "Listen",
-                                "url": "t.me/undefined?start=undefined"
-                            }
-                        ]
-                    ]
-                }
-            }
-        }
-    },
-    {
         "type": "reject",
         "input": {
             "term": "",
-            "language": "en"
-        },
-        "output": []
-    },
-    {
-        "type": "reject",
-        "input": {
-            "term": "",
+            "language": "en",
             "country": "us"
         },
         "output": []
@@ -72,15 +39,8 @@
     {
         "type": "reject",
         "input": {
-            "term": "",
-            "language": "en"
-        },
-        "output": []
-    },
-    {
-        "type": "reject",
-        "input": {
-            "term": "",
+            "term": "mistyped",
+            "language": "en",
             "country": "us"
         },
         "output": []

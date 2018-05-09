@@ -52,10 +52,7 @@ const reducePodcast = ({ language, country }, { maskFunction, shortener, transla
 });
 
 const parsePodcast = ({ podcasts, language, country }: parseParameters, { maskFunction, shortener, translateRoot }: parseFunctions) => {
-    language = (undefined != language) ? language : 'en';
-    country = (undefined != country) ? country : 'us';
-
-    if (undefined != podcasts && hasAllFunctions({ maskFunction, shortener, translateRoot })) {
+    if (hasAllFunctions({ maskFunction, shortener, translateRoot })) {
         return podcasts.reduce(reducePodcast({ language, country }, { maskFunction, shortener, translateRoot }), Promise.resolve([]));
     }
 
