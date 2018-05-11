@@ -1,11 +1,7 @@
 [
     {
-        "type": "resolve",
+        "type" : "synchronous",
         "input": {
-            "id": 381816509,
-            "country": "br"
-        },
-        "output": [{
             "artistName": "Jovem Nerd",
             "artworkUrl100": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/100x100bb.jpg",
             "artworkUrl30": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/30x30bb.jpg",
@@ -17,22 +13,22 @@
             "collectionId": 381816509,
             "collectionName": "NerdCast",
             "collectionPrice": 0,
-            "collectionViewUrl": "https://itunes.apple.com/br/podcast/nerdcast/id381816509?mt=2&uo=4",
+            "collectionViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id381816509?mt=2&uo=4",
             "contentAdvisoryRating": "Clean",
-            "country": "BRA",
-            "currency": "BRL",
+            "country": "USA",
+            "currency": "USD",
             "feedUrl": "https://jovemnerd.com.br/feed-nerdcast/",
             "genreIds": [
                 "1324",
                 "26"
             ],
             "genres": [
-                "Sociedade e cultura",
+                "Society & Culture",
                 "Podcasts"
             ],
             "kind": "podcast",
-            "primaryGenreName": "Sociedade e cultura",
-            "releaseDate": "2018-05-11T11:00:00Z",
+            "primaryGenreName": "Society & Culture",
+            "releaseDate": "2018-05-04T11:01:00Z",
             "trackCensoredName": "NerdCast",
             "trackCount": 300,
             "trackExplicitness": "cleaned",
@@ -42,31 +38,18 @@
             "trackName": "NerdCast",
             "trackPrice": 0,
             "trackRentalPrice": 0,
-            "trackViewUrl": "https://itunes.apple.com/br/podcast/nerdcast/id381816509?mt=2&uo=4",
+            "trackViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id381816509?mt=2&uo=4",
             "wrapperType": "track"
-        }]
-    },
-    {
-        "type": "reject",
-        "input": {
-            "term": "",
-            "country": "br"
         },
-        "output": []
-    },
-    {
-        "type": "reject",
-        "input": {
-            "term": "mistyped",
-            "country": "br"
-        },
-        "output": []
-    },
-    {
-        "type": "reject",
-        "input": {
-            "country": "br"
-        },
-        "output": []
-    }
+        "output": {
+            "artistName": "Jovem Nerd",
+            "artworkUrl600": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/600x600bb.jpg",
+            "collectionId": 381816509,
+            "collectionName": "NerdCast",
+            "genres": "Society & Culture | Podcasts",
+            "releaseDate": "2018-05-04T11:01:00Z",
+            "trackCount": 300,
+            "trackId": 381816509
+        }
+    }    
 ]

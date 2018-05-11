@@ -4,6 +4,8 @@ import { searchPodcast, lookupPodcast } from '../../../src/lib/podcasts/get';
 import { initMock } from '../../__mocks__/mocks';
 import { languageTesting, functionTesting } from '../../tests';
 
+jest.setTimeout(60000);
+
 const functions = [{
     name: 'searchPodcast', func: searchPodcast }, {
     name: 'lookupPodcast', func: lookupPodcast        

@@ -13,7 +13,10 @@ const functions = [{
 const mock = initMock({ path: 'handlers/stage' }, { functions });
 
 languageTesting((languageCountry) => {
-    const translate = mock[languageCountry].translate;
+    const opts = {
+        translateRoot,
+        translate: true
+    };
 
-    functions.forEach(({ name, func }) => functionTesting({ name, mock, languageCountry }, { func, opts: { translateRoot, translate } }));
+    functions.forEach(({ name, func }) => functionTesting({ name, mock, languageCountry }, { func, opts }));
 });
