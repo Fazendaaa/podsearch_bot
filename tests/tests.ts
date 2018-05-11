@@ -2,19 +2,21 @@
 
 import { languagesCode } from './locales/locales';
 
-const safeAttribution = async ({ cur }, { func }) => {
+const safeAttribution = async ({ cur }, { func, opts }) => {
     let value;
 
     try {
         if ('resolve' === cur.type) {
-            value = await expect(func).resolves.toEqual(cur.output);
+            value = await expect(func(cur.input, opts)).resolves.toEqual(cur.output);
         } if ('reject' === cur.type) {
-            value = await expect(func).rejects.toEqual(cur.output);
-        } if ('synchronous' === cur.type) {
-            value = expect(func).toEqual(cur.output);
+            value = await expect(func(cur.input, opts)).rejects.toEqual(cur.output);
+        } if ('synchronous_equal' === cur.type) {
+            value = expect(func(cur.input, opts)).toEqual(cur.output);
+        } if ('synchronous_throw' === cur.type) {
+            value = expect(() => func(cur.input, opts)).toThrow();
+        } else {
+            value = false;
         }
-
-        value = false;
     } catch (error) {
         value = false;
 
@@ -40,7 +42,7 @@ export const functionTesting = ({ name, mock, languageCountry }, { func, opts })
     expect.assertions(array.length);
     
     return array.reduce(async (acc, cur) => {
-        const value = await safeAttribution({ cur }, { func: func(cur.input, newOpts) });
+        const value = await safeAttribution({ cur }, { func, opts: newOpts });
         acc.then((result) => result.push(value));
 
         return acc;

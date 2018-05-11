@@ -1,6 +1,6 @@
 [
     {
-        "type": "synchronous",
+        "type": "synchronous_equal",
         "input": {
             "latest": "11th July 2016 4: 05 am",
             "rss": "https://tinyurl.com/y7hl5rf7",

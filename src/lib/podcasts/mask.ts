@@ -1,8 +1,8 @@
 'use strict';
 
-const hasGenres = (genres: Array<string>): string => {
+const hasGenres = (genres: Array<string>): string | TypeError => {
     if (undefined == genres) {
-        throw (new TypeError('Wrong argument.'));
+        throw new TypeError('Wrong argument.');
     }
 
     return genres.reduce((accumulator, current) => `${accumulator} | ${current}`);
@@ -26,14 +26,6 @@ export const maskResponse = (data) => {
 };
 
 export const maskResponseInline = (data, { translate }) => {
-    let preview;
-
-    if (undefined != data.artworkUrl60) {
-        preview = data.artworkUrl60;
-    } else if (undefined != data.artworkUrl100) {
-        preview = data.artworkUrl100;
-    }
-
     return {
         id: `${data.trackId}`,
         title: data.artistName,
@@ -44,6 +36,6 @@ export const maskResponseInline = (data, { translate }) => {
         },
         reply_markup: data.keyboard.reply_markup,
         description: hasGenres (<Array<string>> data.genres),
-        thumb_url: preview
+        thumb_url: data.artworkUrl60
     };
 };

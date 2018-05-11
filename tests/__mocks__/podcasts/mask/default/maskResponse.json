@@ -1,6 +1,6 @@
 [
     {
-        "type" : "synchronous",
+        "type" : "synchronous_equal",
         "input": {
             "artistName": "Jovem Nerd",
             "artworkUrl100": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/100x100bb.jpg",
@@ -51,5 +51,45 @@
             "trackCount": 300,
             "trackId": 381816509
         }
-    }    
+    },
+    {
+        "type": "synchronous_throw",
+        "input": {
+            "artistName": "Jovem Nerd",
+            "artworkUrl100": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/100x100bb.jpg",
+            "artworkUrl30": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/30x30bb.jpg",
+            "artworkUrl60": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/60x60bb.jpg",
+            "artworkUrl600": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/600x600bb.jpg",
+            "collectionCensoredName": "NerdCast",
+            "collectionExplicitness": "cleaned",
+            "collectionHdPrice": 0,
+            "collectionId": 381816509,
+            "collectionName": "NerdCast",
+            "collectionPrice": 0,
+            "collectionViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id381816509?mt=2&uo=4",
+            "contentAdvisoryRating": "Clean",
+            "country": "USA",
+            "currency": "USD",
+            "feedUrl": "https://jovemnerd.com.br/feed-nerdcast/",
+            "genreIds": [
+                "1324",
+                "26"
+            ],
+            "kind": "podcast",
+            "primaryGenreName": "Society & Culture",
+            "releaseDate": "2018-05-04T11:01:00Z",
+            "trackCensoredName": "NerdCast",
+            "trackCount": 300,
+            "trackExplicitness": "cleaned",
+            "trackHdPrice": 0,
+            "trackHdRentalPrice": 0,
+            "trackId": 381816509,
+            "trackName": "NerdCast",
+            "trackPrice": 0,
+            "trackRentalPrice": 0,
+            "trackViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id381816509?mt=2&uo=4",
+            "wrapperType": "track"
+        },
+        "output": {}
+    }
 ]
