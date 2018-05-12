@@ -66,3 +66,10 @@ export const streamKeyboard = async ({ rssContent, id }, { translate, shortener 
         return keyboard;
     }
 };
+
+export const startKeyboard = ({ rootTranslate, language }) => {
+    const buttons = arrayLoad(rootTranslate.repository[language].keyboard);
+    const keyboard = markup.keyboard(buttons);
+
+    return keyboard.resize().extra();
+};

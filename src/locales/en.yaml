@@ -62,8 +62,9 @@ alreadySubscribed:
 notAddedSubsciption:
   "An error occured. Please, try it again later or talk to my creator to report this."
 
-# The '\' after '\n' is just so, this way, the next line doesn't have a little spacing at the starting, and since this
-# string has a notation with colon has to be double-quoted also.
+letMeHelpYou:
+  "Hey, ${username}. You can do the following kind of searches..."
+
 mask:
   "[\u200B](${artworkUrl600})*Name*: _${collectionName}_\n\
   *From:* _${artistName}_\n\

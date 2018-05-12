@@ -1,0 +1,58 @@
+[
+    {
+        "type": "synchronous_equal",
+        "input": {
+            "username": "Farm"
+        },
+        "output": [
+            {
+                "text": "Hey, Farm. You can do the following kind of searches..."
+            },
+            {
+                "text": "Please send a valid search of the following format:\n/search _podcast name_\n\nExample:\n/search _The Story by The Mission_\n"
+            },
+            {
+                "source": "/home/farm/Documents/podsearch_bot/src/gif/searchCmd.mp4"
+            },
+            {
+                "text": "Or you can try the button mode:"
+            },
+            {
+                "source": "/home/farm/Documents/podsearch_bot/src/gif/searchButton.mp4"
+            },
+            {
+                "text": "Or even the inline mode:"
+            },
+            {
+                "source": "/home/farm/Documents/podsearch_bot/src/gif/searchInline.mp4"
+            }
+        ]
+    },
+    {
+        "type": "synchronous_equal",
+        "input": {},
+        "output": [
+            {
+                "text": "Hey, undefined. You can do the following kind of searches..."
+            },
+            {
+                "text": "Please send a valid search of the following format:\n/search _podcast name_\n\nExample:\n/search _The Story by The Mission_\n"
+            },
+            {
+                "source": "/home/farm/Documents/podsearch_bot/src/gif/searchCmd.mp4"
+            },
+            {
+                "text": "Or you can try the button mode:"
+            },
+            {
+                "source": "/home/farm/Documents/podsearch_bot/src/gif/searchButton.mp4"
+            },
+            {
+                "text": "Or even the inline mode:"
+            },
+            {
+                "source": "/home/farm/Documents/podsearch_bot/src/gif/searchInline.mp4"
+            }
+        ]
+    }
+]

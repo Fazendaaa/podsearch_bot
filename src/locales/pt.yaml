@@ -62,6 +62,9 @@ alreadySubscribed:
 notAddedSubsciption:
   "Um erro ocorreu para adicioná-lo. Por favor, tente novamente mais tarde ou avise meu criador sobre."
 
+letMeHelpYou:
+  "Hey, ${username}. Você pode fazer pesquisas das seguintes maneiras..."
+
 mask:
   "[\u200B](${artworkUrl600})*Nome*: _${collectionName}_\n\
   *Criadores*: _${artistName}_\n\
@@ -99,6 +102,7 @@ help:
   /pesquise\n\
   Mais em:\n\
   /sobre"
+
 about:
   "Quer ver mais:\n\
   🤖 [Podsearch](https://fazendaaa.github.io/podsearch_bot/) — Veja como este bot funciona.\n\
