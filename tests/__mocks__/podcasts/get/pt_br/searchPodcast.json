@@ -47,26 +47,26 @@
         }]
     },
     {
-        "type": "reject",
+        "type": "reject_error",
         "input": {
             "term": "",
             "country": "br"
         },
-        "output": []
+        "output": "Nothing found"
     },
     {
-        "type": "reject",
+        "type": "reject_error",
         "input": {
             "term": "mistyped",
             "country": "br"
         },
-        "output": []
+        "output": "Nothing found"
     },
     {
-        "type": "reject",
+        "type": "reject_error",
         "input": {
             "country": "br"
         },
-        "output": []
+        "output": "Nothing found"
     }
 ]

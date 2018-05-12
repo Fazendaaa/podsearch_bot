@@ -1,24 +1,31 @@
 'use strict';
 
+import * as moment from 'moment';
 import * as Parser from 'rss-parser';
 import { tiny } from 'tiny-shortener';
-import { resultExtended } from '../../@types/parse/main';
-import { parsePodcastCommand, parsePodcastInline } from '../podcasts/parse';
-import { searchPodcast } from '../podcasts/search';
-import { fetchLastEpisode } from '../podcasts/stream';
+import { resultExtended } from '../@types/podcasts/main';
+import { parsePodcastCommand, parsePodcastInline, parsePodcastLastEpisode } from '../podcasts/parse';
+import { searchPodcast, lookupPodcast } from '../podcasts/get';
 import { endInline, searchInline, errorInline } from '../telegram/messages';
-const telegraf = require('telegraf');
-const markup = telegraf.Markup;
-const handlerRss = new Parser();
 
-const functionArgs = {
-    shortener: tiny,
-    fetchRss: handlerRss
+const parsingLastEpisode = ({ episode, id, country }, { translate }) => {
+    const functionArgs = {
+        shortener: tiny,
+        rss: new Parser()
+    };
+
+    return parsePodcastLastEpisode({ episode, id, country }, { translate, ...functionArgs }).then((parsed: resultExtended) => {
+        return { text: translate('episode', parsed), keyboard: parsed.keyboard };
+    }).catch((error: string) => {
+        console.error(error);
+
+        return { text: translate('noResult', { id }), keyboard: null };
+    });
 };
 
 export const handleLastEpisode = async ({ id, country }, { translate }) => {
-    return fetchLastEpisode({ id, country }, { functionArgs, ...translate }).then((episode: resultExtended) => {
-        return { text: translate('episode', episode), keyboard: episode.keyboard };
+    return lookupPodcast({ id, country }).then((podcasts) => {
+        return parsingLastEpisode({ episode: podcasts[0], id, country }, { translate });
     }).catch((error: Error) => {
         console.error(error);
 
@@ -27,7 +34,7 @@ export const handleLastEpisode = async ({ id, country }, { translate }) => {
 };
 
 const parsingCommand = ({ podcasts, term }, { translate }) => {
-    return parsePodcastCommand({ podcasts }, { functionArgs, ...translate }).then((parsed) => {
+    return parsePodcastCommand({ podcasts }, { translate, shortener: tiny }).then((parsed) => {
         return { text: translate('mask', parsed), keyboard: parsed.keyboard };
     }).catch((error: string) => {
         console.error(error);
@@ -56,7 +63,7 @@ const paginatingPodcasts = ({ podcasts, offset, pageLimit }, { translate }) => {
         return endInline(translate);
     }
 
-    return parsePodcastInline({ podcasts }, { functionArgs, ...translate }).catch((error: Error) => {
+    return parsePodcastInline({ podcasts }, { shortener: tiny, translate }).catch((error: Error) => {
         return searchInline(translate);
     });
 };

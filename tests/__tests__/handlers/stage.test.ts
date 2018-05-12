@@ -14,8 +14,8 @@ const mock = initMock({ path: 'handlers/stage' }, { functions });
 
 languageTesting((languageCountry) => {
     const opts = {
-        translateRoot,
-        translate: true
+        translate: true,
+        translateRoot
     };
 
     functions.forEach(({ name, func }) => functionTesting({ name, mock, languageCountry }, { func, opts }));

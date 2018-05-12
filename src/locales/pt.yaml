@@ -81,9 +81,9 @@ episode:
   *Gêneros*: _${genres}_\n\
   *Número do episódio*: _${trackCount}_"
 
-noResult: |
-  Nenhuma pesquisa foi encontrada para "_${value}_".
-  Isso pode significar uma palavra com erro de digitação ou o serviço está em manutenção. Por favor tente novamente mais tarde.
+noResult:
+  "Nenhuma pesquisa foi encontrada para \"_${value}_\".\n\
+  Isso pode significar uma palavra com erro de digitação ou o serviço está em manutenção. Por favor tente novamente mais tarde."
 
 wrongInputCmd:
   "Por favor envie uma pesquisa válida no seguinte formato:\n

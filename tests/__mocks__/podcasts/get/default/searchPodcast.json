@@ -46,15 +46,15 @@
         }]
     },
     {
-        "type": "reject",
+        "type": "reject_error",
         "input": {
             "term": ""            
         },
-        "output": []
+        "output": "Nothing found"
     },
     {
-        "type": "reject",
+        "type": "reject_error",
         "input": {},
-        "output": []
+        "output": "Nothing found"
     }
 ]

@@ -10,6 +10,8 @@ const safeAttribution = async ({ cur }, { func, opts }) => {
             value = await expect(func(cur.input, opts)).resolves.toEqual(cur.output);
         } if ('reject' === cur.type) {
             value = await expect(func(cur.input, opts)).rejects.toEqual(cur.output);
+        } if ('reject_error' === cur.type) {
+            value = await expect(func(cur.input, opts)).rejects.toEqual(new Error(cur.output));
         } if ('synchronous_equal' === cur.type) {
             value = expect(func(cur.input, opts)).toEqual(cur.output);
         } if ('synchronous_throw' === cur.type) {

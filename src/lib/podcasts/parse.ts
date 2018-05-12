@@ -2,9 +2,10 @@
 
 import { response, result } from 'itunes-search';
 import * as moment from 'moment';
+import { resultExtended } from '../@types/podcasts/main';
 import { parseParameters, parseFunctions } from '../@types/podcasts/parse';
 import { maskResponse, maskResponseInline } from './mask';
-import { podcastKeyboard } from '../telegram/keyboard';
+import { podcastKeyboard, streamKeyboard } from '../telegram/keyboard';
 
 const hasAllFunctions = (parameters) => {
     const args = [ 'maskFunction', 'shortener', 'translateRoot' ];
@@ -66,3 +67,25 @@ const curryParsePodcast = ({ maskFunction }) => ((first, second) => parsePodcast
 
 export const parsePodcastCommand = curryParsePodcast({ maskFunction: maskResponse });
 export const parsePodcastInline = curryParsePodcast({ maskFunction: maskResponseInline });
+
+const fetchNameEpisode = ({ rssContent }, { translate }): string => {
+    if (true === rssContent.hasOwnProperty('title')) {
+        return rssContent.title;
+    }
+
+    return translate('noName');
+};
+
+export const parsePodcastLastEpisode = ({ episode, id, country }, { translate, rss, shortener }): Promise<resultExtended | Error> =>
+new Promise(async (resolve: (data: resultExtended) => void, reject: (error: Error) => void) => {
+    const podcastContent = await rss.parseURL(episode.feedUrl).catch(reject);
+    const rssContent = podcastContent.items[0];
+    const keyboard = await streamKeyboard({ rssContent, id }, { translate, shortener });
+
+    resolve({
+        name: fetchNameEpisode({ rssContent }, { translate }),
+        latest: moment(episode.releaseDate).locale(country).format('Do MMMM YYYY, h:mm a'),
+        keyboard,
+        ...episode
+    });
+});

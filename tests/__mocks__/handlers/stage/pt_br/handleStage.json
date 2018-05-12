@@ -3,46 +3,62 @@
         "type": "resolve",
         "input": {
             "term": "Nerdcast",
-            "country": "us",
-            "language": "pt"
+            "language": "pt",
+            "country": "br"
         },
         "output": {
-            "text": "[​](https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg)*Nome*: _Nerdcast_\n*Criadores*: _Nerdcast_\n*Gêneros*: _Comedy | Podcasts_\n*Episódios*: _2_\n*Último episódio*: _11th July 2016, 4:05 am_\n*Mais em*: [RSS](https://tinyurl.com/y7hl5rf7) ou [iTunes](https://tinyurl.com/y8zuutgx)\n",
+            "artistName": "Nerdcast",
+            "artworkUrl600": "https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg",
+            "collectionId": 1103141552,
+            "collectionName": "Nerdcast",
+            "genres": "Comedy | Podcasts",
+            "itunes": "https://tinyurl.com/y8zuutgx",
             "keyboard": {
                 "reply_markup": {
                     "inline_keyboard": [
                         [
                             {
-                                "text": "Inscrever-se",
-                                "callback_data": "subscribe/undefined",
-                                "hide": false
+                                "callback_data": "subscribe/1103141552",
+                                "hide": false,
+                                "text": "Inscrever-se"
                             },
                             {
                                 "text": "Ouça",
-                                "url": "t.me/undefined?start=undefined"
+                                "url": "t.me/undefined?start=1103141552"
                             }
                         ]
                     ]
                 }
-            }
+            },
+            "latest": "11vet Gouere 2016, 4:05 am",
+            "releaseDate": "2016-07-11T07:05:00Z",
+            "rss": "https://tinyurl.com/y7hl5rf7",
+            "trackCount": 2,
+            "trackId": 1103141552
         }
     },
     {
-        "type": "reject",
+        "type": "resolve",
         "input": {
             "term": "",
-            "country": "br",
-            "language": "pt"
+            "language": "pt",
+            "country": "br"
         },
-        "output": []
+        "output": {
+            "keyboard": null,
+            "text": "Nenhuma pesquisa foi encontrada para \"__\".\nIsso pode significar uma palavra com erro de digitação ou o serviço está em manutenção. Por favor tente novamente mais tarde."
+        }
     },
     {
-        "type": "reject",
+        "type": "resolve",
         "input": {
             "term": "mistyped",
-            "country": "br",
-            "language": "pt"
+            "language": "pt",
+            "country": "br"
         },
-        "output": []
+        "output": {
+            "keyboard": null,
+            "text": "Nenhuma pesquisa foi encontrada para \"_mistyped_\".\nIsso pode significar uma palavra com erro de digitação ou o serviço está em manutenção. Por favor tente novamente mais tarde."
+        }
     }
 ]

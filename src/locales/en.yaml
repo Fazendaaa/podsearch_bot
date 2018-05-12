@@ -81,9 +81,9 @@ episode:
   *Genre*: _${genres}_\n\
   *#Episode*: _${trackCount}_"
 
-noResult: |
-  No result was found for "_${value}_".
-  This could mean a wrong typing or right now the search service is in maintenance. Please, try it again later.
+noResult:
+  "No result was found for \"_${value}_\".\n\
+  This could mean a wrong typing or right now the search service is in maintenance. Please, try it again later."
 
 wrongInputCmd:
   "Please send a valid search of the following format:\n\

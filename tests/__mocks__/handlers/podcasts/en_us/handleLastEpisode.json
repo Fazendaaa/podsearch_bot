@@ -1,0 +1,30 @@
+[
+    {
+        "type": "resolve",
+        "input": {
+            "id": 381816509,
+            "country": "us",
+            "language": "en"
+        },
+        "output": {
+            "keyboard": {
+                "reply_markup": {
+                    "inline_keyboard": [
+                        [
+                            {
+                                "callback_data": "subscribe/381816509",
+                                "hide": false,
+                                "text": "Subscribe"
+                            }
+                        ],
+                        {
+                            "text": "Listen now",
+                            "url": "https://tinyurl.com/ycv5kv9n"
+                        }
+                    ]
+                }
+            },
+            "text": "[​](https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/600x600bb.jpg)*Name*: _NerdCast_\n*From:* _Jovem Nerd_\n*Last episode name*: _NerdCast 619 - Eternos Adolescentes_\n*Release date*: _11th May 2018, 8:00 am_\n*Genre*: _Society & Culture,Podcasts_\n*#Episode*: _300_"
+        }
+    }
+]

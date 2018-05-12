@@ -7,42 +7,58 @@
             "country": "us"
         },
         "output": {
-            "text": "[​](https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg)*Name*: _Nerdcast_\n*From:* _Nerdcast_\n*Genre*: _Comedy | Podcasts_\n*Episodes*: _2_\n*Latest Episode*: _11th July 2016, 4:05 am_\n*More in*: [RSS](https://tinyurl.com/y7hl5rf7) or [iTunes](https://tinyurl.com/y8zuutgx)\n",
+            "artistName": "Nerdcast",
+            "artworkUrl600": "https://is1-ssl.mzstatic.com/image/thumb/Music71/v4/1c/4e/bf/1c4ebfcd-c792-f28e-071b-ff9343d8958a/source/600x600bb.jpg",
+            "collectionId": 1103141552,
+            "collectionName": "Nerdcast",
+            "genres": "Comedy | Podcasts",
+            "itunes": "https://tinyurl.com/y8zuutgx",
             "keyboard": {
                 "reply_markup": {
                     "inline_keyboard": [
                         [
                             {
-                                "text": "Subscribe",
-                                "callback_data": "subscribe/undefined",
-                                "hide": false
+                                "callback_data": "subscribe/1103141552",
+                                "hide": false,
+                                "text": "Subscribe"
                             },
                             {
                                 "text": "Listen",
-                                "url": "t.me/undefined?start=undefined"
+                                "url": "t.me/undefined?start=1103141552"
                             }
                         ]
                     ]
                 }
-            }
+            },
+            "latest": "11th July 2016, 4:05 am",
+            "releaseDate": "2016-07-11T07:05:00Z",
+            "rss": "https://tinyurl.com/y7hl5rf7",
+            "trackCount": 2,
+            "trackId": 1103141552
         }
     },
     {
-        "type": "reject",
+        "type": "resolve",
         "input": {
             "term": "",
             "language": "en",
             "country": "us"
         },
-        "output": []
+        "output": {
+            "keyboard": null,
+            "text": "No result was found for \"__\".\nThis could mean a wrong typing or right now the search service is in maintenance. Please, try it again later."
+        }
     },
     {
-        "type": "reject",
+        "type": "resolve",
         "input": {
             "term": "mistyped",
             "language": "en",
             "country": "us"
         },
-        "output": []
+        "output": {
+            "keyboard": null,
+            "text": "No result was found for \"_mistyped_\".\nThis could mean a wrong typing or right now the search service is in maintenance. Please, try it again later."
+        }
     }
 ]

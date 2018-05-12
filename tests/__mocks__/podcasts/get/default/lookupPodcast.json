@@ -46,8 +46,8 @@
         }]
     },
     {
-        "type": "reject",
+        "type": "reject_error",
         "input": {},
-        "output": []
+        "output": "Nothing found"
     }
 ]

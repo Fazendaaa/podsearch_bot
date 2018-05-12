@@ -14,14 +14,12 @@ const defaultOptions: options = {
 };
 
 export const searchPodcast = async (searchOptions): Promise<Array<result>> =>
-new Promise((resolve: (searchResult: Array<result>) => void, reject: (error: Array<result>) => void) => {
-    search({ ...defaultOptions, ...searchOptions }, (err: string, data: response) => {
+new Promise((resolve: (searchResult: Array<result>) => void, reject: (error: Error) => void) => {
+    search({ ...defaultOptions, ...searchOptions }, (err: Error, data: response) => {
         if (err) {
-            console.error(new Error(err));
-
-            reject([]);
-        } if (0 === data.resultCount) {
-            reject([]);            
+            reject(err);
+        } if (0 == data.resultCount) {
+            reject(new Error('Nothing found'));
         }
 
         resolve(data.results);
@@ -29,14 +27,12 @@ new Promise((resolve: (searchResult: Array<result>) => void, reject: (error: Arr
 });
 
 export const lookupPodcast = (searchOptions): Promise<Array<result>> =>
-new Promise((resolve: (searchResult: Array<result>) => void, reject: (error) => void) => {
-    lookup({ limit: 1, ...defaultOptions, ...searchOptions }, (err: string, data: response) => {
+new Promise((resolve: (searchResult: Array<result>) => void, reject: (error: Error) => void) => {
+    lookup({ limit: 1, ...defaultOptions, ...searchOptions }, (err: Error, data: response) => {
         if (err) {
-            console.error(new Error(err));
-
-            reject([]);
-        } if (0 === data.resultCount) {
-            reject([]);
+            reject(err);
+        } if (0 == data.resultCount) {
+            reject(new Error('Nothing found'));
         }
 
         resolve(data.results);
