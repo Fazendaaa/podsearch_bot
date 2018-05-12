@@ -1,26 +1,26 @@
 'use strict';
 
+import * as tinyShortener from 'tiny-shortener';
 import { parsePodcastCommand, parsePodcastInline } from '../../../src/lib/podcasts/parse';
-let input;
-let output;
+import { initMock } from '../../__mocks__/mocks';
+import { translateRoot } from '../../locales/locales';
+import { languageTesting, functionTesting } from '../../tests';
 
 jest.setTimeout(60000);
 
-beforeAll(async (done) => {
-    // input = await readAsync('');
-    // output = await readAsync('');
+const functions = [{
+    name: 'parsePodcastCommand', func: parsePodcastCommand }, {
+    name: 'parsePodcastInline', func: parsePodcastInline
+}];
+const mock = initMock({ path: 'podcasts/parse' }, { functions });
 
-    done();
-});
+languageTesting((languageCountry) => {
+    const opts = {
+        shortener: tinyShortener.tiny,
+        translateRoot
+    };
 
-describe('Testing function parsePodcastCommand', () => {
-    // test('', async () => {
-    //     expect.assertions(1);
-
-    //     return await expect(parsePodcastCommand({}, {})).resolves.toEqual({});
-    // });
-
-    test.skip('Nothing yet.', () => {
-        expect(true).toEqual(true);
+    functions.forEach(({ name, func }) => {
+        functionTesting({ name, mock, languageCountry }, { func, opts });
     });
 });

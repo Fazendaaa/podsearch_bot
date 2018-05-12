@@ -1,0 +1,79 @@
+[
+    {
+        "type": "resolve",
+        "input": {
+            "language": "en",
+            "country": "us",
+            "podcasts": [
+                {
+                    "artistName": "Jovem Nerd",
+                    "artworkUrl100": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/100x100bb.jpg",
+                    "artworkUrl30": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/30x30bb.jpg",
+                    "artworkUrl60": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/60x60bb.jpg",
+                    "artworkUrl600": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/600x600bb.jpg",
+                    "collectionCensoredName": "NerdCast",
+                    "collectionExplicitness": "cleaned",
+                    "collectionHdPrice": 0,
+                    "collectionId": 381816509,
+                    "collectionName": "NerdCast",
+                    "collectionPrice": 0,
+                    "collectionViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id381816509?mt=2&uo=4",
+                    "contentAdvisoryRating": "Clean",
+                    "country": "USA",
+                    "currency": "USD",
+                    "feedUrl": "https://jovemnerd.com.br/feed-nerdcast/",
+                    "genreIds": [
+                        "1324",
+                        "26"
+                    ],
+                    "genres": [
+                        "Society & Culture",
+                        "Podcasts"
+                    ],
+                    "kind": "podcast",
+                    "primaryGenreName": "Society & Culture",
+                    "releaseDate": "2018-05-11T11:00:00Z",
+                    "trackCensoredName": "NerdCast",
+                    "trackCount": 300,
+                    "trackExplicitness": "cleaned",
+                    "trackHdPrice": 0,
+                    "trackHdRentalPrice": 0,
+                    "trackId": 381816509,
+                    "trackName": "NerdCast",
+                    "trackPrice": 0,
+                    "trackRentalPrice": 0,
+                    "trackViewUrl": "https://itunes.apple.com/us/podcast/nerdcast/id381816509?mt=2&uo=4",
+                    "wrapperType": "track"
+                }
+            ]
+        },
+        "output": [
+            {
+                "description": "Society & Culture | Podcasts",
+                "id": "381816509",
+                "input_message_content": {
+                    "message_text": "[​](https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/600x600bb.jpg)*Name*: _NerdCast_\n*From:* _Jovem Nerd_\n*Genre*: _Society & Culture,Podcasts_\n*Episodes*: _300_\n*Latest Episode*: _11th May 2018, 8:00 am_\n*More in*: [RSS](https://tinyurl.com/ydxobgdm) or [iTunes](https://tinyurl.com/ycner2ky)\n",
+                    "parse_mode": "Markdown"
+                },
+                "reply_markup": {
+                    "inline_keyboard": [
+                        [
+                            {
+                                "callback_data": "subscribe/381816509",
+                                "hide": false,
+                                "text": "Subscribe"
+                            },
+                            {
+                                "text": "Listen",
+                                "url": "t.me/undefined?start=381816509"
+                            }
+                        ]
+                    ]
+                },
+                "thumb_url": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/60x60bb.jpg",
+                "title": "Jovem Nerd",
+                "type": "article"
+            }
+        ]
+    }
+]

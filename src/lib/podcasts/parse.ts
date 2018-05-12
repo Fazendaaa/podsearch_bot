@@ -6,12 +6,12 @@ import { parseParameters, parseFunctions } from '../@types/podcasts/parse';
 import { maskResponse, maskResponseInline } from './mask';
 import { podcastKeyboard } from '../telegram/keyboard';
 
-const hasAllFunctions = ({ maskFunction, shortener, translateRoot }) => {
-    if (undefined == maskFunction || undefined == shortener || undefined == translateRoot) {
-        return false;
-    }
-
-    return true;
+const hasAllFunctions = (parameters) => {
+    const args = [ 'maskFunction', 'shortener', 'translateRoot' ];
+    
+    return args.reduce((acc, cur) => {
+        return (false === acc || false === parameters.hasOwnProperty(cur)) ? false : true;
+    }, true);
 };
 
 const hasAllPodcastData = (data: result): boolean => {
@@ -38,8 +38,9 @@ const parseMapping = async ({ podcast, language, country }, { maskFunction, shor
     const latest = moment(podcast.releaseDate).locale(country).format('Do MMMM YYYY, h:mm a');
     const podcastId = podcast.collectionId;
     const keyboard = podcastKeyboard({ language, podcastId }, { translateRoot });
+    const translate = (languageCode, resourceKey) => translateRoot.t(language, languageCode, resourceKey);
 
-    return maskFunction({ ...podcast, ...links, latest, keyboard }, translateRoot.t );
+    return maskFunction({ ...podcast, ...links, latest, keyboard }, { translate } );
 };
 
 const reducePodcast = ({ language, country }, { maskFunction, shortener, translateRoot }) => (async (acc, podcast) => {

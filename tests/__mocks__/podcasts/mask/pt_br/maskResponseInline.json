@@ -48,12 +48,12 @@
                     "inline_keyboard": [
                         [
                             {
-                                "text": "Subscribe",
+                                "text": "Inscrever-se",
                                 "callback_data": "subscribe/undefined",
                                 "hide": false
                             },
                             {
-                                "text": "Listen",
+                                "text": "Ouça",
                                 "url": "t.me/undefined?start=undefined"
                             }
                         ]
@@ -74,10 +74,10 @@
                         {
                             "callback_data": "subscribe/undefined",
                             "hide": false,
-                            "text": "Subscribe"
+                            "text": "Inscrever-se"
                         },
                         {
-                            "text": "Listen",
+                            "text": "Ouça",
                             "url": "t.me/undefined?start=undefined"
                         }
                     ]

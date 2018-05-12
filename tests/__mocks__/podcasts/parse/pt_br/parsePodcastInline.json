@@ -1,0 +1,82 @@
+[
+    {
+        "type": "resolve",
+        "input": {
+            "language": "pt",
+            "country": "br",
+            "podcasts": [
+                {
+                    "latest": "11th July 2016 4: 05 am",
+                    "rss": "https://tinyurl.com/y7hl5rf7",
+                    "itunes": "https://tinyurl.com/y8zuutgx",
+                    "artistName": "Jovem Nerd",
+                    "artworkUrl100": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/100x100bb.jpg",
+                    "artworkUrl30": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/30x30bb.jpg",
+                    "artworkUrl60": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/60x60bb.jpg",
+                    "artworkUrl600": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/600x600bb.jpg",
+                    "collectionCensoredName": "NerdCast",
+                    "collectionExplicitness": "cleaned",
+                    "collectionHdPrice": 0,
+                    "collectionId": 381816509,
+                    "collectionName": "NerdCast",
+                    "collectionPrice": 0,
+                    "collectionViewUrl": "https://itunes.apple.com/br/podcast/nerdcast/id381816509?mt=2&uo=4",
+                    "contentAdvisoryRating": "Clean",
+                    "country": "BRA",
+                    "currency": "BRL",
+                    "feedUrl": "https://jovemnerd.com.br/feed-nerdcast/",
+                    "genreIds": [
+                        "1324",
+                        "26"
+                    ],
+                    "genres": [
+                        "Sociedade e cultura",
+                        "Podcasts"
+                    ],
+                    "kind": "podcast",
+                    "primaryGenreName": "Sociedade e cultura",
+                    "releaseDate": "2018-05-04T11:01:00Z",
+                    "trackCensoredName": "NerdCast",
+                    "trackCount": 300,
+                    "trackExplicitness": "cleaned",
+                    "trackHdPrice": 0,
+                    "trackHdRentalPrice": 0,
+                    "trackId": 381816509,
+                    "trackName": "NerdCast",
+                    "trackPrice": 0,
+                    "trackRentalPrice": 0,
+                    "trackViewUrl": "https://itunes.apple.com/br/podcast/nerdcast/id381816509?mt=2&uo=4",
+                    "wrapperType": "track"
+                }
+            ]
+        },
+        "output": [
+            {
+                "description": "Sociedade e cultura | Podcasts",
+                "id": "381816509",
+                "input_message_content": {
+                    "message_text": "[​](https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/600x600bb.jpg)*Nome*: _NerdCast_\n*Criadores*: _Jovem Nerd_\n*Gêneros*: _Sociedade e cultura,Podcasts_\n*Episódios*: _300_\n*Último episódio*: _4vet Mae 2018, 8:01 am_\n*Mais em*: [RSS](https://tinyurl.com/ydxobgdm) ou [iTunes](https://tinyurl.com/yalj2a5x)\n",
+                    "parse_mode": "Markdown"
+                },
+                "reply_markup": {
+                    "inline_keyboard": [
+                        [
+                            {
+                                "callback_data": "subscribe/381816509",
+                                "hide": false,
+                                "text": "Inscrever-se"
+                            },
+                            {
+                                "text": "Ouça",
+                                "url": "t.me/undefined?start=381816509"
+                            }
+                        ]
+                    ]
+                },
+                "thumb_url": "https://is5-ssl.mzstatic.com/image/thumb/Music/v4/53/c4/c2/53c4c2b6-60f4-96b7-42d7-f8068b8b4323/source/60x60bb.jpg",
+                "title": "Jovem Nerd",
+                "type": "article"
+            }
+        ]
+    }
+]
