@@ -11,7 +11,7 @@ import { talkingSearchManager } from './lib/telegram/stage';
 import { arrayLoad, messageToString, removeCmd } from './lib/utils';
 import { handleStartKeyboard, handleNoSearch } from './lib/handlers/default';
 import { handleSubscribe, handleUnsubscribe } from './lib/handlers/database';
-import { handleEpisode, handleSearchCommand, handleLastEpisode, handleSearchInline } from './lib/handlers/podcast';
+import { handleEpisode, handleSearchCommand, handleLastEpisode, handleSearchInline } from './lib/handlers/podcasts';
 const telegraf = require('telegraf');
 const session = telegraf.session;
 const telegrafI18n = require('telegraf-i18n');
