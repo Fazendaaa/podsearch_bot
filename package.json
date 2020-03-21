@@ -9,7 +9,9 @@
     "build": "tsc",
     "watch": "tsc -w",
     "validate": "node node_modules/app.json/index.js validate",
-    "docker": "npm run build && docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --push --tag fazenda/podsearch ."
+    "docker": "npm run build && docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --push --tag fazenda/podsearch .",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -38,15 +40,17 @@
     "dotenv": "^5.0.1",
     "i18n-node-yaml": "^1.0.3",
     "itunes-search": "git+https://github.com/connor/itunes-node.git",
-    "jest": "^22.4.3",
+    "jest": "^24.0.0",
     "moment": "^2.21.0",
-    "mongoose": "^5.0.14",
+    "mongoose": "^5.7.5",
     "remove-accents": "^0.4.2",
     "request": "^2.85.0",
     "rss-parser": "^3.1.2",
     "shorturl": "0.0.3",
     "telegraf": "^3.20.0",
     "telegraf-i18n": "^6.0.4",
-    "tinyurl": "^1.1.2"
-  }
+    "tinyurl": "^1.1.2",
+    "snyk": "^1.301.0"
+  },
+  "snyk": true
 }
