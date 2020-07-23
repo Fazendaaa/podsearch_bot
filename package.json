@@ -42,7 +42,7 @@
     "moment": "^2.21.0",
     "mongoose": "^5.0.14",
     "remove-accents": "^0.4.2",
-    "request": "^2.85.0",
+    "request": "^2.88.0",
     "rss-parser": "^3.1.2",
     "shorturl": "0.0.3",
     "telegraf": "^3.20.0",
